@@ -27,6 +27,8 @@ backup_and_copy() {
 
 deploy_tree() {
   local base="$1"
+  [[ -d "$base" ]] || return 0
+
   while IFS= read -r rel; do
     backup_and_copy "$base/$rel" "$HOME/$rel"
   done < <(cd "$base" && find . -type f | sed 's#^./##')
