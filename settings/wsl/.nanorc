@@ -1,0 +1,10 @@
+set linenumbers
+set tabsize 4
+set tabstospaces
+set autoindent
+set indicator
+set mouse
+include /usr/share/nano/*.nanorc
+set titlecolor brightwhite,blue
+set statuscolor brightwhite,green
+set errorcolor brightwhite,red
