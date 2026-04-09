@@ -23,6 +23,7 @@ PACKAGES=(
   bat
   fzf
   colordiff
+  eza
   jq
   tree
   htop
@@ -91,6 +92,13 @@ sudo apt upgrade -y
 
 echo "Installing base packages..."
 sudo apt install -y "${PACKAGES[@]}"
+
+if ! command -v starship >/dev/null 2>&1; then
+  echo "Installing starship..."
+  curl -fsSL https://starship.rs/install.sh | sh -s -- -y
+else
+  echo "starship already installed."
+fi
 
 echo "Applying common settings..."
 deploy_tree "$ROOT_DIR/settings/common"

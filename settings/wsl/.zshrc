@@ -14,7 +14,6 @@ if command -v dircolors >/dev/null 2>&1; then
 fi
 
 # color / compatibility aliases
-alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
 # fd command alias (Ubuntu package is fd-find)
@@ -31,9 +30,18 @@ if command -v colordiff >/dev/null 2>&1; then
 fi
 
 # practical lightweight aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+if command -v eza >/dev/null 2>&1; then
+  alias ls='eza'
+  alias ll='eza -al --git'
+  alias la='eza -a'
+  alias lt='eza --tree --level=2'
+  alias l='eza'
+else
+  alias ls='ls --color=auto'
+  alias ll='ls -alF'
+  alias la='ls -A'
+  alias l='ls -CF'
+fi
 alias ..='cd ..'
 alias ...='cd ../..'
 alias cls='clear'

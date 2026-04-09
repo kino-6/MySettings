@@ -1,0 +1,31 @@
+# WSL prompt: SFC-like colors, practical and lightweight.
+add_newline = true
+format = "$hostname$directory$git_branch$python$cmd_duration\n$character"
+
+[hostname]
+format = "[$hostname]($style) "
+style = "bold #7aa2f7"
+ssh_only = false
+
+[directory]
+style = "bold #9ece6a"
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = " "
+style = "#e0af68"
+
+[python]
+format = "[($virtualenv)]($style) "
+style = "#bb9af7"
+
+[cmd_duration]
+min_time = 2000
+format = "[${duration}]($style) "
+style = "#7dcfff"
+
+[character]
+success_symbol = "[❯](#e0af68)"
+error_symbol = "[❯](#f7768e)"
