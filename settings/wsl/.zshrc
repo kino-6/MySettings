@@ -8,9 +8,22 @@ export PATH="$HOME/.local/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 
+# initialize LS_COLORS when dircolors is available
+if command -v dircolors >/dev/null 2>&1; then
+  eval "$(dircolors -b)"
+fi
+
+# color / compatibility aliases
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
 # fd command alias (Ubuntu package is fd-find)
 if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
   alias fd='fdfind'
+fi
+
+if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
+  alias bat='batcat'
 fi
 
 if command -v colordiff >/dev/null 2>&1; then

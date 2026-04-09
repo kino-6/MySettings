@@ -71,7 +71,7 @@ GPU を使う重い ML ワークロード（例: torch / tensorflow を使う学
 実行内容:
 
 1. `sudo apt update && sudo apt upgrade -y`
-2. 基本パッケージ導入（`neovim`, `fzf`, `colordiff` を含む軽量構成）
+2. 基本パッケージ導入（`neovim`, `bat`, `fzf`, `colordiff` を含む軽量構成）
 3. `settings/common/` + `settings/wsl/` をホームへ反映
    - `settings/wsl/.config/nvim/init.lua` は `~/.config/nvim/init.lua` に配置
 4. `uv` 未導入時のみインストール
@@ -84,12 +84,16 @@ GPU を使う重い ML ワークロード（例: torch / tensorflow を使う学
 WSL 用 `.zshrc` は以下を満たします。
 
 - `~/.local/bin` を PATH に追加
+- `dircolors` があれば `LS_COLORS` を初期化し、`ls/grep` は `--color=auto` で表示
 - `fd-find` の補助として、`fd` 未導入時のみ `fdfind -> fd` alias
+- `bat` 未導入かつ `batcat` 導入済み環境では `batcat -> bat` alias
 - `~/.venv-tools/bin/activate` を interactive shell で自動 source
 - `colordiff` があれば `alias diff='colordiff'`
 - `starship` があれば初期化
 
-Ubuntu では `fd` コマンドの実体が `fdfind` パッケージ名で提供されるため、`.zshrc` で自然に `fd` として使えるように補助しています。
+Ubuntu では `fd` コマンドの実体が `fdfind`、`bat` コマンドの実体が `batcat` として提供される場合があるため、`.zshrc` で自然に `fd` / `bat` として使えるよう補助しています。
+
+WSL / Windows Terminal 側の ANSI color 表示が正常であれば、色表示の体験差は主に利用コマンドによります。`cat` は plain text 表示なので Markdown の視認性は高くありません。`bat README.md` のように `bat` を使うと、README やコードを色付きで見やすく表示できます。
 
 セットアップ後は反映のため、次のいずれかを実施してください。
 

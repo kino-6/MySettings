@@ -20,6 +20,7 @@ PACKAGES=(
   neovim
   ripgrep
   fd-find
+  bat
   fzf
   colordiff
   jq
