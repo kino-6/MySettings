@@ -19,6 +19,8 @@ PACKAGES=(
   vim
   ripgrep
   fd-find
+  fzf
+  colordiff
   jq
   tree
   htop
