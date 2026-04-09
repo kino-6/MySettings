@@ -17,6 +17,7 @@ PACKAGES=(
   zsh
   nano
   vim
+  neovim
   ripgrep
   fd-find
   fzf
