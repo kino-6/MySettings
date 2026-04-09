@@ -3,7 +3,7 @@
 Mac と WSL の dotfiles / setup を整理し、再構築しやすく保つためのリポジトリです。
 
 - **Mac**: 既存の常用運用を維持する便利ツール環境
-- **WSL**: toolbox / Assist 用の軽量環境
+- **WSL**: 開発特化型 CLI 環境（toolbox / Assist 用）
 - **Python 方針**: WSL でも `uv` ベースの常用補助環境を使い、使い捨てスクリプトをすぐ書ける状態にする
 - **GPU / 重い ML**: Windows 側で実行（WSL では実施しない）
 
@@ -61,10 +61,13 @@ exec zsh
 ./wsl-setup.sh
 ```
 
+WSL は「開発特化型 CLI 環境」として、日常の Git / CLI / grep / 軽い Python / ビルド用途に最適化します。
+GPU を使う重い ML ワークロード（例: torch / tensorflow を使う学習・推論）は Windows 側で実行する前提です。
+
 実行内容:
 
 1. `sudo apt update && sudo apt upgrade -y`
-2. 基本パッケージ導入
+2. 基本パッケージ導入（`fzf`, `colordiff` を含む軽量構成）
 3. `settings/common/` + `settings/wsl/` をホームへ反映
 4. `uv` 未導入時のみインストール
    - `curl -LsSf https://astral.sh/uv/install.sh | sh`
@@ -76,10 +79,12 @@ exec zsh
 WSL 用 `.zshrc` は以下を満たします。
 
 - `~/.local/bin` を PATH に追加
-- `fd-find` の補助として `fdfind -> fd` alias
+- `fd-find` の補助として、`fd` 未導入時のみ `fdfind -> fd` alias
 - `~/.venv-tools/bin/activate` を interactive shell で自動 source
 - `colordiff` があれば `alias diff='colordiff'`
 - `starship` があれば初期化
+
+Ubuntu では `fd` コマンドの実体が `fdfind` パッケージ名で提供されるため、`.zshrc` で自然に `fd` として使えるように補助しています。
 
 セットアップ後は反映のため、次のいずれかを実施してください。
 
@@ -91,7 +96,7 @@ WSL 用 `.zshrc` は以下を満たします。
 ### Doctor
 
 ```bash
-./scripts/wsl-doctor.sh
+bash scripts/wsl-doctor.sh
 ```
 
 表示内容:
@@ -99,14 +104,16 @@ WSL 用 `.zshrc` は以下を満たします。
 - OS / kernel 情報
 - `/` のディスク使用量
 - `$HOME` のサイズ
-- 主要ツール有無（git, curl, zsh, uv, python3, pipx, rg, fd, jq, tree, htop, tmux, shellcheck など）
+- 主要ツール有無（git, curl, zsh, uv, python/python3, pipx, rg, fd, fdfind, fzf, colordiff, jq, tree, htop, tmux, shellcheck など）
+- Python 常用環境の状態（`VIRTUAL_ENV`, `which python`, `python -V`）
+- 主要 Python パッケージ import check（`numpy`, `pandas`, `requests`, `rich`, `tqdm`, `matplotlib`, `IPython`）
 - mount 状態
 - apt cache サイズ
 
 ### Maintenance (安全側)
 
 ```bash
-./scripts/wsl-maintenance.sh
+bash scripts/wsl-maintenance.sh
 ```
 
 実行内容:
@@ -119,7 +126,7 @@ WSL 用 `.zshrc` は以下を満たします。
 ### Cleanup (強めの掃除)
 
 ```bash
-./scripts/wsl-cleanup.sh
+bash scripts/wsl-cleanup.sh
 ```
 
 `cleanup` は `maintenance` より強めの掃除です。
