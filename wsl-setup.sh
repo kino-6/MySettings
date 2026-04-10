@@ -4,6 +4,9 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 VENV_TOOLS="$HOME/.venv-tools"
+NEOVIM_VERSION="${NEOVIM_VERSION:-v0.12.1}"
+NEOVIM_INSTALL_ROOT="$HOME/opt/nvim"
+NEOVIM_TARBALL_NAME="nvim-linux-x86_64"
 
 PACKAGES=(
   build-essential
@@ -17,7 +20,6 @@ PACKAGES=(
   zsh
   nano
   vim
-  neovim
   ripgrep
   fd-find
   bat
@@ -69,13 +71,49 @@ backup_and_copy() {
   cp "$src" "$dst"
 }
 
-deploy_tree() {
+deploy_tree_to() {
   local base="$1"
+  local dst_root="$2"
   [[ -d "$base" ]] || return 0
 
   while IFS= read -r rel; do
-    backup_and_copy "$base/$rel" "$HOME/$rel"
+    backup_and_copy "$base/$rel" "$dst_root/$rel"
   done < <(cd "$base" && find . -type f | sed 's#^./##')
+}
+
+install_neovim_release() {
+  local version="$1"
+  local install_root="$2"
+  local version_dir="$install_root/$version"
+  local current_link="$install_root/current"
+  local nvim_bin="$version_dir/$NEOVIM_TARBALL_NAME/bin/nvim"
+
+  mkdir -p "$install_root"
+
+  if [[ -x "$nvim_bin" ]]; then
+    echo "Neovim $version already installed: $nvim_bin"
+  else
+    local tmp_dir
+    tmp_dir="$(mktemp -d)"
+    local tarball="$tmp_dir/${NEOVIM_TARBALL_NAME}.tar.gz"
+    local url="https://github.com/neovim/neovim/releases/download/${version}/${NEOVIM_TARBALL_NAME}.tar.gz"
+
+    echo "Installing Neovim $version from release tarball..."
+    echo "download: $url"
+    curl -fL "$url" -o "$tarball"
+
+    tar -xzf "$tarball" -C "$tmp_dir"
+
+    rm -rf "$version_dir"
+    mkdir -p "$version_dir"
+    mv "$tmp_dir/$NEOVIM_TARBALL_NAME" "$version_dir/$NEOVIM_TARBALL_NAME"
+
+    rm -rf "$tmp_dir"
+    echo "Installed: $nvim_bin"
+  fi
+
+  ln -sfn "$version_dir/$NEOVIM_TARBALL_NAME" "$current_link"
+  echo "Updated symlink: $current_link -> $version_dir/$NEOVIM_TARBALL_NAME"
 }
 
 is_wsl() {
@@ -93,6 +131,8 @@ sudo apt upgrade -y
 echo "Installing base packages..."
 sudo apt install -y "${PACKAGES[@]}"
 
+install_neovim_release "$NEOVIM_VERSION" "$NEOVIM_INSTALL_ROOT"
+
 if ! command -v starship >/dev/null 2>&1; then
   echo "Installing starship..."
   curl -fsSL https://starship.rs/install.sh | sh -s -- -y
@@ -101,10 +141,13 @@ else
 fi
 
 echo "Applying common settings..."
-deploy_tree "$ROOT_DIR/settings/common"
+deploy_tree_to "$ROOT_DIR/settings/common" "$HOME"
 
 echo "Applying WSL settings..."
-deploy_tree "$ROOT_DIR/settings/wsl"
+backup_and_copy "$ROOT_DIR/settings/wsl/.zshrc" "$HOME/.zshrc"
+backup_and_copy "$ROOT_DIR/settings/wsl/.nanorc" "$HOME/.nanorc"
+backup_and_copy "$ROOT_DIR/settings/wsl/.config/starship.toml" "$HOME/.config/starship.toml"
+deploy_tree_to "$ROOT_DIR/settings/wsl/nvim" "$HOME/.config/nvim"
 
 export PATH="$HOME/.local/bin:$PATH"
 if ! command -v uv >/dev/null 2>&1; then
