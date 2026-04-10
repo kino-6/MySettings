@@ -111,10 +111,20 @@ WSL / Windows Terminal 側の ANSI color 表示が正常であれば、色表示
 
 このリポジトリの Neovim 設定は、WSL での **CLI 補助編集** 用の初心者セットです。
 VSCode を置き換えるための IDE 化は意図していません。
+前提バージョンは **Neovim 0.11+** です（`nvim-treesitter` は `main` ブランチ API 前提）。
 
 - エントリ: `~/.config/nvim/init.lua`
 - Plugin manager: `lazy.nvim`
 - 初回起動時に plugin install / setup が自動で走ります
+
+`nvim-treesitter` を初回導入/更新した後は、互換性のため以下を順に実行してください。
+
+```vim
+:Lazy update nvim-treesitter
+:TSUninstall all
+:TSUpdate
+:checkhealth nvim-treesitter
+```
 
 含まれる plugin（最小セット）:
 
