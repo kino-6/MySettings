@@ -1,6 +1,9 @@
 # shellcheck source=/dev/null
 [[ -f ~/.zshrc.common ]] && source ~/.zshrc.common
 
+# neovim tarball (managed by wsl-setup.sh)
+export PATH="$HOME/opt/nvim/current/bin:$PATH"
+
 # user local bin (uv, pipx)
 export PATH="$HOME/.local/bin:$PATH"
 
