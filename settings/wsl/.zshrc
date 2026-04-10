@@ -1,15 +1,26 @@
 # shellcheck source=/dev/null
 [[ -f ~/.zshrc.common ]] && source ~/.zshrc.common
 
-# neovim tarball (managed by wsl-setup.sh)
-export PATH="$HOME/opt/nvim/current/bin:$PATH"
+prepend_path() {
+  local dir="$1"
+  [[ -d "$dir" ]] || return 0
+  case ":$PATH:" in
+    *":$dir:"*) ;;
+    *) PATH="$dir:$PATH" ;;
+  esac
+}
 
-# user local bin (uv, pipx)
-export PATH="$HOME/.local/bin:$PATH"
+# prioritize user-managed bins over system binaries
+prepend_path "$HOME/.cargo/bin"
+prepend_path "$HOME/.local/bin"
+prepend_path "$HOME/opt/nvim/current/bin"
+
+export PATH
 
 # optional pyenv path only
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+prepend_path "$PYENV_ROOT/bin"
+export PATH
 
 # initialize LS_COLORS when dircolors is available
 if command -v dircolors >/dev/null 2>&1; then
