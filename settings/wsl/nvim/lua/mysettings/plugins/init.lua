@@ -1,6 +1,11 @@
+local uv = vim.uv or vim.loop
+local fs_stat = uv and uv.fs_stat or nil
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system({
+local lazy_exists = fs_stat and fs_stat(lazypath)
+
+if not lazy_exists then
+  local ok = pcall(vim.fn.system, {
     "git",
     "clone",
     "--filter=blob:none",
@@ -8,7 +13,13 @@ if not vim.uv.fs_stat(lazypath) then
     "--branch=stable",
     lazypath,
   })
+
+  if not ok then
+    vim.notify("Failed to bootstrap lazy.nvim", vim.log.levels.ERROR)
+    return
+  end
 end
+
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
