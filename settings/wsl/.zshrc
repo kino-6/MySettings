@@ -12,10 +12,15 @@ prepend_path() {
 
 # prioritize user-managed bins over system binaries
 prepend_path "$HOME/.cargo/bin"
-prepend_path "$HOME/.local/bin"
 prepend_path "$HOME/opt/nvim/current/bin"
+prepend_path "$HOME/.local/bin"
 
 export PATH
+
+# zsh command hash refresh (useful right after setup/symlink updates)
+if [[ -o interactive ]]; then
+  rehash
+fi
 
 # optional pyenv path only
 export PYENV_ROOT="$HOME/.pyenv"

@@ -86,6 +86,7 @@ GPU を使う重い ML ワークロード（例: torch / tensorflow を使う学
    - 既定: `v0.12.1`（`NEOVIM_VERSION` で変更可能）
    - `~/opt/nvim/current` シンボリックリンクを更新
    - `~/.local/bin/nvim -> ~/opt/nvim/current/bin/nvim` のシンボリックリンクを作成し、`/usr/bin/nvim` より優先されるようにする
+   - setup script 内で `verify_nvim_runtime` を実行し、`which nvim` が `~/.local/bin/nvim` を指すことを確認（不一致なら終了）
 4. Rust toolchain を `rustup` で stable に更新し、`cargo install --locked tree-sitter-cli` を実行
    - `tree-sitter-cli` は **0.26.1+ 必須**（`nvim-treesitter` 互換のため）
    - `build-essential`, `clang` も同時に導入
@@ -105,8 +106,9 @@ GPU を使う重い ML ワークロード（例: torch / tensorflow を使う学
 
 WSL 用 `.zshrc` は以下を満たします。
 
-- `~/.cargo/bin` / `~/.local/bin` / `~/opt/nvim/current/bin` を PATH 先頭側に追加
+- `~/.cargo/bin` / `~/opt/nvim/current/bin` / `~/.local/bin` を PATH 先頭側に追加
 - `~/.local/bin/nvim` symlink を優先して tarball 版 Neovim を利用
+- interactive shell 起動時に `rehash` を実行し、コマンドハッシュの古い解決結果を避ける
 - `dircolors` があれば `LS_COLORS` を初期化し、`ls/grep` は `--color=auto` で表示
 - `fd-find` の補助として、`fd` 未導入時のみ `fdfind -> fd` alias
 - `bat` 未導入かつ `batcat` 導入済み環境では `batcat -> bat` alias
@@ -127,10 +129,15 @@ WSL / Windows Terminal 側の ANSI color 表示が正常であれば、色表示
 
 ```bash
 which nvim
-nvim --version
+nvim --version | head -n 1
 tree-sitter --version
 nvim --headless "+q"
 ```
+
+期待値の例:
+
+- `which nvim` が `~/.local/bin/nvim` を返す
+- `nvim --version | head -n 1` が `NVIM v0.12.1`（または指定した `NEOVIM_VERSION`）を返す
 
 追加確認（plugin/ネットワーク依存のためローカル確認推奨）:
 
@@ -143,6 +150,11 @@ nvim --headless "+q"
 
 - `exec zsh`
 - WSL 再起動
+
+既に開いている shell で古い解決結果（`/usr/bin/nvim` など）が残る場合は、次も実行してください。
+
+- bash: `hash -r`
+- zsh: `rehash`
 
 ## WSL Neovim starter (lightweight)
 

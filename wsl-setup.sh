@@ -140,6 +140,39 @@ install_nvim_shim() {
   echo "Updated symlink: $shim -> $current_nvim"
 }
 
+verify_nvim_runtime() {
+  local expected_shim="$HOME/.local/bin/nvim"
+  local expected_real="$NEOVIM_INSTALL_ROOT/current/bin/nvim"
+  local resolved_path
+
+  export PATH="$HOME/.local/bin:$NEOVIM_INSTALL_ROOT/current/bin:$PATH"
+  hash -r
+
+  resolved_path="$(command -v nvim || true)"
+  if [[ "$resolved_path" != "$expected_shim" ]]; then
+    echo "ERROR: nvim resolution is unexpected."
+    echo "expected: $expected_shim"
+    echo "actual  : $resolved_path"
+    return 1
+  fi
+
+  if [[ ! -L "$expected_shim" ]]; then
+    echo "ERROR: expected shim is not a symlink: $expected_shim"
+    return 1
+  fi
+
+  if [[ "$(readlink -f "$expected_shim")" != "$(readlink -f "$expected_real")" ]]; then
+    echo "ERROR: nvim shim target mismatch."
+    echo "shim points to: $(readlink -f "$expected_shim")"
+    echo "expected      : $(readlink -f "$expected_real")"
+    return 1
+  fi
+
+  echo "Neovim runtime verification passed."
+  echo "which nvim -> $(command -v nvim)"
+  nvim --version | head -n 1
+}
+
 install_or_update_rustup() {
   export PATH="$HOME/.cargo/bin:$PATH"
 
@@ -193,6 +226,7 @@ sudo apt install -y "${PACKAGES[@]}"
 
 install_neovim_release "$NEOVIM_VERSION" "$NEOVIM_INSTALL_ROOT"
 install_nvim_shim
+verify_nvim_runtime
 
 install_or_update_rustup
 install_tree_sitter_cli
