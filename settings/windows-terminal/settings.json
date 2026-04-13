@@ -1,0 +1,168 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+
+    "actions": [],
+    "copyFormatting": "none",
+    "copyOnSelect": false,
+
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+
+    "keybindings": [
+        { "id": "Terminal.CopyToClipboard", "keys": "ctrl+c" },
+        { "id": "Terminal.PasteFromClipboard", "keys": "ctrl+v" },
+        { "id": "Terminal.FindText", "keys": "ctrl+shift+f" },
+        { "id": "Terminal.DuplicatePaneAuto", "keys": "alt+shift+d" }
+    ],
+
+    "newTabMenu": [
+        { "type": "remainingProfiles" }
+    ],
+
+    "profiles": {
+        "defaults": {
+            "colorScheme": "SFC Retro",
+            "cursorShape": "vintage",
+            "font": {
+                "face": "HackGen Console NF",
+                "size": 11
+            },
+            "useAcrylic": false,
+            "opacity": 100,
+            "padding": "8, 6, 8, 6",
+            "antialiasingMode": "grayscale"
+        },
+
+        "list": [
+            {
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "コマンド プロンプト"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{963ff2f7-6aed-5ce3-9d91-90d99571f53a}",
+                "hidden": true,
+                "name": "Ubuntu-24.04",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{e568f158-664f-5ff6-abcc-d3c467720d29}",
+                "hidden": false,
+                "name": "Ubuntu-24.04",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{17bf3de4-5353-5709-bcf9-835bd952a95e}",
+                "hidden": true,
+                "name": "Ubuntu-22.04",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{4ff56d04-d9cf-57ea-bae2-ad396374e7e3}",
+                "hidden": false,
+                "name": "Ubuntu 22.04.5 LTS",
+                "source": "CanonicalGroupLimited.Ubuntu22.04LTS_79rhkp1fndgsc"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\pinokio\\bin\\miniconda\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\pinokio\\bin\\miniconda' \"",
+                "guid": "{a8d87650-a09b-5767-a035-d6b4a4175999}",
+                "icon": "C:\\pinokio\\bin\\miniconda\\Menu\\anaconda_powershell_prompt.ico",
+                "name": "Anaconda PowerShell Prompt (miniconda)",
+                "startingDirectory": "C:\\Users\\tkino"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\cmd.exe \"/K\" C:\\pinokio\\bin\\miniconda\\Scripts\\activate.bat C:\\pinokio\\bin\\miniconda",
+                "guid": "{b3ebe7b3-516b-562f-8d58-fe79d2738564}",
+                "icon": "C:\\pinokio\\bin\\miniconda\\Menu\\anaconda_prompt.ico",
+                "name": "Anaconda Prompt (miniconda)",
+                "startingDirectory": "C:\\Users\\tkino"
+            },
+            {
+                "guid": "{0c541d3b-2799-5e20-a20b-3c274ec71a97}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2019",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{86e6a32d-dffa-50b8-a019-bd8bf45e519e}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2019",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "commandline": "C:\\LocalWork\\text-generation-webui\\installer_files\\env\\Library\\bin\\bash.exe --login -i --",
+                "guid": "{b2ba7791-f3b5-553a-8f4a-064b61969df2}",
+                "icon": "C:\\LocalWork\\text-generation-webui\\installer_files\\env\\Menu\\git-for-windows.ico",
+                "name": "Git Bash (conda)",
+                "startingDirectory": "C:\\Users\\tkino"
+            },
+            {
+                "guid": "{c55dd579-5114-58cc-aed8-bc2092282e0a}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{d330a463-1304-5c02-9375-7525c7ae5bc6}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{16208362-94fc-5b1f-a491-5b2624d5ab56}",
+                "hidden": true,
+                "name": "Visual Studio Debug Console",
+                "source": "VSDebugConsole"
+            },
+            {
+                "guid": "{9aede596-b378-520c-ab80-19e0778e3ba7}",
+                "hidden": false,
+                "name": "Ubuntu-24.04",
+                "source": "Microsoft.WSL"
+            }
+        ]
+    },
+
+    "schemes": [
+        {
+            "name": "SFC Retro",
+            "background": "#0C0C3C",
+            "foreground": "#E8E8FF",
+            "selectionBackground": "#3A3A7A",
+            "cursorColor": "#FFFF88",
+
+            "black": "#000000",
+            "red": "#FF5555",
+            "green": "#55FF55",
+            "yellow": "#FFFF55",
+            "blue": "#5555FF",
+            "purple": "#FF55FF",
+            "cyan": "#55FFFF",
+            "white": "#E8E8FF",
+
+            "brightBlack": "#555555",
+            "brightRed": "#FF8888",
+            "brightGreen": "#88FF88",
+            "brightYellow": "#FFFF88",
+            "brightBlue": "#8888FF",
+            "brightPurple": "#FF88FF",
+            "brightCyan": "#88FFFF",
+            "brightWhite": "#FFFFFF"
+        }
+    ],
+
+    "themes": []
+}
