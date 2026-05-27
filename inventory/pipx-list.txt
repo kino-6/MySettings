@@ -1,0 +1,6 @@
+venvs are in /Users/kinoshitayuki/.local/pipx/venvs
+apps are exposed on your $PATH at /Users/kinoshitayuki/.local/bin
+manual pages are exposed at /Users/kinoshitayuki/.local/share/man
+   package numpy 2.4.6, installed using Python 3.13.0
+    - f2py
+    - numpy-config

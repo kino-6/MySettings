@@ -1,0 +1,6 @@
+/Users/kinoshitayuki/.nodebrew/node/v24.5.0/lib
+├── @anthropic-ai/claude-code@2.1.152
+├── @vscode/vsce@3.9.1
+├── corepack@0.34.7
+└── npm@11.15.0
+
