@@ -1,0 +1,6 @@
+display_name: Outcome-First Prompting
+short_description: Stable output specs for prompts
+default_prompt: >-
+  Convert this request into an outcome-first prompt. Define the artifact,
+  required fields or sections, acceptance criteria, constraints, references, and
+  exact task so the output is repeatable.

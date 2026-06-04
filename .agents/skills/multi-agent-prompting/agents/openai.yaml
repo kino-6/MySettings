@@ -1,0 +1,6 @@
+display_name: Multi-Agent Prompting
+short_description: Routing, debate, and evaluator patterns
+default_prompt: >-
+  Design the smallest useful multi-agent workflow for this task. Choose whether
+  to use real subagents or simulated roles, define each role, constrain tools,
+  and specify the integration handoff for the final answer.

@@ -1,0 +1,6 @@
+display_name: GameStudio Review
+short_description: Multi-role game design review
+default_prompt: >-
+  Review the current game like a small game studio. Identify the player
+  experience problem, critique evidence, propose design options, and turn the
+  best slice into an implementation plan.

@@ -1,0 +1,6 @@
+display_name: Context Architecture
+short_description: Structure long context and stable rules
+default_prompt: >-
+  Rework this prompt or workflow as context architecture. Separate stable rules,
+  intent, reference index, loaded references, current task, and deltas; then
+  propose a cache-aware, just-in-time layout.

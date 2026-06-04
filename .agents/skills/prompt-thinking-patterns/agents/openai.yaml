@@ -1,0 +1,6 @@
+display_name: Prompt Thinking Patterns
+short_description: Reasoning and verification prompt patterns
+default_prompt: >-
+  Improve this prompt or workflow by choosing one reasoning pattern that reduces
+  the real failure mode: verification, self-refine, branching, skeleton-first,
+  pre-mortem, counter-hypothesis, or calibrated confidence.

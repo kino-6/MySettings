@@ -1,0 +1,5 @@
+display_name: Agent Harness Design
+short_description: Loops, tools, memory, and guardrails
+default_prompt: >-
+  Design an agent harness for this workflow. Define the loop, tools, guardrails,
+  memory strategy, approval points, verification checks, and stop conditions.

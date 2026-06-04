@@ -1,0 +1,7 @@
+display_name: AI Automation Ops
+short_description: Operationalize Codex and Claude workflows
+default_prompt: >-
+  Turn this AI workflow into an operational setup. Decide what belongs in
+  project instructions, what stays in the prompt, which tools or MCPs are needed,
+  what needs a plan or approval gate, what verification runs, and whether it
+  should become a Skill.
