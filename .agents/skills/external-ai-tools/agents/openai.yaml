@@ -1,0 +1,7 @@
+display_name: External AI Tools
+short_description: Route third-party AI tools safely
+default_prompt: >-
+  Evaluate this third-party AI tool for the current repo. Classify it as ADOPT,
+  PILOT, REFERENCE, or SKIP; check install footprint, secrets, licenses, MCP or
+  config effects, and recommend the lightest safe integration path.
+

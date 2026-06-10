@@ -1,0 +1,7 @@
+display_name: Skill Use Manager
+short_description: Route repo skills by daily or conditional use
+default_prompt: >-
+  Classify the current task against this repo's skills. Choose the smallest
+  useful set, explain why each skill applies, and note whether any skill should
+  be promoted or demoted between daily, conditional, and library use.
+
