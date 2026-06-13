@@ -1,7 +1,7 @@
 # Codex Skills Inventory
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-06-10 09:11:40 JST
+Updated: 2026-06-13 JST
 
 ## Sources
 
@@ -11,12 +11,12 @@ Updated: 2026-06-10 09:11:40 JST
 ## Merge Summary
 
 - Local user skills found: 22
-- Repository skills found: 30
+- Repository skills found: 56
 - Missing local user skills in repository: 0
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 5
 
-All non-system local skills are already present in this repository.
+All non-system local skills are already present in this repository. ECC upstream Codex skills from `affaan-m/ECC` were added in add-only mode on 2026-06-13.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 
@@ -57,12 +57,38 @@ These skills exist in `.agents/skills` but not in local `~/.codex/skills`.
 | --- |
 | `agent-harness-design` |
 | `ai-automation-ops` |
+| `api-design` |
+| `article-writing` |
+| `backend-patterns` |
+| `brand-voice` |
+| `bun-runtime` |
+| `coding-standards` |
+| `content-engine` |
 | `context-architecture` |
+| `crosspost` |
+| `deep-research` |
+| `dmux-workflows` |
+| `documentation-lookup` |
+| `everything-claude-code` |
+| `exa-search` |
 | `external-ai-tools` |
+| `fal-ai-media` |
+| `frontend-patterns` |
+| `frontend-slides` |
+| `investor-materials` |
+| `investor-outreach` |
+| `market-research` |
+| `mcp-server-patterns` |
+| `mle-workflow` |
 | `multi-agent-prompting` |
+| `nextjs-turbopack` |
 | `outcome-first-prompting` |
+| `product-capability` |
 | `prompt-thinking-patterns` |
+| `security-review` |
 | `skill-use-manager` |
+| `video-editing` |
+| `x-api` |
 
 ## Local Codex System Skills
 
