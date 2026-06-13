@@ -261,6 +261,18 @@ bash scripts/wsl-cleanup.sh
 
 失敗しても致命傷になりにくいよう、必要箇所は `|| true` で継続します。
 
+## ECC / Codex baseline
+
+このリポジトリは [affaan-m/ECC](https://github.com/affaan-m/ECC) の Codex 向け baseline を project-local に取り込んでいます。
+
+- `.codex/config.toml`: Codex CLI 用の sandbox / MCP / multi-agent baseline
+- `.codex/agents/`: `explorer`, `reviewer`, `docs-researcher` の role 定義
+- `.codex/AGENTS.md`: Codex 向け ECC 補助指示
+- `.agents/skills/`: Codex が auto-load する project-local skills
+- `.agents/plugins/marketplace.json`: ECC plugin metadata
+
+既存のローカル skill は保持し、ECC upstream 由来の不足 skill だけを add-only で追加しています。`notify` は macOS/WSL 両対応のため project baseline では無効化し、必要な host だけ `~/.codex/config.toml` で有効化する方針です。
+
 ## Future extension policy
 
 - 共通化できる設定は `settings/common/` に集約
