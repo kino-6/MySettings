@@ -1,0 +1,33 @@
+{
+  "name": "ecc",
+  "version": "2.0.0",
+  "description": "Project-local ECC workflows for Codex: shared skills and conventions for TDD, security scanning, code review, and autonomous development.",
+  "author": {
+    "name": "Affaan Mustafa",
+    "email": "me@affaanmustafa.com",
+    "url": "https://x.com/affaanmustafa"
+  },
+  "homepage": "https://ecc.tools",
+  "repository": "https://github.com/affaan-m/ECC",
+  "license": "MIT",
+  "keywords": ["codex", "agents", "skills", "tdd", "code-review", "security", "workflow", "automation"],
+  "skills": "../../.agents/skills/",
+  "interface": {
+    "displayName": "ECC",
+    "shortDescription": "ECC skills for TDD, security, code review, and autonomous development.",
+    "longDescription": "ECC is a harness-native operator system for Codex and adjacent agent harnesses. This project-local plugin points at the repository's .agents/skills directory so Codex can discover the vendored ECC skill surface.",
+    "developerName": "Affaan Mustafa",
+    "category": "Coding",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "websiteURL": "https://ecc.tools",
+    "privacyPolicyURL": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
+    "termsOfServiceURL": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
+    "brandColor": "#E07856",
+    "screenshots": [],
+    "defaultPrompt": [
+      "Use the tdd-workflow skill to write tests before implementation.",
+      "Use the security-review skill to scan for OWASP Top 10 vulnerabilities.",
+      "Use the verification-loop skill to verify correctness before shipping changes."
+    ]
+  }
+}
