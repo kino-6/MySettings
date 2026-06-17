@@ -1,7 +1,7 @@
 # Codex Skills Inventory
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-06-13 JST
+Updated: 2026-06-18 JST
 
 ## Sources
 
@@ -11,12 +11,14 @@ Updated: 2026-06-13 JST
 ## Merge Summary
 
 - Local user skills found: 22
-- Repository skills found: 56
+- Repository skills found: 58
 - Missing local user skills in repository: 0
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 5
 
 All non-system local skills are already present in this repository. ECC upstream Codex skills from `affaan-m/ECC` were added in add-only mode on 2026-06-13.
+
+`hirokita117/yaml-to-html-skill` was added in add-only mode on 2026-06-18. It contributes `generate-explainer-yaml` and `generate-explainer-html`, both kept as project-local skills under `.agents/skills/`; the upstream MIT license is copied into each imported skill directory.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 
@@ -75,6 +77,8 @@ These skills exist in `.agents/skills` but not in local `~/.codex/skills`.
 | `fal-ai-media` |
 | `frontend-patterns` |
 | `frontend-slides` |
+| `generate-explainer-html` |
+| `generate-explainer-yaml` |
 | `investor-materials` |
 | `investor-outreach` |
 | `market-research` |

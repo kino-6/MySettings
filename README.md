@@ -273,6 +273,13 @@ bash scripts/wsl-cleanup.sh
 
 既存のローカル skill は保持し、ECC upstream 由来の不足 skill だけを add-only で追加しています。`notify` は macOS/WSL 両対応のため project baseline では無効化し、必要な host だけ `~/.codex/config.toml` で有効化する方針です。
 
+追加で、`hirokita117/yaml-to-html-skill` 由来の explainer workflow を project-local skill として取り込んでいます。
+
+- `generate-explainer-yaml`: ドキュメント / PR / README / 仕様などを `core.yaml` と `view.yaml` に整理
+- `generate-explainer-html`: その YAML から、ライト / ダーク切り替え付きのオフライン HTML explainer bundle を生成
+
+取り込み元は MIT License のため、各 skill directory に upstream `LICENSE` を同梱しています。
+
 ## Future extension policy
 
 - 共通化できる設定は `settings/common/` に集約

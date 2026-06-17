@@ -1,6 +1,7 @@
 # Skill Use Classification
 
 Generated: 2026-06-10 09:11:40 JST
+Updated: 2026-06-18 JST
 
 ## Position
 
@@ -50,6 +51,8 @@ This follows the same progressive-disclosure idea used by Codex skills: keep met
 | `iterative-retrieval` | Context must be retrieved progressively instead of bulk-loaded. |
 | `agent-introspection-debugging` | A failed agent/session needs structured diagnosis and recovery. |
 | `external-ai-tools` | Evaluating or installing third-party AI tools, MCPs, research CLIs, OCR, TTS, video, or avatar apps. |
+| `generate-explainer-yaml` | A document, PR, README, design note, or spec should be captured as `core.yaml` + `view.yaml` before visualization. |
+| `generate-explainer-html` | A `core.yaml` / `view.yaml` pair should become an offline switchable HTML explainer bundle. |
 | `continuous-learning-v2` | Session patterns should become project-scoped reusable instincts. |
 | `continuous-learning` | Legacy continuous-learning workflow is explicitly requested. |
 | `hookify-rules` | Creating or modifying Hookify rules. |

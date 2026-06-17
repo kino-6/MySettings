@@ -43,6 +43,8 @@ Available skills:
 - documentation-lookup — API and release-note verification
 - mcp-server-patterns — MCP server design and implementation patterns
 - product-capability — Product capability definition and delivery framing
+- generate-explainer-yaml — Convert documents, PRs, READMEs, design notes, or specs into `core.yaml` and `view.yaml`
+- generate-explainer-html — Build an offline, switchable HTML explainer bundle from `core.yaml` and `view.yaml`
 
 ## MCP Servers
 
