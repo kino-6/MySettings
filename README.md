@@ -280,6 +280,14 @@ bash scripts/wsl-cleanup.sh
 
 取り込み元は MIT License のため、各 skill directory に upstream `LICENSE` を同梱しています。
 
+さらに、[addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) の production engineering workflow skills 24 個を repo と local `~/.codex/skills/` の両方に取り込んでいます。
+
+- `using-agent-skills`: Addy pack 側の meta router。既存の `skill-use-manager` をこの repo の daily router として維持し、こちらは参照用に保持
+- lifecycle skills: `interview-me`, `idea-refine`, `spec-driven-development`, `planning-and-task-breakdown`, `incremental-implementation`, `test-driven-development`, `code-review-and-quality`, `git-workflow-and-versioning`, `shipping-and-launch` など
+- production quality skills: `source-driven-development`, `doubt-driven-development`, `security-and-hardening`, `performance-optimization`, `frontend-ui-engineering`, `browser-testing-with-devtools`, `ci-cd-and-automation`, `observability-and-instrumentation` など
+
+Standalone Codex skill として参照が切れないよう、upstream root の `references/` や `agents/` を必要な skill directory に寄せています。
+
 ## Future extension policy
 
 - 共通化できる設定は `settings/common/` に集約

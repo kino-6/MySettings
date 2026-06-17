@@ -38,10 +38,15 @@ Use these when the task matches the trigger:
 | Trigger | Skills |
 | --- | --- |
 | New feature, bug fix, refactor, shell/setup script change | `tdd-workflow`, `verification-loop` |
+| Stricter Addy-style TDD or thin-slice implementation | `test-driven-development`, `incremental-implementation` |
+| Test/build failure or unexpected behavior | `debugging-and-error-recovery` |
 | AI-written code needs regression traps or review harnesses | `ai-regression-testing`, `eval-harness` |
-| Browser or UI end-to-end tests are needed | `e2e-testing` |
+| Browser or UI end-to-end/runtime tests are needed | `e2e-testing`, `browser-testing-with-devtools` |
+| Requirements are unclear, vague, or need a spec | `interview-me`, `idea-refine`, `spec-driven-development`, `planning-and-task-breakdown` |
 | Prompt, reusable instruction, or output contract design | `outcome-first-prompting`, `prompt-thinking-patterns` |
-| Long context, references, cache-aware prompt layout | `context-architecture`, `iterative-retrieval` |
+| Source-cited framework/library decisions | `source-driven-development`, `documentation-lookup` |
+| High-stakes or unfamiliar decisions need adversarial review | `doubt-driven-development`, `council` |
+| Long context, references, cache-aware prompt layout | `context-architecture`, `context-engineering`, `iterative-retrieval` |
 | Multiple roles, debate, reviewer separation, subagent design | `multi-agent-prompting`, `council` |
 | Tool-using AI agent harness design | `agent-harness-design` |
 | Debugging a failed agent or session behavior | `agent-introspection-debugging` |
@@ -49,6 +54,9 @@ Use these when the task matches the trigger:
 | Continuous learning, local instincts, or session pattern capture | `continuous-learning-v2`, `continuous-learning` |
 | Hookify or Plankton rule work | `hookify-rules`, `plankton-code-quality` |
 | Onboarding walkthroughs or architecture tours | `code-tour` |
+| Git hygiene, code review, or simplification | `git-workflow-and-versioning`, `code-review-and-quality`, `code-simplification` |
+| API/interface, frontend UI, security, or performance work | `api-and-interface-design`, `frontend-ui-engineering`, `security-and-hardening`, `performance-optimization` |
+| CI/CD, observability, deprecation, docs/ADRs, or launch readiness | `ci-cd-and-automation`, `observability-and-instrumentation`, `deprecation-and-migration`, `documentation-and-adrs`, `shipping-and-launch` |
 
 ## Library Routing
 
@@ -59,6 +67,7 @@ Keep these available, but only load them when the repo or user request explicitl
 | Databases and migrations | `database-migrations`, `postgres-patterns`, `clickhouse-io` |
 | Java backend | `jpa-patterns` |
 | Games | `gamestudio-review` |
+| Alternate skill router | `using-agent-skills` (reference only; this repo uses `skill-use-manager` as the daily router) |
 
 ## Operating Rules
 

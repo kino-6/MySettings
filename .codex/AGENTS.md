@@ -45,6 +45,13 @@ Available skills:
 - product-capability — Product capability definition and delivery framing
 - generate-explainer-yaml — Convert documents, PRs, READMEs, design notes, or specs into `core.yaml` and `view.yaml`
 - generate-explainer-html — Build an offline, switchable HTML explainer bundle from `core.yaml` and `view.yaml`
+- using-agent-skills — Addy agent-skills meta router; kept as library because `skill-use-manager` is this repo's daily router
+- interview-me / idea-refine / spec-driven-development / planning-and-task-breakdown — Define and plan work before implementation
+- incremental-implementation / test-driven-development / debugging-and-error-recovery — Build and repair work in verifiable slices
+- code-review-and-quality / code-simplification / git-workflow-and-versioning — Review, simplify, and ship source changes cleanly
+- source-driven-development / doubt-driven-development / documentation-and-adrs — Ground decisions, challenge assumptions, and record durable context
+- frontend-ui-engineering / browser-testing-with-devtools / api-and-interface-design — UI, browser runtime, and interface design workflows
+- security-and-hardening / performance-optimization / ci-cd-and-automation / observability-and-instrumentation / deprecation-and-migration / shipping-and-launch — Production quality, deployment, and lifecycle workflows
 
 ## MCP Servers
 

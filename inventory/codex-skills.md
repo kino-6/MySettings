@@ -10,8 +10,8 @@ Updated: 2026-06-18 JST
 
 ## Merge Summary
 
-- Local user skills found: 22
-- Repository skills found: 58
+- Local user skills found: 80
+- Repository skills found: 82
 - Missing local user skills in repository: 0
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 5
@@ -20,11 +20,15 @@ All non-system local skills are already present in this repository. ECC upstream
 
 `hirokita117/yaml-to-html-skill` was added in add-only mode on 2026-06-18. It contributes `generate-explainer-yaml` and `generate-explainer-html`, both kept as project-local skills under `.agents/skills/`; the upstream MIT license is copied into each imported skill directory.
 
+`addyosmani/agent-skills` was added in add-only mode on 2026-06-18. It contributes 24 production engineering workflow skills to both `.agents/skills` and local `~/.codex/skills`. The upstream MIT license is copied into each imported skill directory, and root-level supporting `references/` / `agents/` files were copied into the specific standalone skill directories that reference them.
+
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 
 Codex system skills under `.system` were not vendored into `.agents/skills`; they are preinstalled Codex skills and should stay system-managed unless explicitly pinned for this repo later.
 
-## Local User Skills
+## Original Local User Skills
+
+This table is the original audited local set from 2026-06-10. Additional local skills now mirror the repository set after the 2026-06-13 ECC import and the 2026-06-18 Addy import.
 
 | Skill | Repo status |
 | --- | --- |
@@ -57,42 +61,8 @@ These skills exist in `.agents/skills` but not in local `~/.codex/skills`.
 
 | Skill |
 | --- |
-| `agent-harness-design` |
-| `ai-automation-ops` |
-| `api-design` |
-| `article-writing` |
-| `backend-patterns` |
-| `brand-voice` |
-| `bun-runtime` |
-| `coding-standards` |
-| `content-engine` |
-| `context-architecture` |
-| `crosspost` |
-| `deep-research` |
-| `dmux-workflows` |
-| `documentation-lookup` |
-| `everything-claude-code` |
-| `exa-search` |
-| `external-ai-tools` |
-| `fal-ai-media` |
-| `frontend-patterns` |
-| `frontend-slides` |
 | `generate-explainer-html` |
 | `generate-explainer-yaml` |
-| `investor-materials` |
-| `investor-outreach` |
-| `market-research` |
-| `mcp-server-patterns` |
-| `mle-workflow` |
-| `multi-agent-prompting` |
-| `nextjs-turbopack` |
-| `outcome-first-prompting` |
-| `product-capability` |
-| `prompt-thinking-patterns` |
-| `security-review` |
-| `skill-use-manager` |
-| `video-editing` |
-| `x-api` |
 
 ## Local Codex System Skills
 
