@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent Self Review"
+  short_description: "One-pass self-check for agent outputs"
+  default_prompt: "Use $agent-self-review to check your output once, make minimal fixes, and report remaining risk."
+policy:
+  allow_implicit_invocation: true

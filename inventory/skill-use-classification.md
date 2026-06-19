@@ -1,7 +1,7 @@
 # Skill Use Classification
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-06-18 JST
+Updated: 2026-06-20 JST
 
 ## Position
 
@@ -28,6 +28,7 @@ This follows the same progressive-disclosure idea used by Codex skills: keep met
 | --- | --- | --- |
 | `skill-use-manager` | Added as the router for `.agents/skills` | Keeps routing decisions lightweight and repeatable. |
 | `verification-loop` | Repo changes affect setup scripts and dotfiles | Verification should be considered before handoff after meaningful edits. |
+| `agent-self-review` | Agent-created outputs need a lightweight check before handoff | Adds one self-review pass without turning routine work into a strict gate. |
 | `strategic-compact` | Skill and config work can run long | Helps preserve state during long repo maintenance sessions. |
 | `skill-stocktake` | User is actively auditing skills | Core workflow for skill quality and overlap review. |
 | `agent-sort` | User is sorting skill use surfaces | Core workflow for daily versus library decisions. |

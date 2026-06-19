@@ -1,7 +1,7 @@
 # Codex Skills Inventory
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-06-18 JST
+Updated: 2026-06-20 JST
 
 ## Sources
 
@@ -11,7 +11,7 @@ Updated: 2026-06-18 JST
 ## Merge Summary
 
 - Local user skills found: 80
-- Repository skills found: 82
+- Repository skills found: 83
 - Missing local user skills in repository: 0
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 5
@@ -21,6 +21,8 @@ All non-system local skills are already present in this repository. ECC upstream
 `hirokita117/yaml-to-html-skill` was added in add-only mode on 2026-06-18. It contributes `generate-explainer-yaml` and `generate-explainer-html`, both kept as project-local skills under `.agents/skills/`; the upstream MIT license is copied into each imported skill directory.
 
 `addyosmani/agent-skills` was added in add-only mode on 2026-06-18. It contributes 24 production engineering workflow skills to both `.agents/skills` and local `~/.codex/skills`. The upstream MIT license is copied into each imported skill directory, and root-level supporting `references/` / `agents/` files were copied into the specific standalone skill directories that reference them.
+
+`agent-self-review` was added on 2026-06-20 as a project-local Codex skill for one-pass self-review of agent outputs. It is intentionally lightweight and does not act as a strict review gate.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 
@@ -61,6 +63,7 @@ These skills exist in `.agents/skills` but not in local `~/.codex/skills`.
 
 | Skill |
 | --- |
+| `agent-self-review` |
 | `generate-explainer-html` |
 | `generate-explainer-yaml` |
 
