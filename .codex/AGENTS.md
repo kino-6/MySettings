@@ -43,6 +43,9 @@ Available skills:
 - documentation-lookup — API and release-note verification
 - mcp-server-patterns — MCP server design and implementation patterns
 - product-capability — Product capability definition and delivery framing
+- ecc-task-workflow — Lightweight structured task context for broad or multi-session work
+- ecc-final-check — Final diff/scope/verification review before substantial work is summarized
+- ecc-finish-work — Session-ending ritual for checks, resume notes, and durable learning promotion
 - generate-explainer-yaml — Convert documents, PRs, READMEs, design notes, or specs into `core.yaml` and `view.yaml`
 - generate-explainer-html — Build an offline, switchable HTML explainer bundle from `core.yaml` and `view.yaml`
 - using-agent-skills — Addy agent-skills meta router; kept as library because `skill-use-manager` is this repo's daily router
@@ -84,6 +87,27 @@ Sample role configs in this repo:
 - `.codex/agents/explorer.toml` — read-only evidence gathering
 - `.codex/agents/reviewer.toml` — correctness/security review
 - `.codex/agents/docs-researcher.toml` — API and release-note verification
+
+## ECC Structured Workflow
+
+This repository does not install an external agent harness by default.
+Instead, it keeps a lightweight workflow inspired by durable agent-harness
+patterns under
+`.agents/ecc-workflow/`:
+
+- `spec/` stores durable repo standards and reusable project knowledge.
+- `templates/task/` stores `prd.md`, `implement.md`, `check.md`, and `journal.md`
+  shapes for structured work.
+- `tasks/` can hold task artifacts when work spans multiple files, changes
+  agent behavior, or may need to resume later.
+- `workspace/` is gitignored local journal space for private or machine-specific
+  notes.
+
+Use `ecc-task-workflow` for broad/risky/multi-session work, `ecc-final-check`
+before summarizing substantial changes, and `ecc-finish-work` when ending a
+structured task. Do not install external harness tooling, create vendor-owned
+workflow directories, or rewrite the existing ECC baseline unless the user
+explicitly asks for that trial.
 
 ## Key Differences from Claude Code
 
