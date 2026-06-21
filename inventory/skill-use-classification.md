@@ -1,7 +1,7 @@
 # Skill Use Classification
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-06-20 JST
+Updated: 2026-06-21 JST
 
 ## Position
 
@@ -20,6 +20,7 @@ This follows the same progressive-disclosure idea used by Codex skills: keep met
 - This repo is a dotfiles/setup repository, not an application runtime.
 - Active first-party files are mostly Markdown and shell scripts: `README.md`, `mac-setup.sh`, `wsl-setup.sh`, and `scripts/*.sh`.
 - The repo contains `.agents/skills`, so skill governance is a first-class concern.
+- Current scan found 86 repository skills, 86 non-system local user skills, and 0 repository-only skills.
 - There are no active app manifests such as `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, or `tsconfig*.json`.
 
 ## DAILY
@@ -59,6 +60,9 @@ This follows the same progressive-disclosure idea used by Codex skills: keep met
 | `context-engineering` | Agent context/rules setup needs explicit optimization. |
 | `multi-agent-prompting` | Routing, debate, independent alternatives, or reviewer separation would improve the task. |
 | `agent-harness-design` | Designing or improving a tool-using agent loop, guardrails, or stop conditions. |
+| `ecc-task-workflow` | Broad, risky, multi-file, or multi-session repo work should create lightweight task context. |
+| `ecc-final-check` | Substantial structured workflow changes need a final diff, scope, and verification review. |
+| `ecc-finish-work` | Structured tasks need a clean ending ritual with check updates, resume notes, and durable learning promotion. |
 | `council` | Multiple valid paths require structured disagreement before deciding. |
 | `iterative-retrieval` | Context must be retrieved progressively instead of bulk-loaded. |
 | `agent-introspection-debugging` | A failed agent/session needs structured diagnosis and recovery. |

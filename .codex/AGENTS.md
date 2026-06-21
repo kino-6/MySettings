@@ -34,6 +34,7 @@ Available skills:
 - strategic-compact — Context management
 - api-design — REST API design patterns
 - verification-loop — Build, test, lint, typecheck, security
+- agent-self-review — Lightweight one-pass review before handoff
 - deep-research — Multi-source research with firecrawl and exa MCPs
 - exa-search — Neural search via Exa MCP for web, code, and companies
 - x-api — X/Twitter API integration for posting, threads, and analytics

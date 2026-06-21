@@ -25,6 +25,7 @@ Use these as the default operating surface for this repo:
 | --- | --- |
 | `skill-use-manager` | Decide whether another skill should be used. |
 | `verification-loop` | Verify meaningful repo edits before handoff. |
+| `agent-self-review` | Run a lightweight self-review pass before handoff. |
 | `strategic-compact` | Preserve context during long-running repo work. |
 | `skill-stocktake` | Audit skill quality, overlap, and stale references. |
 | `agent-sort` | Reclassify skills into daily/conditional/library buckets. |
@@ -49,6 +50,7 @@ Use these when the task matches the trigger:
 | Long context, references, cache-aware prompt layout | `context-architecture`, `context-engineering`, `iterative-retrieval` |
 | Multiple roles, debate, reviewer separation, subagent design | `multi-agent-prompting`, `council` |
 | Tool-using AI agent harness design | `agent-harness-design` |
+| Broad, risky, multi-file, or multi-session repo work | `ecc-task-workflow`, `ecc-final-check`, `ecc-finish-work` |
 | Debugging a failed agent or session behavior | `agent-introspection-debugging` |
 | Third-party AI tools, MCPs, research CLIs, OCR, TTS, video, or avatar apps | `external-ai-tools` |
 | Continuous learning, local instincts, or session pattern capture | `continuous-learning-v2`, `continuous-learning` |
@@ -77,6 +79,36 @@ Keep these available, but only load them when the repo or user request explicitl
 4. Do not read a domain skill body just because it exists.
 5. If a skill seems useful in three unrelated recent sessions, propose promoting it from `CONDITIONAL` to `DAILY`.
 6. If a daily skill has not affected decisions for several sessions, propose demoting it to `CONDITIONAL`.
+
+## Auto Update Routine
+
+When this skill is used for routing, stocktaking, or skill inventory work, first
+check whether the mechanical inventory is stale:
+
+```bash
+bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check
+```
+
+`--check` exits `0` when inventory is current and `1` when drift is found.
+
+If the check reports drift and the user has asked to update skill inventory or
+classification files, run:
+
+```bash
+bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --write
+```
+
+The script only updates mechanical inventory facts:
+
+- `inventory/codex-skills.md` update date.
+- local non-system skill count.
+- repository skill count.
+- system skill count.
+- repository-only skill list.
+
+It does not classify skills into `DAILY`, `CONDITIONAL`, or `LIBRARY`. Bucket
+changes still require repo evidence and judgment, then manual updates to this
+file and `inventory/skill-use-classification.md`.
 
 ## Updating The Classification
 
