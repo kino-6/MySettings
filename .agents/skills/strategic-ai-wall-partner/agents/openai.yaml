@@ -1,0 +1,4 @@
+interface:
+  display_name: "Strategic AI Wall Partner"
+  short_description: "A rigorous AI partner for strategic thinking"
+  default_prompt: "Use $strategic-ai-wall-partner to stress-test my idea from multiple time horizons and turn it into concrete next actions."
