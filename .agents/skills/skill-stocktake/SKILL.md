@@ -1,12 +1,12 @@
 ---
 name: skill-stocktake
-description: "Use when auditing Claude skills and commands for quality. Supports Quick Scan (changed skills only) and Full Stocktake modes with sequential subagent batch evaluation."
+description: "Use when auditing Codex/ECC skills for quality, overlap, stale references, and routing drift. Supports Quick Scan for changed skills and Full Stocktake for complete review."
 origin: ECC
 ---
 
 # skill-stocktake
 
-Slash command (`/skill-stocktake`) that audits all Claude skills and commands using a quality checklist + AI holistic judgment. Supports two modes: Quick Scan for recently changed skills, and Full Stocktake for a complete review.
+Audit Codex/ECC skills using a quality checklist plus holistic judgment. Supports two modes: Quick Scan for recently changed skills, and Full Stocktake for a complete review.
 
 ## Scope
 
@@ -14,8 +14,8 @@ The command targets the following paths **relative to the directory where it is 
 
 | Path | Description |
 |------|-------------|
-| `~/.claude/skills/` | Global skills (all projects) |
-| `{cwd}/.claude/skills/` | Project-level skills (if the directory exists) |
+| `~/.codex/skills/` | Local user skills (all projects) |
+| `{cwd}/.agents/skills/` | Project-level Codex/ECC skills (if the directory exists) |
 
 **At the start of Phase 1, the command explicitly lists which paths were found and scanned.**
 
@@ -28,7 +28,7 @@ cd ~/path/to/my-project
 /skill-stocktake
 ```
 
-If the project has no `.claude/skills/` directory, only global skills and commands are evaluated.
+If the project has no `.agents/skills/` directory, only local user skills are evaluated. Claude Code paths such as `~/.claude/skills` can still be audited by passing them through `SKILL_STOCKTAKE_GLOBAL_DIR` or `SKILL_STOCKTAKE_PROJECT_DIR`, but they are compatibility targets rather than this repo's default.
 
 ## Modes
 
@@ -37,37 +37,37 @@ If the project has no `.claude/skills/` directory, only global skills and comman
 | Quick Scan | `results.json` exists (default) | 5–10 min |
 | Full Stocktake | `results.json` absent, or `/skill-stocktake full` | 20–30 min |
 
-**Results cache:** `~/.claude/skills/skill-stocktake/results.json`
+**Results cache:** keep a repo-local or user-local JSON file, for example `.agents/ecc-workflow/workspace/skill-stocktake-results.json` for private task work or `~/.codex/skills/skill-stocktake/results.json` for local user history. Do not commit machine-specific usage observations.
 
 ## Quick Scan Flow
 
 Re-evaluate only skills that have changed since the last run (5–10 min).
 
-1. Read `~/.claude/skills/skill-stocktake/results.json`
-2. Run: `bash ~/.claude/skills/skill-stocktake/scripts/quick-diff.sh \
-         ~/.claude/skills/skill-stocktake/results.json`
-   (Project dir is auto-detected from `$PWD/.claude/skills`; pass it explicitly only if needed)
+1. Read the selected results JSON file.
+2. Run: `bash .agents/skills/skill-stocktake/scripts/quick-diff.sh \
+         .agents/ecc-workflow/workspace/skill-stocktake-results.json`
+   (Project dir is auto-detected from `$PWD/.agents/skills`; pass it explicitly only if needed)
 3. If output is `[]`: report "No changes since last run." and stop
 4. Re-evaluate only those changed files using the same Phase 2 criteria
 5. Carry forward unchanged skills from previous results
 6. Output only the diff
-7. Run: `bash ~/.claude/skills/skill-stocktake/scripts/save-results.sh \
-         ~/.claude/skills/skill-stocktake/results.json <<< "$EVAL_RESULTS"`
+7. Run: `bash .agents/skills/skill-stocktake/scripts/save-results.sh \
+         .agents/ecc-workflow/workspace/skill-stocktake-results.json <<< "$EVAL_RESULTS"`
 
 ## Full Stocktake Flow
 
 ### Phase 1 — Inventory
 
-Run: `bash ~/.claude/skills/skill-stocktake/scripts/scan.sh`
+Run: `bash .agents/skills/skill-stocktake/scripts/scan.sh`
 
 The script enumerates skill files, extracts frontmatter, and collects UTC mtimes.
-Project dir is auto-detected from `$PWD/.claude/skills`; pass it explicitly only if needed.
+Project dir is auto-detected from `$PWD/.agents/skills`; pass it explicitly only if needed.
 Present the scan summary and inventory table from the script output:
 
 ```
 Scanning:
-  ✓ ~/.claude/skills/         (17 files)
-  ✗ {cwd}/.claude/skills/    (not found — global skills only)
+  ✓ ~/.codex/skills/          (86 files)
+  ✓ {cwd}/.agents/skills/     (87 files)
 ```
 
 | Skill | 7d use | 30d use | Description |
@@ -107,7 +107,7 @@ Each skill is evaluated against this checklist:
 
 ```
 - [ ] Content overlap with other skills checked
-- [ ] Overlap with MEMORY.md / CLAUDE.md checked
+- [ ] Overlap with AGENTS.md, inventory docs, and other skills checked
 - [ ] Freshness of technical references verified (use WebSearch if tool names / CLI flags / APIs are present)
 - [ ] Usage frequency considered
 ```
@@ -125,7 +125,7 @@ Verdict criteria:
 Evaluation is **holistic AI judgment** — not a numeric rubric. Guiding dimensions:
 - **Actionability**: code examples, commands, or steps that let you act immediately
 - **Scope fit**: name, trigger, and content are aligned; not too broad or narrow
-- **Uniqueness**: value not replaceable by MEMORY.md / CLAUDE.md / another skill
+- **Uniqueness**: value not replaceable by AGENTS.md, inventory docs, or another skill
 - **Currency**: technical references work in the current environment
 
 **Reason quality requirements** — the `reason` field must be self-contained and decision-enabling:
@@ -153,16 +153,16 @@ Evaluation is **holistic AI judgment** — not a numeric rubric. Guiding dimensi
 1. **Retire / Merge**: present detailed justification per file before confirming with user:
    - What specific problem was found (overlap, staleness, broken references, etc.)
    - What alternative covers the same functionality (for Retire: which existing skill/rule; for Merge: the target file and what content to integrate)
-   - Impact of removal (any dependent skills, MEMORY.md references, or workflows affected)
+   - Impact of removal (any dependent skills, AGENTS.md/inventory references, or workflows affected)
 2. **Improve**: present specific improvement suggestions with rationale:
    - What to change and why (e.g., "trim 430→200 lines because sections X/Y duplicate python-patterns")
    - User decides whether to act
 3. **Update**: present updated content with sources checked
-4. Check MEMORY.md line count; propose compression if >100 lines
+4. Check long-lived agent guidance and inventory docs for duplicated rules; propose compression when they become noisy
 
 ## Results File Schema
 
-`~/.claude/skills/skill-stocktake/results.json`:
+Example results JSON:
 
 **`evaluated_at`**: Must be set to the actual UTC time of evaluation completion.
 Obtain via Bash: `date -u +%Y-%m-%dT%H:%M:%SZ`. Never use a date-only approximation like `T00:00:00Z`.
@@ -178,7 +178,7 @@ Obtain via Bash: `date -u +%Y-%m-%dT%H:%M:%SZ`. Never use a date-only approximat
   },
   "skills": {
     "skill-name": {
-      "path": "~/.claude/skills/skill-name/SKILL.md",
+      "path": ".agents/skills/skill-name/SKILL.md",
       "verdict": "Keep",
       "reason": "Concrete, actionable, unique value for X workflow",
       "mtime": "2026-01-15T08:30:00Z"

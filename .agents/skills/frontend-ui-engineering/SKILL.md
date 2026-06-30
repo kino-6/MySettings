@@ -1,6 +1,6 @@
 ---
 name: frontend-ui-engineering
-description: Builds production-quality UIs. Use when building or modifying user-facing interfaces. Use when creating components, implementing layouts, managing state, or when the output needs to look and feel production-quality rather than AI-generated.
+description: Use when building or modifying user-facing UI that must feel production-quality: layout, visual hierarchy, interaction states, accessibility, responsiveness, and design-system fit. For React/Next.js code patterns, prefer frontend-patterns.
 ---
 
 # Frontend UI Engineering

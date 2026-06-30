@@ -17,6 +17,14 @@ The goal is to keep the always-on surface small while preserving access to speci
 
 `LIBRARY` never means delete. It means searchable and selective.
 
+## Metadata Policy
+
+`agents/openai.yaml` is optional by default. Add or maintain it when a skill is
+exported, plugin-facing, shared across agent runtimes, or benefits from external
+router metadata. Do not add boilerplate `agents/openai.yaml` files to every
+skill solely for symmetry; `SKILL.md` frontmatter remains the canonical local
+routing source.
+
 ## Daily Set
 
 Use these as the default operating surface for this repo:
@@ -28,9 +36,6 @@ Use these as the default operating surface for this repo:
 | `agent-self-review` | Run a lightweight self-review pass before handoff. |
 | `strategic-compact` | Preserve context during long-running repo work. |
 | `skill-stocktake` | Audit skill quality, overlap, and stale references. |
-| `agent-sort` | Reclassify skills into daily/conditional/library buckets. |
-| `configure-ecc` | Adjust ECC/Codex installation and config surfaces. |
-| `ai-automation-ops` | Operationalize Codex/ECC workflows into repo practice. |
 
 ## Conditional Routing
 
@@ -38,8 +43,9 @@ Use these when the task matches the trigger:
 
 | Trigger | Skills |
 | --- | --- |
-| New feature, bug fix, refactor, shell/setup script change | `tdd-workflow`, `verification-loop` |
-| Stricter Addy-style TDD or thin-slice implementation | `test-driven-development`, `incremental-implementation` |
+| New feature, bug fix, refactor, or behavior change | `test-driven-development`, `verification-loop` |
+| Strict coverage gates, explicit red-green-refactor, or coordinated unit/integration/E2E planning | `tdd-workflow` |
+| Multi-file implementation should land as thin, verifiable slices | `incremental-implementation` |
 | Test/build failure or unexpected behavior | `debugging-and-error-recovery` |
 | AI-written code needs regression traps or review harnesses | `ai-regression-testing`, `eval-harness` |
 | Browser or UI end-to-end/runtime tests are needed | `e2e-testing`, `browser-testing-with-devtools` |
@@ -51,14 +57,25 @@ Use these when the task matches the trigger:
 | Multiple roles, debate, reviewer separation, subagent design | `multi-agent-prompting`, `council` |
 | Tool-using AI agent harness design | `agent-harness-design` |
 | Broad, risky, multi-file, or multi-session repo work | `ecc-task-workflow`, `ecc-final-check`, `ecc-finish-work` |
+| Reclassifying skills, commands, rules, hooks, or extras into daily/conditional/library buckets | `agent-sort` |
+| Adjusting ECC/Codex installation, config, or project/user-level setup surfaces | `configure-ecc` |
+| Turning local agent practice into repo/team automation, review gates, or repeatable skill packaging | `ai-automation-ops` |
 | Debugging a failed agent or session behavior | `agent-introspection-debugging` |
 | Third-party AI tools, MCPs, research CLIs, OCR, TTS, video, or avatar apps | `external-ai-tools` |
-| Continuous learning, local instincts, or session pattern capture | `continuous-learning-v2`, `continuous-learning` |
+| Continuous learning, local instincts, or session pattern capture | `continuous-learning-v2` |
 | Hookify or Plankton rule work | `hookify-rules`, `plankton-code-quality` |
 | Onboarding walkthroughs or architecture tours | `code-tour` |
 | Git hygiene, code review, or simplification | `git-workflow-and-versioning`, `code-review-and-quality`, `code-simplification` |
-| API/interface, frontend UI, security, or performance work | `api-and-interface-design`, `frontend-ui-engineering`, `security-and-hardening`, `performance-optimization` |
+| Public contracts, module boundaries, schemas, or frontend/backend integration points | `api-and-interface-design` |
+| REST endpoint/resource conventions, status codes, pagination, filtering, errors, versioning, or rate limits | `api-design` |
+| Backend implementation patterns for services, repositories, middleware, data access, caching, jobs, or logging | `backend-patterns` |
+| React/Next.js implementation patterns for components, hooks, state, forms, errors, animation, or frontend performance | `frontend-patterns` |
+| Production-quality UI layout, visual hierarchy, interaction states, responsiveness, and design-system fit | `frontend-ui-engineering` |
+| Designing or implementing sensitive behavior with untrusted input, auth, storage, secrets, or external integrations | `security-and-hardening` |
+| Reviewing or auditing changes for vulnerabilities, secrets, auth gaps, injection risks, or missing security tests | `security-review` |
+| Performance requirements, regressions, Core Web Vitals, or profiling are relevant | `performance-optimization` |
 | CI/CD, observability, deprecation, docs/ADRs, or launch readiness | `ci-cd-and-automation`, `observability-and-instrumentation`, `deprecation-and-migration`, `documentation-and-adrs`, `shipping-and-launch` |
+| Strategic wall-partner work for business ideas, product bets, career decisions, research questions, or assumption stress tests | `strategic-ai-wall-partner` |
 
 ## Library Routing
 
@@ -70,6 +87,8 @@ Keep these available, but only load them when the repo or user request explicitl
 | Java backend | `jpa-patterns` |
 | Games | `gamestudio-review` |
 | Alternate skill router | `using-agent-skills` (reference only; this repo uses `skill-use-manager` as the daily router) |
+| Legacy continuous learning | `continuous-learning` (reference only; use `continuous-learning-v2` for current project-scoped learning) |
+| Upstream ECC conventions | `everything-claude-code` (reference/provenance only; this repo keeps its Codex baseline in `.codex/AGENTS.md` and `.agents/ecc-workflow/`) |
 
 ## Operating Rules
 

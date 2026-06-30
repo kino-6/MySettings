@@ -1,29 +1,41 @@
 #!/usr/bin/env bash
 # scan.sh — enumerate skill files, extract frontmatter and UTC mtime
-# Usage: scan.sh [CWD_SKILLS_DIR]
+# Usage: scan.sh [PROJECT_SKILLS_DIR]
 # Output: JSON to stdout
 #
-# When CWD_SKILLS_DIR is omitted, defaults to $PWD/.claude/skills so the
-# script always picks up project-level skills without relying on the caller.
+# When PROJECT_SKILLS_DIR is omitted, defaults to $PWD/.agents/skills so the
+# script picks up this repo's Codex project-level skills.
 #
 # Environment:
-#   SKILL_STOCKTAKE_GLOBAL_DIR   Override ~/.claude/skills (for testing only;
-#                                do not set in production — intended for bats tests)
+#   SKILL_STOCKTAKE_GLOBAL_DIR   Override ~/.codex/skills
 #   SKILL_STOCKTAKE_PROJECT_DIR  Override project dir detection (for testing only)
 
 set -euo pipefail
 
-GLOBAL_DIR="${SKILL_STOCKTAKE_GLOBAL_DIR:-$HOME/.claude/skills}"
-CWD_SKILLS_DIR="${SKILL_STOCKTAKE_PROJECT_DIR:-${1:-$PWD/.claude/skills}}"
+CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+GLOBAL_DIR="${SKILL_STOCKTAKE_GLOBAL_DIR:-$CODEX_HOME/skills}"
+CWD_SKILLS_DIR="${SKILL_STOCKTAKE_PROJECT_DIR:-${1:-$PWD/.agents/skills}}"
 # Path to JSONL file containing tool-use observations (optional; used for usage frequency counts).
 # Override via SKILL_STOCKTAKE_OBSERVATIONS env var if your setup uses a different path.
-OBSERVATIONS="${SKILL_STOCKTAKE_OBSERVATIONS:-$HOME/.claude/observations.jsonl}"
+OBSERVATIONS="${SKILL_STOCKTAKE_OBSERVATIONS:-$CODEX_HOME/observations.jsonl}"
 
-# Validate CWD_SKILLS_DIR looks like a .claude/skills path (defense-in-depth).
+# Validate CWD_SKILLS_DIR looks like a known skills path (defense-in-depth).
 # Only warn when the path exists — a nonexistent path poses no traversal risk.
-if [[ -n "$CWD_SKILLS_DIR" && -d "$CWD_SKILLS_DIR" && "$CWD_SKILLS_DIR" != */.claude/skills* ]]; then
-  echo "Warning: CWD_SKILLS_DIR does not look like a .claude/skills path: $CWD_SKILLS_DIR" >&2
+if [[ -n "$CWD_SKILLS_DIR" && -d "$CWD_SKILLS_DIR" &&
+      "$CWD_SKILLS_DIR" != */.agents/skills* &&
+      "$CWD_SKILLS_DIR" != */.codex/skills* &&
+      "$CWD_SKILLS_DIR" != */.claude/skills* ]]; then
+  echo "Warning: CWD_SKILLS_DIR does not look like a known skills path: $CWD_SKILLS_DIR" >&2
 fi
+
+display_path() {
+  local file="$1"
+  case "$file" in
+    "$PWD"/*) printf "%s\n" "${file#$PWD/}" ;;
+    "$HOME"/*) printf "~%s\n" "${file#$HOME}" ;;
+    *) printf "%s\n" "$file" ;;
+  esac
+}
 
 # Extract a frontmatter field (handles both quoted and unquoted single-line values).
 # Does NOT support multi-line YAML blocks (| or >) or nested YAML keys.
@@ -106,7 +118,7 @@ scan_dir_to_json() {
     u7="${u7:-0}"
     u30=$(echo "$obs_30d_counts" | awk -v f="$file" '$2 == f {print $1}' | head -1)
     u30="${u30:-0}"
-    dp="${file/#$HOME/~}"
+    dp=$(display_path "$file")
 
     jq -n \
       --arg path "$dp" \
@@ -118,7 +130,7 @@ scan_dir_to_json() {
       '{path:$path,name:$name,description:$description,use_7d:$use_7d,use_30d:$use_30d,mtime:$mtime}' \
       > "$tmpdir/$i.json"
     i=$((i+1))
-  done < <(find "$dir" -name "*.md" -type f 2>/dev/null | sort)
+  done < <(find "$dir" -mindepth 2 -maxdepth 2 -name "SKILL.md" -type f 2>/dev/null | sort)
 
   if [[ $i -eq 0 ]]; then
     echo "[]"

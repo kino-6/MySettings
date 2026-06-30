@@ -69,6 +69,28 @@ This repository tracks the ECC Codex baseline directly in `.codex/config.toml`.
 Keep host-specific credentials, notification commands, and heavier optional MCP
 servers in `~/.codex/config.toml` instead of committing them here.
 
+## Agent Change Discipline
+
+Before editing, read the target files and nearby patterns. Preserve this repo's
+existing setup-script, dotfile, skill, and Codex config conventions instead of
+importing a generic framework or style.
+
+Keep diffs surgical. Do not reformat unrelated files, reorder existing content
+without a task-specific reason, or clean up neighboring code just because it is
+near the change. If a change starts cascading across many files, pause and make
+the scope explicit before continuing.
+
+Prefer existing scripts, dependencies, skills, and standard library behavior.
+Add new dependencies, MCP servers, or abstractions only when the current repo
+cannot reasonably cover the need, and explain the tradeoff when you do.
+
+For bugs, reproduce the behavior when feasible before fixing it. For setup
+scripts, dotfiles, and agent config changes, run the narrowest relevant smoke
+check and report any check that could not be run.
+
+Before summarizing substantial work, review the diff for scope, secrets,
+host-specific state, destructive changes, and unapproved external actions.
+
 ## External Action Boundaries
 
 Treat networked tools as read-only by default. Search, inspect, and draft freely within the user's requested scope, but require explicit user approval before posting, publishing, pushing, merging, opening paid jobs, dispatching remote agents, changing third-party resources, or modifying credentials.
