@@ -1,7 +1,7 @@
 # Skill Use Classification
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-06-21 JST
+Updated: 2026-06-30 JST
 
 ## Position
 
@@ -15,12 +15,17 @@ The useful split is not just "always" versus "sometimes"; it is:
 
 This follows the same progressive-disclosure idea used by Codex skills: keep metadata and routing cheap, load detailed skill bodies only when needed.
 
+`agents/openai.yaml` is optional metadata. Keep it for exported, plugin-facing,
+or cross-runtime skills where external router metadata helps. Do not add
+boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
+`SKILL.md` frontmatter remains the canonical local routing source.
+
 ## Repo Evidence
 
 - This repo is a dotfiles/setup repository, not an application runtime.
 - Active first-party files are mostly Markdown and shell scripts: `README.md`, `mac-setup.sh`, `wsl-setup.sh`, and `scripts/*.sh`.
 - The repo contains `.agents/skills`, so skill governance is a first-class concern.
-- Current scan found 86 repository skills, 86 non-system local user skills, and 0 repository-only skills.
+- Current scan found 87 repository skills, 86 non-system local user skills, and 1 repository-only skill: `strategic-ai-wall-partner`.
 - There are no active app manifests such as `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, or `tsconfig*.json`.
 
 ## DAILY
@@ -32,16 +37,13 @@ This follows the same progressive-disclosure idea used by Codex skills: keep met
 | `agent-self-review` | Agent-created outputs need a lightweight check before handoff | Adds one self-review pass without turning routine work into a strict gate. |
 | `strategic-compact` | Skill and config work can run long | Helps preserve state during long repo maintenance sessions. |
 | `skill-stocktake` | User is actively auditing skills | Core workflow for skill quality and overlap review. |
-| `agent-sort` | User is sorting skill use surfaces | Core workflow for daily versus library decisions. |
-| `configure-ecc` | Repo owns ECC/Codex setup guidance | Needed when the classification turns into install/config changes. |
-| `ai-automation-ops` | Repo contains Codex/ECC operational guidance | Helps turn local agent practice into maintainable repo rules. |
 
 ## CONDITIONAL
 
 | Skill | Trigger |
 | --- | --- |
-| `tdd-workflow` | New feature, bug fix, refactor, or setup script behavior change. |
-| `test-driven-development` | Addy TDD workflow is useful when a task benefits from a stricter red-green-refactor script than the default `tdd-workflow`. |
+| `test-driven-development` | New feature, bug fix, refactor, or behavior change where tests should prove the result. |
+| `tdd-workflow` | Strict coverage gates, explicit red-green-refactor, or coordinated unit/integration/E2E planning are required. |
 | `incremental-implementation` | Multi-file changes should land as thin, verifiable slices. |
 | `debugging-and-error-recovery` | Tests fail, builds break, or behavior is unexpected and needs systematic root-cause triage. |
 | `ai-regression-testing` | AI-written changes need regression traps or review harnesses. |
@@ -63,6 +65,9 @@ This follows the same progressive-disclosure idea used by Codex skills: keep met
 | `ecc-task-workflow` | Broad, risky, multi-file, or multi-session repo work should create lightweight task context. |
 | `ecc-final-check` | Substantial structured workflow changes need a final diff, scope, and verification review. |
 | `ecc-finish-work` | Structured tasks need a clean ending ritual with check updates, resume notes, and durable learning promotion. |
+| `agent-sort` | Reclassifying skills, commands, rules, hooks, or extras into daily/conditional/library buckets. |
+| `configure-ecc` | Adjusting ECC/Codex installation, config, or project/user-level setup surfaces. |
+| `ai-automation-ops` | Turning local agent practice into repo/team automation, review gates, or repeatable skill packaging. |
 | `council` | Multiple valid paths require structured disagreement before deciding. |
 | `iterative-retrieval` | Context must be retrieved progressively instead of bulk-loaded. |
 | `agent-introspection-debugging` | A failed agent/session needs structured diagnosis and recovery. |
@@ -70,7 +75,6 @@ This follows the same progressive-disclosure idea used by Codex skills: keep met
 | `generate-explainer-yaml` | A document, PR, README, design note, or spec should be captured as `core.yaml` + `view.yaml` before visualization. |
 | `generate-explainer-html` | A `core.yaml` / `view.yaml` pair should become an offline switchable HTML explainer bundle. |
 | `continuous-learning-v2` | Session patterns should become project-scoped reusable instincts. |
-| `continuous-learning` | Legacy continuous-learning workflow is explicitly requested. |
 | `hookify-rules` | Creating or modifying Hookify rules. |
 | `plankton-code-quality` | Plankton hook-based code quality workflow is explicitly needed. |
 | `code-tour` | User asks for onboarding, architecture walkthrough, PR tour, or RCA tour. |
@@ -78,14 +82,19 @@ This follows the same progressive-disclosure idea used by Codex skills: keep met
 | `code-review-and-quality` | Reviewing self/agent/human code before merge. |
 | `code-simplification` | Refactoring for clarity without behavior change. |
 | `documentation-and-adrs` | Architectural decisions, APIs, or durable context should be documented. |
-| `api-and-interface-design` | Public APIs, module contracts, or frontend/backend boundaries are being designed. |
-| `frontend-ui-engineering` | Building or modifying production-quality user-facing UI. |
-| `security-and-hardening` | Handling user input, auth, storage, third-party integrations, or hardening. |
+| `api-and-interface-design` | Public contracts, module boundaries, schemas, or frontend/backend integration points are being designed. |
+| `api-design` | REST endpoint/resource conventions, status codes, pagination, filtering, errors, versioning, or rate limits are needed. |
+| `backend-patterns` | Backend implementation patterns for services, repositories, middleware, data access, caching, jobs, or logging are needed. |
+| `frontend-patterns` | React/Next.js implementation patterns for components, hooks, state, forms, errors, animation, or frontend performance are needed. |
+| `frontend-ui-engineering` | Production-quality UI layout, visual hierarchy, interaction states, responsiveness, or design-system fit is needed. |
+| `security-and-hardening` | Designing or implementing sensitive behavior with untrusted input, auth, storage, secrets, or external integrations. |
+| `security-review` | Reviewing or auditing changes for vulnerabilities, secrets, auth gaps, injection risks, or missing security tests. |
 | `performance-optimization` | Performance requirements, regressions, Core Web Vitals, or profiling are relevant. |
 | `ci-cd-and-automation` | CI/CD pipelines, quality gates, or deployment automation are being set up or changed. |
 | `observability-and-instrumentation` | Logging, metrics, tracing, or production diagnosability are needed. |
 | `deprecation-and-migration` | Removing old systems or migrating users/behavior. |
 | `shipping-and-launch` | Preparing production launch, staged rollout, rollback, or monitoring. |
+| `strategic-ai-wall-partner` | Strategy, business ideas, product bets, career decisions, research questions, or assumption stress tests need a wall partner. |
 
 ## LIBRARY
 
@@ -97,6 +106,8 @@ This follows the same progressive-disclosure idea used by Codex skills: keep met
 | `jpa-patterns` | No Java/Spring/JPA code in this repo. |
 | `gamestudio-review` | No game project files in this repo. |
 | `using-agent-skills` | Addy pack's alternate router; this repo keeps `skill-use-manager` as the daily router. |
+| `continuous-learning` | Legacy workflow; use `continuous-learning-v2` for current project-scoped learning. |
+| `everything-claude-code` | Upstream ECC conventions/provenance reference; this repo keeps its Codex baseline in `.codex/AGENTS.md` and `.agents/ecc-workflow/`. |
 
 ## Notes
 

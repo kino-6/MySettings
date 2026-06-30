@@ -1,32 +1,44 @@
 #!/usr/bin/env bash
 # quick-diff.sh — compare skill file mtimes against results.json evaluated_at
-# Usage: quick-diff.sh RESULTS_JSON [CWD_SKILLS_DIR]
+# Usage: quick-diff.sh RESULTS_JSON [PROJECT_SKILLS_DIR]
 # Output: JSON array of changed/new files to stdout (empty [] if no changes)
 #
-# When CWD_SKILLS_DIR is omitted, defaults to $PWD/.claude/skills so the
-# script always picks up project-level skills without relying on the caller.
+# When PROJECT_SKILLS_DIR is omitted, defaults to $PWD/.agents/skills so the
+# script picks up this repo's Codex project-level skills.
 #
 # Environment:
-#   SKILL_STOCKTAKE_GLOBAL_DIR   Override ~/.claude/skills (for testing only;
-#                                do not set in production — intended for bats tests)
+#   SKILL_STOCKTAKE_GLOBAL_DIR   Override ~/.codex/skills
 #   SKILL_STOCKTAKE_PROJECT_DIR  Override project dir detection (for testing only)
 
 set -euo pipefail
 
 RESULTS_JSON="${1:-}"
-CWD_SKILLS_DIR="${SKILL_STOCKTAKE_PROJECT_DIR:-${2:-$PWD/.claude/skills}}"
-GLOBAL_DIR="${SKILL_STOCKTAKE_GLOBAL_DIR:-$HOME/.claude/skills}"
+CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+CWD_SKILLS_DIR="${SKILL_STOCKTAKE_PROJECT_DIR:-${2:-$PWD/.agents/skills}}"
+GLOBAL_DIR="${SKILL_STOCKTAKE_GLOBAL_DIR:-$CODEX_HOME/skills}"
 
 if [[ -z "$RESULTS_JSON" || ! -f "$RESULTS_JSON" ]]; then
   echo "Error: RESULTS_JSON not found: ${RESULTS_JSON:-<empty>}" >&2
   exit 1
 fi
 
-# Validate CWD_SKILLS_DIR looks like a .claude/skills path (defense-in-depth).
+# Validate CWD_SKILLS_DIR looks like a known skills path (defense-in-depth).
 # Only warn when the path exists — a nonexistent path poses no traversal risk.
-if [[ -n "$CWD_SKILLS_DIR" && -d "$CWD_SKILLS_DIR" && "$CWD_SKILLS_DIR" != */.claude/skills* ]]; then
-  echo "Warning: CWD_SKILLS_DIR does not look like a .claude/skills path: $CWD_SKILLS_DIR" >&2
+if [[ -n "$CWD_SKILLS_DIR" && -d "$CWD_SKILLS_DIR" &&
+      "$CWD_SKILLS_DIR" != */.agents/skills* &&
+      "$CWD_SKILLS_DIR" != */.codex/skills* &&
+      "$CWD_SKILLS_DIR" != */.claude/skills* ]]; then
+  echo "Warning: CWD_SKILLS_DIR does not look like a known skills path: $CWD_SKILLS_DIR" >&2
 fi
+
+display_path() {
+  local file="$1"
+  case "$file" in
+    "$PWD"/*) printf "%s\n" "${file#$PWD/}" ;;
+    "$HOME"/*) printf "~%s\n" "${file#$HOME}" ;;
+    *) printf "%s\n" "$file" ;;
+  esac
+}
 
 evaluated_at=$(jq -r '.evaluated_at' "$RESULTS_JSON")
 
@@ -54,7 +66,7 @@ process_dir() {
   while IFS= read -r file; do
     local mtime dp is_new
     mtime=$(date -u -r "$file" +%Y-%m-%dT%H:%M:%SZ)
-    dp="${file/#$HOME/~}"
+    dp=$(display_path "$file")
 
     # Check if this file is known to results.json (exact whole-line match to
     # avoid substring false-positives, e.g. "python-patterns" matching "python-patterns-v2").
@@ -74,7 +86,7 @@ process_dir() {
       '{path:$path,mtime:$mtime,is_new:$is_new}' \
       > "$tmpdir/$i.json"
     i=$((i+1))
-  done < <(find "$dir" -name "*.md" -type f 2>/dev/null | sort)
+  done < <(find "$dir" -mindepth 2 -maxdepth 2 -name "SKILL.md" -type f 2>/dev/null | sort)
 }
 
 [[ -d "$GLOBAL_DIR" ]] && process_dir "$GLOBAL_DIR"

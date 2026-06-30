@@ -1,7 +1,7 @@
 # Codex Skills Inventory
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-06-21 JST
+Updated: 2026-06-30 JST
 
 ## Sources
 
@@ -10,8 +10,8 @@ Updated: 2026-06-21 JST
 
 ## Merge Summary
 
-- Local user skills found: 86
-- Repository skills found: 86
+- Local user skills found: 87
+- Repository skills found: 87
 - Missing local user skills in repository: 0
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 5
@@ -70,7 +70,6 @@ These skills exist in `.agents/skills` but not in local `~/.codex/skills`.
 | Skill |
 | --- |
 | _(none)_ |
-
 
 ## Local Codex System Skills
 
