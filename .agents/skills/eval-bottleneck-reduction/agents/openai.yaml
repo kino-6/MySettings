@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eval Bottleneck Reduction"
+  short_description: "Turn human review into scalable eval loops"
+  default_prompt: "Use $eval-bottleneck-reduction to design an evaluation workflow that reduces human review bottlenecks."

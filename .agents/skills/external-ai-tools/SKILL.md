@@ -24,7 +24,12 @@ Do not install or vendor third-party tools blindly. Classify first, then choose 
 | `last30days-skill` | `PILOT` | Current social/web research skill when timely community signal is needed. |
 | `headroom` | `PILOT` | Token compression, MCP/proxy experiments, large logs, and codebase exploration. |
 | `codegraph` | `PILOT` | Local code knowledge graph experiments on code-heavy repos. |
+| `codebase-memory-mcp` | `PILOT` | Codex-aware code knowledge graph/MCP experiments on larger sibling repos. |
 | `Agent-Reach` | `PILOT` | API-key-light social/web CLI access; review auth/cookie handling first. |
+| `Orca` | `PILOT` | Optional desktop/mobile control surface for parallel coding agents. |
+| `OmniRoute` | `PILOT` | Local AI gateway/provider router; isolate and review credentials/ToS first. |
+| `agency-agents` | `REFERENCE` | Large agent persona catalog; import selected agents only after review. |
+| `OpenMontage` | `REFERENCE` | Agentic video production system for concrete media tasks only. |
 | `PaddleOCR` | `REFERENCE` | OCR/PDF/image extraction tasks. |
 | `VoxCPM` | `REFERENCE` | Multilingual TTS and voice cloning experiments. |
 | `MoneyPrinterTurbo` | `REFERENCE` | Short-video generation workflows. |
@@ -46,14 +51,16 @@ Before installing anything from this map:
 
 - Use `last30days-skill` for recent market/community research.
 - Use `headroom` when context size, logs, RAG chunks, or tool-output volume is the bottleneck.
-- Use `codegraph` when a code-heavy repo repeatedly burns tokens on file discovery.
+- Use `codebase-memory-mcp` or `codegraph` when a code-heavy repo repeatedly burns tokens on file discovery.
 - Use `Agent-Reach` when the task needs social/video platform search and the user accepts cookie/session-based tools.
+- Use `Orca` only when a multi-agent coding task needs an external fleet-management UI.
+- Use `OmniRoute` only for an isolated AI-gateway pilot after reviewing credential handling and provider rules.
+- Use `agency-agents` only as a source catalog for selectively reviewed personas.
 - Use `PaddleOCR` when documents are images or scanned PDFs.
-- Use `VoxCPM`, `MoneyPrinterTurbo`, or `Open-LLM-VTuber` only for media/voice/avatar tasks.
+- Use `OpenMontage`, `VoxCPM`, `MoneyPrinterTurbo`, or `Open-LLM-VTuber` only for media/voice/avatar tasks.
 
 ## Reference
 
 The maintained source list and adoption notes live in:
 
 - `inventory/external-ai-tools.md`
-

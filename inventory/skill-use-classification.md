@@ -1,7 +1,7 @@
 # Skill Use Classification
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-06-30 JST
+Updated: 2026-07-11 JST
 
 ## Position
 
@@ -25,7 +25,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 - This repo is a dotfiles/setup repository, not an application runtime.
 - Active first-party files are mostly Markdown and shell scripts: `README.md`, `mac-setup.sh`, `wsl-setup.sh`, and `scripts/*.sh`.
 - The repo contains `.agents/skills`, so skill governance is a first-class concern.
-- Current scan found 87 repository skills, 86 non-system local user skills, and 1 repository-only skill: `strategic-ai-wall-partner`.
+- Current scan found 88 repository skills, 87 non-system local user skills, and 1 repository-only skill: `eval-bottleneck-reduction`.
 - There are no active app manifests such as `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, or `tsconfig*.json`.
 
 ## DAILY
@@ -50,6 +50,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 | `e2e-testing` | Browser/UI end-to-end tests are relevant. |
 | `browser-testing-with-devtools` | Browser runtime inspection via DevTools MCP is needed. |
 | `eval-harness` | Prompt, agent, or workflow quality needs formal evaluation. |
+| `eval-bottleneck-reduction` | Human review, LLM-as-judge, subjective quality gates, golden task sets, or evaluation bottleneck reduction needs a scalable workflow. |
 | `interview-me` | Requirements are underspecified and need one-question-at-a-time clarification. |
 | `idea-refine` | A vague idea needs divergent/convergent refinement before planning. |
 | `spec-driven-development` | A significant feature or project needs a PRD/spec before implementation. |

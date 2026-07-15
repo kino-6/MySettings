@@ -1,7 +1,7 @@
 # Codex Skills Inventory
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-06-30 JST
+Updated: 2026-07-11 JST
 
 ## Sources
 
@@ -11,7 +11,7 @@ Updated: 2026-06-30 JST
 ## Merge Summary
 
 - Local user skills found: 87
-- Repository skills found: 87
+- Repository skills found: 88
 - Missing local user skills in repository: 0
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 5
@@ -29,6 +29,8 @@ The structured ECC workflow skills were added on 2026-06-21 as Codex skills:
 - `ecc-task-workflow`: starts lightweight task context for broad or multi-session repo work.
 - `ecc-final-check`: checks diff scope, verification, and accidental private state before handoff.
 - `ecc-finish-work`: closes structured tasks with check updates, resume notes, and durable learning promotion.
+
+`eval-bottleneck-reduction` was added on 2026-07-11 as a project-local skill for designing layered AI evaluation workflows that reduce human review bottlenecks. It stays repository-only until it proves broadly useful outside this repo.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 
@@ -69,7 +71,7 @@ These skills exist in `.agents/skills` but not in local `~/.codex/skills`.
 
 | Skill |
 | --- |
-| _(none)_ |
+| `eval-bottleneck-reduction` |
 
 ## Local Codex System Skills
 

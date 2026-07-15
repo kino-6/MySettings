@@ -37,6 +37,7 @@ PACKAGES=(
   gnupg
   lsb-release
   shellcheck
+  shfmt
   python3
   python3-pip
   pipx

@@ -1,10 +1,15 @@
 # External AI Tools
 
 Generated: 2026-06-10 09:11:40 JST
+Updated: 2026-07-07 JST
 
 This file tracks third-party AI tools that may be useful around this Codex/ECC setup.
 
 The repo integration is intentionally light: keep the tools cataloged and routed, but do not vendor large third-party projects or run global installers without a task-specific reason.
+
+2026-07-07 note: reviewed the six fast-growing AI-agent repositories from the
+precisox X post `2074294583643848959`. None should become a default install in
+this dotfiles repo yet; cataloging and opt-in pilots are the right level.
 
 ## Adoption Summary
 
@@ -14,7 +19,12 @@ The repo integration is intentionally light: keep the tools cataloged and routed
 | `last30days-skill` | Agent skill / research engine | `PILOT` | Add to external tool routing; install globally only when needed. |
 | `headroom` | Library / proxy / MCP server | `PILOT` | Candidate for opt-in MCP/proxy trials on large-context sessions. |
 | `codegraph` | Local code knowledge graph | `PILOT` | Candidate for code-heavy repos; this dotfiles repo is probably too small to benefit. |
+| `codebase-memory-mcp` | Local code knowledge graph / MCP server | `PILOT` | Stronger current candidate than `codegraph` for Codex-aware codebase indexing; keep opt-in and avoid default MCP startup here. |
 | `Agent-Reach` | Social/web CLI tool suite | `PILOT` | Useful for platform search; review cookie/session auth before use. |
+| `Orca` | Parallel coding-agent ADE | `PILOT` | Candidate desktop/mobile control surface for multi-agent work; overlaps with Codex multi-agent and should not replace the repo baseline yet. |
+| `OmniRoute` | AI gateway / provider router | `PILOT` | Potential local endpoint for routing Codex/Claude/Cursor across providers; credential, ToS, and proxy behavior require isolated review. |
+| `agency-agents` | Agent persona catalog / installer | `REFERENCE` | Large overlapping agent catalog; import selected agents only after quality/security review. |
+| `OpenMontage` | Agentic video production system | `REFERENCE` | Useful for video workflows, but heavy runtime and AGPL surface make it task-specific only. |
 | `PaddleOCR` | OCR toolkit | `REFERENCE` | Use for scanned PDFs/images; do not install by default. |
 | `VoxCPM` | TTS / voice cloning | `REFERENCE` | Use for TTS experiments with consent and model-cache planning. |
 | `MoneyPrinterTurbo` | Short-video generator | `REFERENCE` | Use for video-generation workflows only. |
@@ -65,6 +75,21 @@ headroom mcp install
 - Why: useful for code-heavy repos where agents repeatedly scan the same files.
 - This repo is mostly Markdown and shell scripts, so expected benefit here is modest.
 
+### codebase-memory-mcp
+
+- Link: https://github.com/DeusData/codebase-memory-mcp
+- Upstream describes it as a high-performance MCP server that indexes codebases into a persistent knowledge graph, supports Codex CLI configuration, and exposes CLI calls for indexing/search/path tracing.
+- Suggested local stance: `PILOT`.
+- Why: better aligned with this repo's Codex/ECC setup than a generic codegraph tool, especially for larger sibling repos.
+- Do not default-enable yet: this dotfiles repo is small, and adding another MCP server to `.codex/config.toml` would increase startup/network/update surface for every session.
+- Good pilot shape: install in an ignored sandbox or user-local binary, index one code-heavy repo, then decide whether a commented `.codex/config.toml` example is worthwhile.
+
+Potential upstream install path:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/scripts/setup.sh | bash
+```
+
 ### last30days-skill
 
 - Link: https://github.com/mvanhorn/last30days-skill
@@ -101,6 +126,51 @@ npx skills add mvanhorn/last30days-skill -g
 - Suggested local stance: `PILOT`.
 - Why: complements research workflows.
 - Safety note: cookie/browser-session based auth needs explicit review before use.
+- 2026-07-07 review: still useful, but keep dedicated throwaway accounts for cookie-backed platforms and prefer `--safe` / `--dry-run` before install.
+
+### agency-agents
+
+- Link: https://github.com/msitarzewski/agency-agents
+- Upstream describes it as a large catalog of specialized AI agent personas with installers for Claude Code, Codex, Cursor, Gemini CLI, OpenCode, and related tools.
+- Suggested local stance: `REFERENCE`.
+- Why: this repo already curates `.agents/skills` and local Codex skills; bulk-importing another large persona catalog would create overlap and review debt.
+- Possible future pilot: selectively compare a few missing roles, such as codebase onboarding or incident response, before importing any one agent into `.agents/skills`.
+
+### OpenMontage
+
+- Link: https://github.com/calesthio/OpenMontage
+- Upstream describes it as an agentic video production system with pipelines, tools, and agent skills for scripts, assets, editing, and rendering.
+- Suggested local stance: `REFERENCE`.
+- Why: valuable for a concrete video-production task, but not a default developer environment dependency.
+- Safety note: AGPL licensing, FFmpeg/Node/Python dependencies, and media-provider credentials make this a task-local sandbox candidate, not a dotfiles baseline tool.
+
+### Orca
+
+- Link: https://github.com/stablyai/orca
+- Upstream describes it as an ADE for working with a fleet of parallel coding agents, available on desktop and mobile and installable on macOS with Homebrew cask.
+- Suggested local stance: `PILOT`.
+- Why: relevant to Codex multi-agent workflows, but it overlaps with this repo's built-in `.codex` multi-agent roles.
+- Do not add to `Brewfile` yet: only install once there is a specific parallel-agent workflow to test.
+
+Potential upstream install command:
+
+```bash
+brew install --cask stablyai/orca/orca
+```
+
+### OmniRoute
+
+- Link: https://github.com/diegosouzapw/OmniRoute
+- Upstream describes it as an OpenAI-compatible AI gateway for routing many coding agents through one endpoint with provider fallback and token compression.
+- Suggested local stance: `PILOT`.
+- Why: could reduce provider-limit friction across Codex, Claude Code, Cursor, and related tools.
+- Do not default-enable yet: it centralizes credentials, changes model routing semantics, and advertises proxy/fingerprint behavior that needs careful ToS and security review.
+
+Potential upstream install command:
+
+```bash
+npm install -g omniroute
+```
 
 ### Open-LLM-VTuber
 
@@ -119,7 +189,8 @@ npx skills add mvanhorn/last30days-skill -g
 ## Suggested Next Pilots
 
 1. `last30days-skill`: try as a global user skill when the next current-events or market-research task appears.
-2. `headroom`: test as MCP/proxy only on a large-log or large-repo session.
-3. `codegraph`: test on a code-heavy repo, not this dotfiles repo.
-4. `Agent-Reach`: test only after reviewing cookie/session handling and platform rules.
-
+2. `codebase-memory-mcp`: test on a code-heavy sibling repo before adding any Codex MCP config example here.
+3. `headroom`: test as MCP/proxy only on a large-log or large-repo session.
+4. `Orca`: test only when a real multi-agent coding workflow needs a desktop/mobile control surface.
+5. `OmniRoute`: test only in a local sandbox after reviewing credential storage, provider ToS, and routing logs.
+6. `Agent-Reach`: test only after reviewing cookie/session handling and platform rules.
