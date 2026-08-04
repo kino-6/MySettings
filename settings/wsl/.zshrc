@@ -4,10 +4,11 @@
 prepend_path() {
   local dir="$1"
   [[ -d "$dir" ]] || return 0
-  case ":$PATH:" in
-    *":$dir:"*) ;;
-    *) PATH="$dir:$PATH" ;;
-  esac
+  # Remove any existing occurrence before prepending. A plain "skip if already
+  # present" guard is not enough: .zshrc.common appends ~/.local/bin to the end
+  # of PATH before this file runs, which would leave the nvim shim behind the
+  # very directories this function exists to take precedence over.
+  path=("$dir" ${path:#"$dir"})
 }
 
 # prioritize user-managed bins over system binaries
@@ -114,6 +115,40 @@ ff() {
 rgg() {
   rg -n --hidden --glob '!.git' "$@"
 }
+
+if command -v fzf >/dev/null 2>&1; then
+  # fzf 0.48+ emits the integration itself; Ubuntu 24.04 ships 0.44, which
+  # still installs it as files under the package docs directory.
+  if fzf --zsh >/dev/null 2>&1; then
+    source <(fzf --zsh)
+  else
+    for _fzf_file in \
+      /usr/share/doc/fzf/examples/key-bindings.zsh \
+      /usr/share/doc/fzf/examples/completion.zsh \
+      /usr/share/fzf/key-bindings.zsh \
+      /usr/share/fzf/completion.zsh; do
+      # shellcheck source=/dev/null
+      [[ -f "$_fzf_file" ]] && source "$_fzf_file"
+    done
+    unset _fzf_file
+  fi
+
+  export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+
+  # fzf runs these commands through sh, so the fd -> fdfind alias above does
+  # not apply. $commands only sees real binaries, which is what is needed.
+  if (( $+commands[fd] )); then
+    _fzf_fd=fd
+  elif (( $+commands[fdfind] )); then
+    _fzf_fd=fdfind
+  fi
+  if [[ -n "${_fzf_fd:-}" ]]; then
+    export FZF_DEFAULT_COMMAND="$_fzf_fd --type f --hidden --exclude .git"
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND="$_fzf_fd --type d --hidden --exclude .git"
+  fi
+  unset _fzf_fd
+fi
 
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"

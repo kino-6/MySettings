@@ -174,6 +174,31 @@ verify_nvim_runtime() {
   nvim --version | head -n 1
 }
 
+# verify_nvim_runtime builds its own PATH, so it can only prove the shim exists
+# and points at the right binary - not that an interactive shell actually
+# resolves it first. That depends entirely on the deployed .zshrc, so it has to
+# be checked separately, after the settings are in place.
+verify_interactive_nvim_runtime() {
+  local expected_shim="$HOME/.local/bin/nvim"
+  local resolved_path
+
+  if ! command -v zsh >/dev/null 2>&1; then
+    echo "skip: zsh not available, cannot verify interactive nvim resolution."
+    return 0
+  fi
+
+  resolved_path="$(zsh -ic 'command -v nvim' 2>/dev/null | tr -d '\r')"
+  if [[ "$resolved_path" != "$expected_shim" ]]; then
+    echo "ERROR: interactive zsh does not resolve nvim through the shim."
+    echo "expected: $expected_shim"
+    echo "actual  : ${resolved_path:-<not found>}"
+    echo "Check the PATH ordering in ~/.zshrc and ~/.zshrc.common."
+    return 1
+  fi
+
+  echo "Interactive shell nvim resolution verified: $resolved_path"
+}
+
 install_or_update_rustup() {
   export PATH="$HOME/.cargo/bin:$PATH"
 
@@ -246,6 +271,8 @@ echo "Applying WSL settings..."
 backup_and_copy "$ROOT_DIR/settings/wsl/.zshrc" "$HOME/.zshrc"
 backup_and_copy "$ROOT_DIR/settings/wsl/.nanorc" "$HOME/.nanorc"
 deploy_tree_to "$ROOT_DIR/settings/wsl/nvim" "$HOME/.config/nvim"
+
+verify_interactive_nvim_runtime
 
 export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/opt/nvim/current/bin:$PATH"
 if ! command -v uv >/dev/null 2>&1; then

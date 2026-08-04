@@ -1,31 +1,32 @@
 # Shared prompt (WSL / macOS / Windows): SFC-like colors, practical and lightweight.
 add_newline = true
 format = "$hostname$directory$git_branch$python$cmd_duration\n$character"
+scan_timeout = 50
 
 [hostname]
 format = "[$hostname]($style) "
-style = "bold #7aa2f7"
+style = "bold #a8a8ff"
 ssh_only = false
 
 [directory]
-style = "bold #9ece6a"
+style = "bold #8bffb5"
 truncation_length = 3
 truncate_to_repo = true
 
 [git_branch]
 format = "[$symbol$branch]($style) "
-symbol = " "
-style = "#e0af68"
+symbol = "◆ "
+style = "#fff27a"
 
 [python]
-format = "[($virtualenv)]($style) "
-style = "#bb9af7"
+format = "[$virtualenv]($style) "
+style = "#d6a8ff"
 
 [cmd_duration]
 min_time = 2000
 format = "[${duration}]($style) "
-style = "#7dcfff"
+style = "#8be9ff"
 
 [character]
-success_symbol = "[❯](#e0af68)"
-error_symbol = "[❯](#f7768e)"
+success_symbol = "[❯](#fff27a)"
+error_symbol = "[❯](#ff8da1)"
