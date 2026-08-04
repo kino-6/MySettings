@@ -28,6 +28,22 @@ export PYENV_ROOT="$HOME/.pyenv"
 prepend_path "$PYENV_ROOT/bin"
 export PATH
 
+# oh-my-zsh (optional; skipped entirely when not installed)
+# Sourced here, before the alias block below, on purpose: oh-my-zsh defines its
+# own ll/la/l, and anything defined after it wins. The aliases this file sets
+# are the ones that should survive.
+if [[ -d "$HOME/.oh-my-zsh" ]]; then
+  export ZSH="$HOME/.oh-my-zsh"
+  # starship draws the prompt; an oh-my-zsh theme would fight it for it.
+  ZSH_THEME=""
+  # Keep the plugin set small. fzf is deliberately absent: its key bindings are
+  # set up further down, against the fzf version actually installed.
+  plugins=(git)
+  zstyle ':omz:update' mode disabled
+  # shellcheck source=/dev/null
+  source "$ZSH/oh-my-zsh.sh"
+fi
+
 # initialize LS_COLORS when dircolors is available
 if command -v dircolors >/dev/null 2>&1; then
   eval "$(dircolors -b)"

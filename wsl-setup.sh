@@ -264,6 +264,22 @@ else
   echo "starship already installed."
 fi
 
+# oh-my-zsh. KEEP_ZSHRC is required: the installer replaces ~/.zshrc by
+# default, which would throw away the file this repository deploys. RUNZSH and
+# CHSH keep it non-interactive - the shell switch is handled at the end of this
+# script instead.
+if [[ "${INSTALL_OH_MY_ZSH:-1}" == "1" ]]; then
+  if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+    echo "Installing oh-my-zsh..."
+    RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  else
+    echo "oh-my-zsh already installed."
+  fi
+else
+  echo "Skipping oh-my-zsh (INSTALL_OH_MY_ZSH=0)."
+fi
+
 echo "Applying common settings..."
 deploy_tree_to "$ROOT_DIR/settings/common" "$HOME"
 

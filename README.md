@@ -93,20 +93,24 @@ GPU を使う重い ML ワークロード（例: torch / tensorflow を使う学
    - 既定: `v0.12.1`（`NEOVIM_VERSION` で変更可能）
    - `~/opt/nvim/current` シンボリックリンクを更新
    - `~/.local/bin/nvim -> ~/opt/nvim/current/bin/nvim` のシンボリックリンクを作成し、`/usr/bin/nvim` より優先されるようにする
-   - setup script 内で `verify_nvim_runtime` を実行し、`which nvim` が `~/.local/bin/nvim` を指すことを確認（不一致なら終了）
+   - setup script 内で `verify_nvim_runtime` を実行し、shim が正しい実体を指すことを確認（不一致なら終了）
+   - 設定配置の**後**に `verify_interactive_nvim_runtime` を実行し、`zsh -ic` で実際の対話シェルが `~/.local/bin/nvim` を解決することを確認（不一致なら終了）
 4. Rust toolchain を `rustup` で stable に更新し、`cargo install --locked tree-sitter-cli` を実行
    - `tree-sitter-cli` は **0.26.1+ 必須**（`nvim-treesitter` 互換のため）
    - `build-essential`, `clang` も同時に導入
 5. `starship` 未導入時のみインストール（公式 install script）
-6. `settings/common/` + WSL 個別設定をホームへ反映
+6. `oh-my-zsh` 未導入時のみインストール
+   - `KEEP_ZSHRC=yes` 必須（既定では installer が `~/.zshrc` を置き換えてしまい、このリポジトリが配置する設定が失われるため）
+   - `INSTALL_OH_MY_ZSH=0` でスキップ可能
+7. `settings/common/` + WSL 個別設定をホームへ反映
    - `settings/wsl/nvim/` は `~/.config/nvim/` に配置
    - `settings/common/.config/starship.toml` は `~/.config/starship.toml` に配置（Mac / Windows と共通）
-7. `uv` 未導入時のみインストール
+8. `uv` 未導入時のみインストール
    - `curl -LsSf https://astral.sh/uv/install.sh | sh`
-8. `~/.venv-tools` を `uv venv` で作成（未作成時）
-9. `uv pip install` で以下を導入
-   - `pandas`, `numpy`, `matplotlib`, `requests`, `rich`, `tqdm`, `ipython`
-10. 可能なら default shell を `zsh` に変更
+9. `~/.venv-tools` を `uv venv` で作成（未作成時）
+10. `uv pip install` で以下を導入
+    - `pandas`, `numpy`, `matplotlib`, `requests`, `rich`, `tqdm`, `ipython`
+11. 可能なら default shell を `zsh` に変更
 
 
 > Ubuntu 24.04 の `apt install neovim` では `0.9.x` 系になることがあり、最近の plugin（特に Treesitter / LSP 周辺）と噛み合わないため、このリポジトリでは apt 版 Neovim を採用しません。
@@ -123,7 +127,15 @@ WSL 用 `.zshrc` は以下を満たします。
 - `eza` が無い場合は `ls --color=auto` ベースの fallback を維持
 - `~/.venv-tools/bin/activate` を interactive shell で自動 source
 - `colordiff` があれば `alias diff='colordiff'`
-- `starship` があれば初期化（WSL 向け軽量 prompt）
+- `~/.oh-my-zsh` があれば読み込み（無ければ何もしない）
+  - **エイリアス定義より前**に source する。oh-my-zsh は独自に `ll` / `la` / `l` を定義するため、後ろに置くと eza ベースのエイリアスが上書きされる
+  - `ZSH_THEME=""`（prompt は starship が担当。テーマを有効にすると競合する）
+  - plugin は `git` のみ。`fzf` plugin は**使わない**（キーバインドは後述の自前ブロックが担当）
+  - 起動時間は概ね 0.2〜0.3 秒増加する
+- `fzf` があればキーバインドを設定（Tab 補完 / `Ctrl+R` / `Ctrl+T` / `Alt+C`）
+  - fzf 0.48+ は `fzf --zsh`、Ubuntu 24.04 の 0.44 は同梱の example ファイルを source
+  - `FZF_DEFAULT_COMMAND` の `fd` 解決には zsh の `$commands` を使う（`fd -> fdfind` alias は fzf が内部で使う `sh` には存在しないため）
+- `starship` があれば初期化（WSL / Mac / Windows 共通 prompt）
 
 `starship` の方針は「SFC風だが実用寄り」です。情報を盛りすぎず、`hostname / directory / git branch / python venv / 長時間コマンド時間 / prompt character` の最小構成のみ表示します。
 
