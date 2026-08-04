@@ -1,5 +1,8 @@
 .DS_Store
 
+# Machine-local Claude Code overrides; .claude/settings.json is the shared one.
+.claude/settings.local.json
+
 # Local structured workflow journals can contain machine-specific or private session notes.
 .agents/ecc-workflow/workspace/*
 !.agents/ecc-workflow/workspace/README.md
