@@ -245,7 +245,6 @@ deploy_tree_to "$ROOT_DIR/settings/common" "$HOME"
 echo "Applying WSL settings..."
 backup_and_copy "$ROOT_DIR/settings/wsl/.zshrc" "$HOME/.zshrc"
 backup_and_copy "$ROOT_DIR/settings/wsl/.nanorc" "$HOME/.nanorc"
-backup_and_copy "$ROOT_DIR/settings/wsl/.config/starship.toml" "$HOME/.config/starship.toml"
 deploy_tree_to "$ROOT_DIR/settings/wsl/nvim" "$HOME/.config/nvim"
 
 export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/opt/nvim/current/bin:$PATH"

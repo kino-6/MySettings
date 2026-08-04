@@ -86,17 +86,11 @@
       "Bash(winget list:*)",
       "Bash(scoop list:*)",
 
-      "PowerShell(Get-ChildItem:*)",
-      "PowerShell(Get-Content:*)",
-      "PowerShell(Get-Item:*)",
-      "PowerShell(Get-Command:*)",
-      "PowerShell(Test-Path:*)",
-      "PowerShell(Select-String:*)",
-      "PowerShell(Measure-Object:*)",
-      "PowerShell(Resolve-Path:*)",
-      "PowerShell(git status:*)",
-      "PowerShell(git diff:*)",
-      "PowerShell(git log:*)"
+      "Bash(winget show:*)",
+      "Bash(wsl.exe -l:*)",
+      "Bash(wsl.exe -e bash -lc:*)",
+
+      "PowerShell"
     ],
     "deny": [
       "Read(./**/.env)",

@@ -1,4 +1,4 @@
-# WSL prompt: SFC-like colors, practical and lightweight.
+# Shared prompt (WSL / macOS / Windows): SFC-like colors, practical and lightweight.
 add_newline = true
 format = "$hostname$directory$git_branch$python$cmd_duration\n$character"
 

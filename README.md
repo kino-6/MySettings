@@ -15,6 +15,7 @@ Mac と WSL の dotfiles / setup を整理し、再構築しやすく保つた�
 ├── README.md
 ├── mac-setup.sh
 ├── wsl-setup.sh
+├── windows-setup.ps1
 ├── scripts/
 │   ├── wsl-doctor.sh
 │   ├── wsl-maintenance.sh
@@ -24,16 +25,20 @@ Mac と WSL の dotfiles / setup を整理し、再構築しやすく保つた�
 └── settings/
     ├── common/
     │   ├── .vimrc
-    │   └── .zshrc.common
+    │   ├── .zshrc.common
+    │   └── .config/
+    │       └── starship.toml
     ├── mac/
     │   ├── .zshrc
     │   ├── .nanorc
     │   └── ghostty.ini
+    ├── windows/
+    │   └── Microsoft.PowerShell_profile.ps1
+    ├── windows-terminal/
+    │   └── settings.json
     └── wsl/
         ├── .zshrc
         ├── .nanorc
-        ├── .config/
-        │   └── starship.toml
         └── nvim/
             ├── init.lua
             ├── lazy-lock.json
@@ -49,9 +54,9 @@ Mac と WSL の dotfiles / setup を整理し、再構築しやすく保つた�
 
 ## Setup scripts
 
-両 setup script は以下を共通方針にしています。
+各 setup script は以下を共通方針にしています。
 
-- `set -euo pipefail`
+- `set -euo pipefail`（`windows-setup.ps1` は `Set-StrictMode -Version Latest` + `$ErrorActionPreference = 'Stop'`）
 - 既存ファイルがあれば `*.bak.YYYYmmdd-HHMMSS` で退避してから上書き
 - 同一内容ならスキップして壊れにくくする（idempotent）
 - destructive な削除はしない
@@ -95,7 +100,7 @@ GPU を使う重い ML ワークロード（例: torch / tensorflow を使う学
 5. `starship` 未導入時のみインストール（公式 install script）
 6. `settings/common/` + WSL 個別設定をホームへ反映
    - `settings/wsl/nvim/` は `~/.config/nvim/` に配置
-   - `settings/wsl/.config/starship.toml` は `~/.config/starship.toml` に配置
+   - `settings/common/.config/starship.toml` は `~/.config/starship.toml` に配置（Mac / Windows と共通）
 7. `uv` 未導入時のみインストール
    - `curl -LsSf https://astral.sh/uv/install.sh | sh`
 8. `~/.venv-tools` を `uv venv` で作成（未作成時）
@@ -157,6 +162,47 @@ nvim --headless "+q"
 
 - bash: `hash -r`
 - zsh: `rehash`
+
+### Windows setup
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\windows-setup.ps1
+```
+
+Windows ネイティブ側（PowerShell / Windows Terminal）の設定ファイルを配置します。
+`mac-setup.sh` / `wsl-setup.sh` と同じく「同一内容ならスキップ、差分があれば `*.bak.YYYYmmdd-HHMMSS` に退避してから上書き」で冪等です。
+
+配置先:
+
+| リポジトリ | 配置先 |
+| --- | --- |
+| `settings/windows/Microsoft.PowerShell_profile.ps1` | `Documents\WindowsPowerShell\`（Windows PowerShell 5.1） |
+| 同上 | `Documents\PowerShell\`（PowerShell 7、`pwsh` 導入時のみ） |
+| `settings/common/.config/starship.toml` | `~/.config/starship.toml`（WSL / Mac と共通の prompt 定義） |
+| `settings/windows-terminal/settings.json` | Windows Terminal の `LocalState\`（`-SkipTerminal` で除外可） |
+
+オプション:
+
+- `-DryRun`: 書き込まずに差分だけ表示
+- `-SkipTerminal`: Windows Terminal の `settings.json` に触れない
+
+> Documents の場所は `[Environment]::GetFolderPath('MyDocuments')` で解決するため、OneDrive リダイレクト環境でも正しい位置に配置されます。
+
+**パッケージ導入は行いません**（設定ファイル配置のみ）。`wsl-setup.sh` のような apt 相当の処理は含めず、Windows 側は winget で個別に導入する方針です。
+
+PowerShell profile は WSL の `.zshrc` と同じ思想で、外部コマンドを**すべて存在確認してから使う**ため、何も入っていないマシンでもエラーなく読み込めます。導入済みのものだけ機能が有効になります。
+
+- 履歴: `MaximumHistoryCount 10000` / 重複除去 / ↑↓ で前方一致検索（`.zshrc.common` の `HISTSIZE` 設定と対応）
+- 補完予測: PSReadLine 2.1+ のときのみ `PredictionSource History` を有効化（5.1 同梱の 2.0.0 では自動的にスキップ）
+- `eza` があれば `ll` / `la` / `lt`、無ければ `Get-ChildItem` fallback
+- `rg` があれば `grep`、無ければ `Select-String` ベースの fallback
+- `nvim` があれば `v` と `$EDITOR`
+- `git` shorthand: `gs` / `gd` / `gb` / `gl`
+- `fzf` + `PSFzf` があれば `Ctrl+t` / `Ctrl+r`（zsh 側と同じキー割り当て）
+- `starship` があれば prompt を初期化（WSL / Mac と同じ prompt engine）
+- Chocolatey の tab 補完、Kiro の shell integration
+
+> profile は **ASCII のみ**で記述しています。Windows PowerShell 5.1 は BOM 無しファイルを ANSI codepage として解釈するため、日本語コメントを入れると文字化けします。
 
 ## WSL Neovim starter (lightweight)
 
