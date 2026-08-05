@@ -1,39 +1,53 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-
     "actions": [],
     "copyFormatting": "none",
     "copyOnSelect": false,
-
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-
-    "keybindings": [
-        { "id": "Terminal.CopyToClipboard", "keys": "ctrl+c" },
-        { "id": "Terminal.PasteFromClipboard", "keys": "ctrl+v" },
-        { "id": "Terminal.FindText", "keys": "ctrl+shift+f" },
-        { "id": "Terminal.DuplicatePaneAuto", "keys": "alt+shift+d" }
+    "keybindings": 
+    [
+        {
+            "id": "Terminal.CopyToClipboard",
+            "keys": "ctrl+c"
+        },
+        {
+            "id": "Terminal.FindText",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "id": "Terminal.PasteFromClipboard",
+            "keys": "ctrl+v"
+        },
+        {
+            "id": "Terminal.DuplicatePaneAuto",
+            "keys": "alt+shift+d"
+        }
     ],
-
-    "newTabMenu": [
-        { "type": "remainingProfiles" }
+    "newTabMenu": 
+    [
+        {
+            "type": "remainingProfiles"
+        }
     ],
-
-    "profiles": {
-        "defaults": {
+    "profiles": 
+    {
+        "defaults": 
+        {
+            "antialiasingMode": "grayscale",
             "colorScheme": "SFC Retro",
             "cursorShape": "vintage",
-            "font": {
+            "font": 
+            {
                 "face": "HackGen Console NF",
                 "size": 17
             },
-            "useAcrylic": false,
             "opacity": 100,
             "padding": "8, 6, 8, 6",
-            "antialiasingMode": "grayscale"
+            "useAcrylic": false
         },
-
-        "list": [
+        "list": 
+        [
             {
                 "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
@@ -44,7 +58,7 @@
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
-                "name": "コマンド プロンプト"
+                "name": "\u30b3\u30de\u30f3\u30c9 \u30d7\u30ed\u30f3\u30d7\u30c8"
             },
             {
                 "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
@@ -132,37 +146,46 @@
                 "hidden": false,
                 "name": "Ubuntu-24.04",
                 "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{6eedc39f-e954-5781-ad09-f27b7cb690ba}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022 (2)",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{c8c87c95-77c9-5592-819d-47b0a6305e95}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022 (2)",
+                "source": "Windows.Terminal.VisualStudio"
             }
         ]
     },
-
-    "schemes": [
+    "schemes": 
+    [
         {
-            "name": "SFC Retro",
             "background": "#0C0C3C",
-            "foreground": "#E8E8FF",
-            "selectionBackground": "#3A3A7A",
-            "cursorColor": "#FFFF88",
-
             "black": "#000000",
-            "red": "#FF5555",
-            "green": "#55FF55",
-            "yellow": "#FFFF55",
             "blue": "#5555FF",
-            "purple": "#FF55FF",
-            "cyan": "#55FFFF",
-            "white": "#E8E8FF",
-
             "brightBlack": "#555555",
-            "brightRed": "#FF8888",
-            "brightGreen": "#88FF88",
-            "brightYellow": "#FFFF88",
             "brightBlue": "#8888FF",
-            "brightPurple": "#FF88FF",
             "brightCyan": "#88FFFF",
-            "brightWhite": "#FFFFFF"
+            "brightGreen": "#88FF88",
+            "brightPurple": "#FF88FF",
+            "brightRed": "#FF8888",
+            "brightWhite": "#FFFFFF",
+            "brightYellow": "#FFFF88",
+            "cursorColor": "#FFFF88",
+            "cyan": "#55FFFF",
+            "foreground": "#E8E8FF",
+            "green": "#55FF55",
+            "name": "SFC Retro",
+            "purple": "#FF55FF",
+            "red": "#FF5555",
+            "selectionBackground": "#3A3A7A",
+            "white": "#E8E8FF",
+            "yellow": "#FFFF55"
         }
     ],
-
     "themes": []
 }

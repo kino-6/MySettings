@@ -201,16 +201,18 @@ Windows ネイティブ側（PowerShell / Windows Terminal）の設定ファイ�
 
 #### Windows Terminal 設定の運用
 
-Windows Terminal は GUI で設定を変えるたびに自分で `settings.json` を書き換えます。そのため2方向を使い分けます。
+Windows Terminal は GUI で設定を変えるたびに自分で `settings.json` を書き換えます。この点だけ他の設定ファイルと性質が違うため、**実機を正とし `-ImportTerminal` で吸い上げる**方針を採ります。設定変更は GUI で行い、リポジトリは追従させます。
 
 ```powershell
-# GUI で変えた設定をリポジトリに取り込む（実機 -> リポジトリ）
+# 通常運用: GUI で変えた設定をリポジトリへ（実機 -> リポジトリ）
 powershell -ExecutionPolicy Bypass -File .\windows-setup.ps1 -ImportTerminal
 git diff settings/windows-terminal/settings.json   # 内容を確認してからコミット
 
-# リポジトリの設定を実機に適用する（リポジトリ -> 実機）
+# 新しいマシンのセットアップ時など、リポジトリを正として流し込む場合（リポジトリ -> 実機）
 powershell -ExecutionPolicy Bypass -File .\windows-setup.ps1
 ```
+
+日常的に `windows-setup.ps1` を引数なしで実行すると GUI 変更が巻き戻るため、PowerShell profile や starship の更新だけを流したい場面では `-SkipTerminal` を付けます。
 
 `-ImportTerminal` はバイト単位のコピーです。整形は Windows Terminal 側が持つため、ここで正規化しても次にアプリが書き戻した時点で差分になるだけだからです。リポジトリ側に `.bak` は作りません（git が履歴を持つため、リポジトリ内に退避ファイルが増えるとコミット対象に紛れ込みます）。
 
