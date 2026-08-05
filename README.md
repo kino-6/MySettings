@@ -207,6 +207,7 @@ PowerShell profile は WSL の `.zshrc` と同じ思想で、外部コマンド�
 - 履歴: `MaximumHistoryCount 10000` / 重複除去 / ↑↓ で前方一致検索（`.zshrc.common` の `HISTSIZE` 設定と対応）
 - 補完予測: PSReadLine 2.1+ のときのみ `PredictionSource History` を有効化（5.1 同梱の 2.0.0 では自動的にスキップ）
 - `eza` があれば `ll` / `la` / `lt`、無ければ `Get-ChildItem` fallback
+  - Windows 版 `eza` は**パスを省略すると何も出力しない**（Linux 版のようにカレントへ fallback しない）ため、実在パスが引数に無いときは `.` を補っている
 - `rg` があれば `grep`、無ければ `Select-String` ベースの fallback
 - `nvim` があれば `v` と `$EDITOR`
 - `git` shorthand: `gs` / `gd` / `gb` / `gl`

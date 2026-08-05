@@ -59,9 +59,23 @@ if (Get-Module -ListAvailable PSReadLine) {
 
 # --- listing ----------------------------------------------------------------
 if (Test-Cmd eza) {
-    function ll { eza -l  --git --group-directories-first @args }
-    function la { eza -la --git --group-directories-first @args }
-    function lt { eza --tree --level=2 @args }
+    # eza on Windows prints nothing when it is given no path at all, unlike on
+    # Linux where it falls back to the current directory. Supply "." ourselves
+    # so a bare ll behaves the way it does in the WSL aliases.
+    # Append "." unless one of the arguments is an existing path. Testing for
+    # a real path rather than just "does not start with -" keeps flag values
+    # such as `lt -L 3` from being mistaken for a target.
+    function Get-EzaTarget([object[]]$Passed) {
+        foreach ($a in $Passed) {
+            if ($a -notlike '-*' -and (Test-Path -LiteralPath $a -ErrorAction Ignore)) {
+                return $Passed
+            }
+        }
+        return $Passed + '.'
+    }
+    function ll { eza -l  --git --group-directories-first @(Get-EzaTarget $args) }
+    function la { eza -la --git --group-directories-first @(Get-EzaTarget $args) }
+    function lt { eza --tree --level=2 @(Get-EzaTarget $args) }
 } else {
     function ll { Get-ChildItem @args }
     function la { Get-ChildItem -Force @args }
