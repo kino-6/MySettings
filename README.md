@@ -197,6 +197,24 @@ Windows ネイティブ側（PowerShell / Windows Terminal）の設定ファイ�
 
 - `-DryRun`: 書き込まずに差分だけ表示
 - `-SkipTerminal`: Windows Terminal の `settings.json` に触れない
+- `-ImportTerminal`: **逆方向**。実機の `settings.json` をリポジトリへ取り込み、他は何もしない（`-SkipTerminal` とは排他）
+
+#### Windows Terminal 設定の運用
+
+Windows Terminal は GUI で設定を変えるたびに自分で `settings.json` を書き換えます。そのため2方向を使い分けます。
+
+```powershell
+# GUI で変えた設定をリポジトリに取り込む（実機 -> リポジトリ）
+powershell -ExecutionPolicy Bypass -File .\windows-setup.ps1 -ImportTerminal
+git diff settings/windows-terminal/settings.json   # 内容を確認してからコミット
+
+# リポジトリの設定を実機に適用する（リポジトリ -> 実機）
+powershell -ExecutionPolicy Bypass -File .\windows-setup.ps1
+```
+
+`-ImportTerminal` はバイト単位のコピーです。整形は Windows Terminal 側が持つため、ここで正規化しても次にアプリが書き戻した時点で差分になるだけだからです。リポジトリ側に `.bak` は作りません（git が履歴を持つため、リポジトリ内に退避ファイルが増えるとコミット対象に紛れ込みます）。
+
+取り込み時、`source` を持つプロファイル（WSL ディストリ、Visual Studio、Azure Cloud Shell など Windows Terminal が自動生成するもの）が**新たに増えていれば警告します**。これらはマシン固有で放っておいても再生成されるため、通常はコミットしない方が無難です。
 
 > Documents の場所は `[Environment]::GetFolderPath('MyDocuments')` で解決するため、OneDrive リダイレクト環境でも正しい位置に配置されます。
 
