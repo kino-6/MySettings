@@ -34,7 +34,7 @@ The structured ECC workflow skills were added on 2026-06-21 as Codex skills:
 
 `observable-development-loop` was added on 2026-08-11 as a project-local skill that defines an Observability Contract for output that cannot be judged from source inspection alone: direct observation, stable reference points, deterministic checks, retained evidence, and failure promotion. It was mirrored into local `~/.codex/skills` on 2026-08-11 at the user's request.
 
-`build-playable-games` was added on 2026-08-11. Its SKILL.md was authored in a separate session by the user's request; this repo integrated it and authored its missing `references/` (quality-gates, genre-lenses, source-lessons distilled from `kino-6/black-stela` and `kino-6/RePrise`) and `scripts/inspect_game_project.py`. Mirrored into local `~/.codex/skills` so game repositories can load it.
+`build-playable-games` was added on 2026-08-11. Its SKILL.md was authored in a separate session by the user's request; this repo integrated it and authored its missing `references/` (quality-gates, genre-lenses, source-lessons distilled from `kino-6/black-stela` and `kino-6/RePrise`) and `scripts/inspect_game_project.py`. On 2026-08-12, `references/task-queue.md` was added: the Tasks.md active-queue conventions (named FAIL-able gates, four-part definition of done, same-edit grooming) distilled from the black-stela operating rules. Mirrored into local `~/.codex/skills` so game repositories can load it.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 
