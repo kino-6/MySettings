@@ -48,6 +48,7 @@ Use these when the task matches the trigger:
 | Multi-file implementation should land as thin, verifiable slices | `incremental-implementation` |
 | Test/build failure or unexpected behavior | `debugging-and-error-recovery` |
 | AI-written code needs regression traps or review harnesses | `ai-regression-testing`, `eval-harness` |
+| Result must be observed at runtime or as a generated artifact, not judged from the diff alone | `observable-development-loop` |
 | Browser or UI end-to-end/runtime tests are needed | `e2e-testing`, `browser-testing-with-devtools` |
 | Requirements are unclear, vague, or need a spec | `interview-me`, `idea-refine`, `spec-driven-development`, `planning-and-task-breakdown` |
 | Prompt, reusable instruction, or output contract design | `outcome-first-prompting`, `prompt-thinking-patterns` |

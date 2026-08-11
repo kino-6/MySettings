@@ -22,6 +22,14 @@ Out of scope:
 
 - TBD
 
+## Quality Bar
+
+What observable output or behavior defines a good result, beyond the diff?
+
+## Human-Owned Judgment
+
+Which quality decisions stay with the user?
+
 ## Risks
 
 - TBD

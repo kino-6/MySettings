@@ -394,6 +394,7 @@ Standalone Codex skill として参照が切れないよう、upstream root の 
 - `ecc-task-workflow`: 大きめの作業を始めるとき、必要なら task artifact を作る
 - `ecc-final-check`: substantial な変更の最後に diff / scope / verification を確認
 - `ecc-finish-work`: 作業終了時に check 更新、resume notes、再利用できる学びの昇格を行う
+- `observable-development-loop`: diff だけで判断できない出力に対して、観察方法・固定の比較条件・機械的な検証・残す証拠を Observability Contract として決める
 
 この workflow は vendor 固有の workflow directory を作らず、外部 harness の init command も実行しません。将来フル導入を試す場合は、一時 branch か scratch repo で generated diff を確認してから取り込む方針です。
 
