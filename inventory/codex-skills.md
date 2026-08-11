@@ -10,8 +10,8 @@ Updated: 2026-08-11 JST
 
 ## Merge Summary
 
-- Local user skills found: 88
-- Repository skills found: 89
+- Local user skills found: 89
+- Repository skills found: 90
 - Missing local user skills in repository: 0
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 6
@@ -33,6 +33,8 @@ The structured ECC workflow skills were added on 2026-06-21 as Codex skills:
 `eval-bottleneck-reduction` was added on 2026-07-11 as a project-local skill for designing layered AI evaluation workflows that reduce human review bottlenecks. It stays repository-only until it proves broadly useful outside this repo.
 
 `observable-development-loop` was added on 2026-08-11 as a project-local skill that defines an Observability Contract for output that cannot be judged from source inspection alone: direct observation, stable reference points, deterministic checks, retained evidence, and failure promotion. It was mirrored into local `~/.codex/skills` on 2026-08-11 at the user's request.
+
+`build-playable-games` was added on 2026-08-11. Its SKILL.md was authored in a separate session by the user's request; this repo integrated it and authored its missing `references/` (quality-gates, genre-lenses, source-lessons distilled from `kino-6/black-stela` and `kino-6/RePrise`) and `scripts/inspect_game_project.py`. Mirrored into local `~/.codex/skills` so game repositories can load it.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 

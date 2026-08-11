@@ -25,7 +25,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 - This repo is a dotfiles/setup repository, not an application runtime.
 - Active first-party files are mostly Markdown and shell scripts: `README.md`, `mac-setup.sh`, `wsl-setup.sh`, and `scripts/*.sh`.
 - The repo contains `.agents/skills`, so skill governance is a first-class concern.
-- Current scan found 89 repository skills, 88 non-system local user skills, and 1 repository-only skill: `eval-bottleneck-reduction`.
+- Current scan found 90 repository skills, 89 non-system local user skills, and 1 repository-only skill: `eval-bottleneck-reduction`.
 - There are no active app manifests such as `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, or `tsconfig*.json`.
 
 ## DAILY
@@ -106,7 +106,8 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 | `postgres-patterns` | No active PostgreSQL project files in this repo. |
 | `clickhouse-io` | No active ClickHouse analytics workload in this repo. |
 | `jpa-patterns` | No Java/Spring/JPA code in this repo. |
-| `gamestudio-review` | No game project files in this repo. |
+| `gamestudio-review` | No game project files in this repo; use in game repositories for multi-role critique. |
+| `build-playable-games` | No game project files in this repo; use in game repositories (e.g. black-stela, RePrise) for playable-slice implementation with shipping-runtime gates. |
 | `using-agent-skills` | Addy pack's alternate router; this repo keeps `skill-use-manager` as the daily router. |
 | `continuous-learning` | Legacy workflow; use `continuous-learning-v2` for current project-scoped learning. |
 | `everything-claude-code` | Upstream ECC conventions/provenance reference; this repo keeps its Codex baseline in `.codex/AGENTS.md` and `.agents/ecc-workflow/`. |

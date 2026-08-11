@@ -86,7 +86,7 @@ Keep these available, but only load them when the repo or user request explicitl
 | --- | --- |
 | Databases and migrations | `database-migrations`, `postgres-patterns`, `clickhouse-io` |
 | Java backend | `jpa-patterns` |
-| Games | `gamestudio-review` |
+| Games | `gamestudio-review` (multi-role critique), `build-playable-games` (implementation with playable slices and shipping-runtime gates) |
 | Alternate skill router | `using-agent-skills` (reference only; this repo uses `skill-use-manager` as the daily router) |
 | Legacy continuous learning | `continuous-learning` (reference only; use `continuous-learning-v2` for current project-scoped learning) |
 | Upstream ECC conventions | `everything-claude-code` (reference/provenance only; this repo keeps its Codex baseline in `.codex/AGENTS.md` and `.agents/ecc-workflow/`) |

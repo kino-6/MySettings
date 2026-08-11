@@ -48,6 +48,7 @@ Available skills:
 - ecc-final-check — Final diff/scope/verification review before substantial work is summarized
 - ecc-finish-work — Session-ending ritual for checks, resume notes, and durable learning promotion
 - observable-development-loop — Observability Contract and evidence-first feedback loop for output that cannot be judged from source alone
+- build-playable-games — Player-first game implementation with playable slices, shipping-runtime proof, and gate design lessons from black-stela / RePrise
 - generate-explainer-yaml — Convert documents, PRs, READMEs, design notes, or specs into `core.yaml` and `view.yaml`
 - generate-explainer-html — Build an offline, switchable HTML explainer bundle from `core.yaml` and `view.yaml`
 - using-agent-skills — Addy agent-skills meta router; kept as library because `skill-use-manager` is this repo's daily router
