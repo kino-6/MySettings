@@ -14,6 +14,7 @@ Treat the game the player runs as the product. Convert intent into one small, ob
 3. Identify the shipping runtime. Label archived prototypes, rules oracles, editors, simulators, and migration references separately. Never validate only a reference runtime when another runtime ships.
 4. Locate the normal player entry point and the shortest complete loop. If either is unclear, inspect code and launch commands before editing.
 5. Read [references/quality-gates.md](references/quality-gates.md). For genre-specific work, also read [references/genre-lenses.md](references/genre-lenses.md). When working on one of the source projects or adapting its lessons, read [references/source-lessons.md](references/source-lessons.md).
+6. If the repository keeps an active task queue (`Tasks.md` or equivalent), read [references/task-queue.md](references/task-queue.md) before adding, starting, or completing entries.
 
 Do not begin with a broad rewrite. First state what is currently observable and what evidence is missing.
 Discover engine versions, launch commands, controls, viewports, and intended loops from the repository before asking the user. Ask only for a design judgment or genuinely absent fact that would materially change the slice.
