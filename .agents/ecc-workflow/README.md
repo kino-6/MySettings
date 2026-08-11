@@ -23,8 +23,11 @@ normal ECC / Codex flow.
    artifacts would make the work easier to resume or review.
 3. Keep the task folder small: `prd.md`, `implement.md`, and `check.md` are
    enough for most changes.
-4. Use `ecc-final-check` before summarizing substantial work.
-5. Use `ecc-finish-work` when a task is done or context is filling up.
+4. When the result cannot be judged from the diff alone, use
+   `observable-development-loop` to fill the Observability Contract in
+   `implement.md` and record the evidence in `check.md`.
+5. Use `ecc-final-check` before summarizing substantial work.
+6. Use `ecc-finish-work` when a task is done or context is filling up.
 
 ## Guardrails
 

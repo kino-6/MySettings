@@ -1,0 +1,4 @@
+interface:
+  display_name: "Observable Development Loop"
+  short_description: "Evidence-first observe/compare/verify loop for AI output"
+  default_prompt: "Use $observable-development-loop to define an Observability Contract before substantial implementation."
