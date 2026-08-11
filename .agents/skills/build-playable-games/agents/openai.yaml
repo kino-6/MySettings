@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Playable Games"
+  short_description: "Player-first game work with shipping-runtime proof gates"
+  default_prompt: "Use $build-playable-games to frame one playable slice and prove it in the shipping runtime."
