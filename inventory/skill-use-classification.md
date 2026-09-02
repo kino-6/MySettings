@@ -54,6 +54,9 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 | `observable-development-loop` | An AI-generated result must be observed at runtime or as a generated artifact, with stable reference points, deterministic checks, and retained evidence. |
 | `interview-me` | Requirements are underspecified and need one-question-at-a-time clarification. |
 | `idea-refine` | A vague idea needs divergent/convergent refinement before planning. |
+| `grill-with-docs` | A plan or design should be stress-tested and documented in one pass; user-invoked only, and it calls `grilling` plus `domain-modeling`. |
+| `grilling` | A plan, decision, or idea needs relentless round-based questioning until the design tree has no open branches. |
+| `domain-modeling` | Codebase terminology is being challenged or fixed, or a `CONTEXT.md` glossary / `docs/adr/` ADR is being written or edited. |
 | `spec-driven-development` | A significant feature or project needs a PRD/spec before implementation. |
 | `planning-and-task-breakdown` | A spec or clear request needs implementable, ordered tasks. |
 | `outcome-first-prompting` | A prompt needs stable schema, format, examples, or acceptance criteria. |
@@ -114,6 +117,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 
 ## Notes
 
+- `interview-me` and `grilling` overlap on "grill me" style triggers but differ in shape: `interview-me` asks one question at a time to recover intent behind an underspecified ask, while `grilling` asks a whole decision frontier per round to stress-test a plan that already exists. Prefer `grill-with-docs` when the grilling should also leave `CONTEXT.md` / ADR behind.
 - Internet research was not used for this pass. The better source of truth is repo-local evidence plus the existing `agent-sort` workflow.
 - `LIBRARY` skills should stay installed and searchable. They are just not worth loading by default for this repository.
 - Revisit this classification when the repo gains application code, CI, package manifests, hooks, or new project-local MCP configuration.

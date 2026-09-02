@@ -51,6 +51,8 @@ Use these when the task matches the trigger:
 | Result must be observed at runtime or as a generated artifact, not judged from the diff alone | `observable-development-loop` |
 | Browser or UI end-to-end/runtime tests are needed | `e2e-testing`, `browser-testing-with-devtools` |
 | Requirements are unclear, vague, or need a spec | `interview-me`, `idea-refine`, `spec-driven-development`, `planning-and-task-breakdown` |
+| A plan or design already exists and should be stress-tested round by round | `grilling`, `grill-with-docs` |
+| Codebase terminology, a `CONTEXT.md` glossary, or an ADR is being written or challenged | `domain-modeling`, `documentation-and-adrs` |
 | Prompt, reusable instruction, or output contract design | `outcome-first-prompting`, `prompt-thinking-patterns` |
 | Source-cited framework/library decisions | `source-driven-development`, `documentation-lookup` |
 | High-stakes or unfamiliar decisions need adversarial review | `doubt-driven-development`, `council` |
@@ -77,6 +79,10 @@ Use these when the task matches the trigger:
 | Performance requirements, regressions, Core Web Vitals, or profiling are relevant | `performance-optimization` |
 | CI/CD, observability, deprecation, docs/ADRs, or launch readiness | `ci-cd-and-automation`, `observability-and-instrumentation`, `deprecation-and-migration`, `documentation-and-adrs`, `shipping-and-launch` |
 | Strategic wall-partner work for business ideas, product bets, career decisions, research questions, or assumption stress tests | `strategic-ai-wall-partner` |
+
+`grill-with-docs` is a composite entry point: it is user-invoked only
+(`disable-model-invocation: true`) and does nothing on its own except call
+`grilling` and `domain-modeling`. Keep all three installed together.
 
 ## Library Routing
 
