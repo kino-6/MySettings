@@ -380,6 +380,14 @@ bash scripts/wsl-cleanup.sh
 
 Standalone Codex skill として参照が切れないよう、upstream root の `references/` や `agents/` を必要な skill directory に寄せています。
 
+また、[mattpocock/skills](https://github.com/mattpocock/skills) から design grilling 一式を add-only で取り込んでいます（MIT License のため各 skill directory に upstream `LICENSE` を同梱）。
+
+- `grill-with-docs`: user 明示呼び出し専用の composite entry point。単体では何もせず `grilling` と `domain-modeling` を呼ぶだけなので、3 つセットで維持する
+- `grilling`: 決定木の frontier を 1 round ずつ潰していく質問攻め。各質問に推奨解を添え、user の回答を待ってから次の round に進む
+- `domain-modeling`: 用語のブレを潰して `CONTEXT.md`（glossary）と `docs/adr/`（ADR）に落とす。format は同梱の `CONTEXT-FORMAT.md` / `ADR-FORMAT.md`
+
+この 3 つはローカルの全プロジェクトから参照できるよう、repo に加えて `~/.codex/skills/`（Codex CLI）と `~/.claude/skills/`（Claude Code）の両方にミラーしています。Claude Code は `~/.codex/skills` を読まないため、user-level skill を両 runtime で使う場合は両方へ配置する方針です。
+
 ### Structured agent workflow
 
 外部 agent harness 本体はまだ導入せず、衝突しにくい軽量 workflow だけを `.agents/ecc-workflow/` に置いています。

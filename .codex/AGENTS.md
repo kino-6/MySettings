@@ -53,6 +53,9 @@ Available skills:
 - generate-explainer-html — Build an offline, switchable HTML explainer bundle from `core.yaml` and `view.yaml`
 - using-agent-skills — Addy agent-skills meta router; kept as library because `skill-use-manager` is this repo's daily router
 - interview-me / idea-refine / spec-driven-development / planning-and-task-breakdown — Define and plan work before implementation
+- grill-with-docs — User-invoked composite entry point that runs `grilling` and `domain-modeling` together
+- grilling — Round-based relentless questioning of a plan, decision, or idea until the design tree is settled
+- domain-modeling — Sharpen project terminology and record it in `CONTEXT.md` and `docs/adr/`
 - incremental-implementation / test-driven-development / debugging-and-error-recovery — Build and repair work in verifiable slices
 - code-review-and-quality / code-simplification / git-workflow-and-versioning — Review, simplify, and ship source changes cleanly
 - source-driven-development / doubt-driven-development / documentation-and-adrs — Ground decisions, challenge assumptions, and record durable context
