@@ -354,6 +354,10 @@ bash scripts/wsl-cleanup.sh
 
 ## ECC / Codex baseline
 
+2026-09-14: [Local / MySettingsの棚卸し](inventory/2026-09-14-astra-stocktake.md)と、
+[日常モデル・Astraの切替設定案](inventory/proposals/model-switch/README.md)を追加しました。
+運用設定には未適用です。現行CLIではprofileは `~/.codex/<name>.config.toml` に分けます。
+
 このリポジトリは [affaan-m/ECC](https://github.com/affaan-m/ECC) の Codex 向け baseline を project-local に取り込んでいます。
 
 - `.codex/config.toml`: Codex CLI 用の sandbox / MCP / multi-agent baseline

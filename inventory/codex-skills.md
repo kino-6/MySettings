@@ -3,6 +3,13 @@
 Generated: 2026-06-10 09:11:40 JST
 Updated: 2026-09-02 JST
 
+Latest audit: [2026-09-14 Local / MySettings stocktake](2026-09-14-astra-stocktake.md)
+and [complete structural inventory](2026-09-14-skill-scan.tsv). That scan found
+93 local and 93 repository skills, with `sprite-gen` local-only and
+`eval-bottleneck-reduction` repository-only. The dated merge summary and
+same-name difference notes below describe the earlier inventory, not the
+current mirror state. No skill synchronization was performed in the new audit.
+
 ## Sources
 
 - Local user skills: `~/.codex/skills`

@@ -3,6 +3,12 @@
 Generated: 2026-06-10 09:11:40 JST
 Updated: 2026-08-11 JST
 
+Audit follow-up: [2026-09-14 stocktake](2026-09-14-astra-stocktake.md) records
+current counts, overlapping routing rules, and proposed model-switch profiles.
+The buckets below remain the existing policy; the audit proposals have not
+been applied. These labels do not disable skill discovery or remove metadata
+from the model's available-skill catalog.
+
 ## Position
 
 `skill-use-manager` is a good next step.

@@ -1,0 +1,4 @@
+# Proposed user profile for Codex CLI >= 0.134.0.
+# Install as ~/.codex/daily.config.toml; select with codex -p daily.
+model = "gpt-5.6-terra"
+model_reasoning_effort = "medium"
