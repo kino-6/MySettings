@@ -354,6 +354,10 @@ bash scripts/wsl-cleanup.sh
 
 ## ECC / Codex baseline
 
+2026-09-14: [Local / MySettingsの棚卸し](inventory/2026-09-14-astra-stocktake.md)と、
+[日常モデル・Astraの切替設定案](inventory/proposals/model-switch/README.md)を追加しました。
+運用設定には未適用です。現行CLIではprofileは `~/.codex/<name>.config.toml` に分けます。
+
 このリポジトリは [affaan-m/ECC](https://github.com/affaan-m/ECC) の Codex 向け baseline を project-local に取り込んでいます。
 
 - `.codex/config.toml`: Codex CLI 用の sandbox / MCP / multi-agent baseline
@@ -379,6 +383,14 @@ bash scripts/wsl-cleanup.sh
 - production quality skills: `source-driven-development`, `doubt-driven-development`, `security-and-hardening`, `performance-optimization`, `frontend-ui-engineering`, `browser-testing-with-devtools`, `ci-cd-and-automation`, `observability-and-instrumentation` など
 
 Standalone Codex skill として参照が切れないよう、upstream root の `references/` や `agents/` を必要な skill directory に寄せています。
+
+また、[mattpocock/skills](https://github.com/mattpocock/skills) から design grilling 一式を add-only で取り込んでいます（MIT License のため各 skill directory に upstream `LICENSE` を同梱）。
+
+- `grill-with-docs`: user 明示呼び出し専用の composite entry point。単体では何もせず `grilling` と `domain-modeling` を呼ぶだけなので、3 つセットで維持する
+- `grilling`: 決定木の frontier を 1 round ずつ潰していく質問攻め。各質問に推奨解を添え、user の回答を待ってから次の round に進む
+- `domain-modeling`: 用語のブレを潰して `CONTEXT.md`（glossary）と `docs/adr/`（ADR）に落とす。format は同梱の `CONTEXT-FORMAT.md` / `ADR-FORMAT.md`
+
+この 3 つはローカルの全プロジェクトから参照できるよう、repo に加えて `~/.codex/skills/`（Codex CLI）と `~/.claude/skills/`（Claude Code）の両方にミラーしています。Claude Code は `~/.codex/skills` を読まないため、user-level skill を両 runtime で使う場合は両方へ配置する方針です。
 
 ### Structured agent workflow
 

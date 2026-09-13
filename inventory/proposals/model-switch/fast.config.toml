@@ -1,0 +1,4 @@
+# Proposed user profile for bounded, straightforward tasks.
+# Install as ~/.codex/fast.config.toml; select with codex -p fast.
+model = "gpt-5.6-luna"
+model_reasoning_effort = "low"
