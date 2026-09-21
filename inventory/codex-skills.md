@@ -1,7 +1,7 @@
 # Codex Skills Inventory
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-09-02 JST
+Updated: 2026-09-21 JST
 
 Latest audit: [2026-09-14 Local / MySettings stocktake](2026-09-14-astra-stocktake.md)
 and [complete structural inventory](2026-09-14-skill-scan.tsv). That scan found
@@ -18,13 +18,13 @@ current mirror state. No skill synchronization was performed in the new audit.
 
 ## Merge Summary
 
-- Local user skills found: 92
-- Repository skills found: 93
-- Missing local user skills in repository: 0
+- Local user skills found: 94
+- Repository skills found: 94
+- Missing local user skills in repository: 1 (`sprite-gen`)
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 6
 
-All non-system local skills are already present in this repository. ECC upstream Codex skills from `affaan-m/ECC` were added in add-only mode on 2026-06-13.
+One non-system local skill is not in this repository: `sprite-gen` (Apache-2.0, appeared in `~/.codex/skills` on 2026-09-12 from another session; it is a full package with `pyproject.toml`, `scripts/`, and `tests/`, so vendoring it is a deliberate decision that has not been made yet). ECC upstream Codex skills from `affaan-m/ECC` were added in add-only mode on 2026-06-13.
 
 `hirokita117/yaml-to-html-skill` was added in add-only mode on 2026-06-18. It contributes `generate-explainer-yaml` and `generate-explainer-html`, both kept as project-local skills under `.agents/skills/`; the upstream MIT license is copied into each imported skill directory.
 
@@ -47,6 +47,8 @@ The structured ECC workflow skills were added on 2026-06-21 as Codex skills:
 `mattpocock/skills` was added in add-only mode on 2026-09-02. It contributes `grill-with-docs`, `grilling`, and `domain-modeling`. `grill-with-docs` is a user-invoked composite (`disable-model-invocation: true`) whose whole body is an instruction to call the other two, so the three are maintained as a set. `domain-modeling` keeps its `CONTEXT-FORMAT.md` and `ADR-FORMAT.md` references inside the skill directory so it stays standalone. The upstream MIT license is copied into each imported skill directory. At the user's request these three were mirrored into both `~/.codex/skills` and `~/.claude/skills` so every local project can reference them from either runtime; `~/.claude/skills` is a new distribution surface and currently holds only these three skills.
 
 On 2026-09-02 the stale local copy of `skill-use-manager` was re-synced from the repository copy: it was missing the `observable-development-loop` and `build-playable-games` routing rows added earlier.
+
+`task-queue-loop` was added on 2026-09-21. It is not an upstream import: it was distilled from the `Tasks.md` queues actually in use across 11 local repositories (see its `references/collected-practice.md` for the per-rule provenance table and the variations deliberately left open). It carries the `Tasks.md` / `CHARTER.md` / archive templates plus `templates/gate-auditor.md`, and `references/gate-audit-loop.md` adds the second-perspective gate audit: a fresh-context agent that attacks the row's gate rather than the diff, returns a fixed-format verdict, and files refactoring proposals back into the queue as gated rows. Mirrored into both `~/.codex/skills` and `~/.claude/skills`. `build-playable-games/references/task-queue.md` stays the game-project cut of the same conventions and now cross-references this skill in both directions.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Task Queue Loop"
+  short_description: "Run a Tasks.md queue as an audited work loop"

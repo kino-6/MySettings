@@ -8,6 +8,11 @@ result). If the target repository already carries a rules header inside its
 own Tasks.md, that in-repo header is authoritative; this file is the
 transferable version.
 
+The general, non-game version of these conventions — plus the Tasks.md /
+CHARTER.md / archive templates and the second-perspective gate audit loop — is
+the `task-queue-loop` skill. This file stays self-contained for game projects and
+adds the game-specific parts (dual-runtime parity, lane split, visual gates).
+
 The two load-bearing ideas: every task names a gate that can FAIL, and
 "done" requires self-verification plus a one-command reproduction. A task
 without those is a wish, not work.

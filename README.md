@@ -392,6 +392,18 @@ Standalone Codex skill として参照が切れないよう、upstream root の 
 
 この 3 つはローカルの全プロジェクトから参照できるよう、repo に加えて `~/.codex/skills/`（Codex CLI）と `~/.claude/skills/`（Claude Code）の両方にミラーしています。Claude Code は `~/.codex/skills` を読まないため、user-level skill を両 runtime で使う場合は両方へ配置する方針です。
 
+### Tasks.md の運用を skill 化（task-queue-loop）
+
+ローカルの 11 リポジトリ（`steering-health-intelligence`, `rustbound`, `black-stela`, `cdda-musou`, `ecliptica`, `virtual-ecu-peripheral-harness`, `watchless-notes`, `AutoRogue`, `codex-game-test` ほか）で実際に動いている `Tasks.md` 運用を収集し、`task-queue-loop` として 1 本にまとめています。「Tasks.md は todo list ではなく loop の状態で、1 周 = 1 タスクを未着手から緑の Gate + commit まで運ぶ」という形に整理したものです。
+
+- `SKILL.md`: 1 周の手順（入口で キュー + 憲章 を読む → 上から 1 件 → Gate を先に書く → 赤いことを確かめる → 実装と自己検証 → commit → 別視点の監査 → 同じ編集で整備）、状態記号、完了の 4 条件、ファイルの不変条件（200 行上限・置き場所の地図・次の ID の宣言）
+- `references/gates.md`: 落とせる Gate の書き方。曖昧語を数値とキー名へ落とす、修正前に赤を確認する、機械判定が書けない場合の扱い
+- `references/gate-audit-loop.md`: **別視点エージェントによる Gate 監査ループ**。差分ではなく Gate を攻める（差分を戻して赤くなるか、挙動を壊して赤くなるか、assertion が実際に走ったか）。判定は `GATE_VALID` / `GATE_BROKEN` / `EVIDENCE_MISSING` の固定書式で返し、refactoring 案は **Gate 付きの行**としてキューへ積む。自動化は subagent への dispatch と、キューファイルへの `PostToolUse` hook（監査記録の無い `[x]` を拒否）の 2 段
+- `references/collected-practice.md`: どの規則をどのリポジトリから取ったかの対応表と、規則が答えている実際の失敗例
+- `templates/`: `Tasks.md`（READ FIRST ヘッダ入り）、`CHARTER.md`、`Tasks-archive.md`、`gate-auditor.md`（`.claude/agents/` へ置く監査 subagent 定義）
+
+Gate を書いた本人が完了も判定する自己承認が構造的な穴だったため、監査を「工程」ではなく **loop の一部**にしています（監査の出力が次の周のタスクになる）。テンプレートは実際の対象リポジトリに合わせて日本語、`SKILL.md` と `references/` は他の skill と揃えて英語です。
+
 ### Structured agent workflow
 
 外部 agent harness 本体はまだ導入せず、衝突しにくい軽量 workflow だけを `.agents/ecc-workflow/` に置いています。
