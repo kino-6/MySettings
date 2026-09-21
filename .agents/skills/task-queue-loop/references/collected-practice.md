@@ -56,3 +56,30 @@ back to the repository that paid for it.
   than the diff. Its enforcement shape is borrowed from
   `steering-health-intelligence`, where the trouble registry is not a habit but a
   commit blocked by `scripts/check_repo.py`.
+
+## First run of the audit loop (2026-09-21)
+
+Run against `rustbound` T609 ("二つの稼ぎ方は競合していない") at `05367a2`, in a
+throwaway `git worktree` so the working tree was never touched.
+
+- Baseline `./Run.sh test --only=test_two_ways_to_earn`: green, 3 tests / 37 checks.
+- **revert-and-run: N/A.** The commit changes only `tests/` and `tools/` - no
+  production code - so reverting deletes the gate instead of the fix. This case
+  was missing from the skill and is now written into
+  [gate-audit-loop.md](gate-audit-loop.md).
+- **mutations: 3/3 RED.** Adding `"parts": 1` to `trade_routes()` (30 failures),
+  raising `cu_scrambler` to `encounter_mult 3.0 / elite_mult 5.0` so avoiding
+  out-earns luring (2 failures), and multiplying the trade payout by 10 (ratio
+  10.5, 1 failure). The gate survived none of them.
+- **assertion-executed: YES.** The test guards its own preconditions with
+  `t.gt(routes.size(), 0)` before looping, which is the check this skill asks for.
+- **repro: OK.** `./Run.sh script res://tools/report_income.gd` reproduced every
+  number quoted in the row (交易 3.5〜4.4G/歩, 荒野+誘引 4.5 → 3.7G/歩, 部品 0.024).
+- **Finding filed.** `tools/report_income.gd` measures the market-to-market
+  distance at run time (`_walk_between_markets()`), while the gate hard-codes
+  `var legs := 164.0`. The tool re-measures when the map moves and the gate does
+  not, so the ratio band silently goes stale. The test's own comment already
+  refuses to copy the gold amounts for this exact reason - the step count slipped
+  through. This is now an explicit refactor check in the audit.
+
+Verdict: `GATE_VALID`. Cost: four gate runs at roughly one second each.

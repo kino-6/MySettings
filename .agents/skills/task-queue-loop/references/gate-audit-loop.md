@@ -38,6 +38,12 @@ The auditor's first job is to attack the gate, not the code.
 1. **Revert-and-run.** Stash or revert the diff, run the gate. **It must go red.**
    Green here means the gate does not measure the fix, and the row reopens
    regardless of how good the code is.
+
+   **Undefined for a row whose diff is test or tool only** - a measurement row, a
+   row that pins an existing behaviour into a band, a row whose whole deliverable
+   *is* the gate. Reverting it deletes the gate rather than the fix, so there is
+   nothing to run. Record `N/A(<why>)` and let mutation carry the falsification;
+   do not fake a red by reverting the test.
 2. **Mutate-and-run.** Break the behaviour the row claims while keeping the diff's
    shape - flip a comparison, zero a constant, drop one branch. **The gate must go
    red for each.** A mutation the gate survives names the hole precisely, and that
@@ -64,6 +70,11 @@ auditor proposes, and **only** proposes:
 
 - Duplication the diff introduced, and which of the copies should own the rule.
   "One reader per question" is the invariant being protected.
+- **A constant the gate copied from the tool that measures it.** If the tool
+  computes the value at run time and the gate hard-codes the number the tool
+  printed once, they will drift silently: the tool re-measures, the gate keeps
+  the stale denominator, and the band stops meaning what it says. Look for any
+  bare number in the gate that appears in the row's prose.
 - A seam the diff worked around instead of moving.
 - Naming that will read wrong to the next session.
 - Missing coverage adjacent to the change - not a wishlist, only what the diff
@@ -83,7 +94,7 @@ it, and so the queue edit is mechanical:
 VERDICT: GATE_VALID | GATE_BROKEN | EVIDENCE_MISSING
 ROW: <id>
 FALSIFICATION:
-  revert-and-run: RED | GREEN(<why this is fatal>)
+  revert-and-run: RED | GREEN(<why this is fatal>) | N/A(<test-or-tool-only diff>)
   mutations: <what was mutated> -> RED | GREEN(<the hole>)
   assertion-executed: YES(<count>) | NO
 REPRO: OK | FAILED(<what happened>)

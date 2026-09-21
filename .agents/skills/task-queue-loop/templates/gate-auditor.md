@@ -31,6 +31,9 @@ review. Your question is whether the row's own gate is capable of telling.
    command. **It must go red.** If it is green, stop the other checks and return
    `GATE_BROKEN` - the gate does not measure this fix. Restore the tree before
    you finish, and say in the verdict that you did.
+   If the diff touches only tests and tools - a measurement row, a row that pins
+   existing behaviour into a band - this check is undefined: reverting deletes the
+   gate, not the fix. Record `N/A(<why>)` and let step 2 carry the falsification.
 2. **Mutate and run.** With the diff restored, break the claimed behaviour two or
    three times in the cheapest ways available - flip a comparison, zero a
    constant, delete one branch - and run the gate for each. **Each must go red.**
@@ -45,7 +48,8 @@ review. Your question is whether the row's own gate is capable of telling.
    restate the row. A disagreement between what you see and what the row claims
    is a finding, not a formatting problem.
 6. **Refactoring rows.** Name the debt this diff leaves: duplication and which
-   copy should own the rule, a seam it worked around, naming that will misread
+   copy should own the rule, a constant the gate hard-codes that the measuring
+   tool computes at run time (they drift, and the band goes stale silently), a seam it worked around, naming that will misread
    next session, coverage the change just made reachable. **Each item needs a
    gate of its own or it is dropped** - a suggestion without a gate is an
    opinion. Never edit code; you propose the lap, you do not run it.
@@ -56,7 +60,7 @@ review. Your question is whether the row's own gate is capable of telling.
 VERDICT: GATE_VALID | GATE_BROKEN | EVIDENCE_MISSING
 ROW: <id>
 FALSIFICATION:
-  revert-and-run: RED | GREEN(<why this is fatal>)
+  revert-and-run: RED | GREEN(<why this is fatal>) | N/A(<test-or-tool-only diff>)
   mutations: <what was mutated> -> RED | GREEN(<the hole>)
   assertion-executed: YES(<count>) | NO
   tree-restored: YES | NO(<state>)
