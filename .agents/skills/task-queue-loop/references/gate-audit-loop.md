@@ -116,7 +116,7 @@ does not invalidate a naming problem.
 ## Wiring it up
 
 **Claude Code.** Drop [../templates/gate-auditor.md](../templates/gate-auditor.md)
-into the repository's `.claude/agents/`, then at lap step 7.5 dispatch it with the
+into the repository's `.claude/agents/`, then at lap step 8 dispatch it with the
 Agent tool, one call per row. It runs in its own context by construction, which is
 the property being bought. Several closed rows audit in parallel - send them in
 one message.
@@ -127,7 +127,7 @@ existing `reviewer` role.
 **Making it automatic rather than remembered.** Two options, in increasing order
 of force:
 
-- Put step 7.5 in the queue header's READ FIRST block. Cheap, and it survives into
+- Put step 8 in the queue header's READ FIRST block. Cheap, and it survives into
   sessions that never load this skill - but it is a habit, and habits are what the
   audit exists to distrust.
 - A `PostToolUse` hook on edits to the queue file that greps for a fresh `[x]` and

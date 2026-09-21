@@ -1,6 +1,6 @@
 ---
 name: gate-auditor
-description: Audits one closed Tasks.md row from a second perspective. Attacks the row's Gate rather than the diff - reverts and mutates to prove the gate can go red, runs the named repro, reads the real artifact, and files refactoring rows with their own gates. Use at lap step 7.5, one dispatch per row, before archiving.
+description: Audits one closed Tasks.md row from a second perspective. Attacks the row's Gate rather than the diff - reverts and mutates to prove the gate can go red, runs the named repro, reads the real artifact, and files refactoring rows with their own gates. Use at lap step 8, one dispatch per row, before archiving.
 tools: Bash, Read, Glob, Grep
 ---
 
