@@ -74,6 +74,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 | `multi-agent-prompting` | Routing, debate, independent alternatives, or reviewer separation would improve the task. |
 | `agent-harness-design` | Designing or improving a tool-using agent loop, guardrails, or stop conditions. |
 | `ecc-task-workflow` | Broad, risky, multi-file, or multi-session repo work should create lightweight task context. |
+| `task-queue-loop` | A repository keeps an active `Tasks.md` / `TASKS.md` queue, work keeps drifting off it, the queue has grown into a history dump, or a queue should be installed in a new repo. |
 | `ecc-final-check` | Substantial structured workflow changes need a final diff, scope, and verification review. |
 | `ecc-finish-work` | Structured tasks need a clean ending ritual with check updates, resume notes, and durable learning promotion. |
 | `agent-sort` | Reclassifying skills, commands, rules, hooks, or extras into daily/conditional/library buckets. |
@@ -123,6 +124,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 
 ## Notes
 
+- `task-queue-loop` and `ecc-task-workflow` both create task context but at different scales: `ecc-task-workflow` spins up per-task artifacts under `.agents/ecc-workflow/tasks/` for one broad piece of work, while `task-queue-loop` operates a single long-lived queue file that outlives individual tasks. `build-playable-games/references/task-queue.md` stays the game-project cut and is cross-referenced from both directions.
 - `interview-me` and `grilling` overlap on "grill me" style triggers but differ in shape: `interview-me` asks one question at a time to recover intent behind an underspecified ask, while `grilling` asks a whole decision frontier per round to stress-test a plan that already exists. Prefer `grill-with-docs` when the grilling should also leave `CONTEXT.md` / ADR behind.
 - Internet research was not used for this pass. The better source of truth is repo-local evidence plus the existing `agent-sort` workflow.
 - `LIBRARY` skills should stay installed and searchable. They are just not worth loading by default for this repository.
