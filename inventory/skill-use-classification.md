@@ -75,6 +75,8 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 | `agent-harness-design` | Designing or improving a tool-using agent loop, guardrails, or stop conditions. |
 | `ecc-task-workflow` | Broad, risky, multi-file, or multi-session repo work should create lightweight task context. |
 | `task-queue-loop` | A repository keeps an active `Tasks.md` / `TASKS.md` queue, work keeps drifting off it, the queue has grown into a history dump, or a queue should be installed in a new repo. |
+| `task-queue-loop` / `references/runtime-contract.md` | Launcher or entry-point design; agent runs take window focus, wait on the human's session, or cannot produce a real-pixel capture; seeds and build identity are not visible in the output. |
+| `task-queue-loop` / `references/trouble-registry.md` | The same class of mistake recurs; a lessons or trouble file should become counted types with automatic appending and a commit block on unclassified entries. |
 | `ecc-final-check` | Substantial structured workflow changes need a final diff, scope, and verification review. |
 | `ecc-finish-work` | Structured tasks need a clean ending ritual with check updates, resume notes, and durable learning promotion. |
 | `agent-sort` | Reclassifying skills, commands, rules, hooks, or extras into daily/conditional/library buckets. |
@@ -124,6 +126,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 
 ## Notes
 
+- `task-queue-loop`'s two sub-skills are deliberately not separate skills: both are near-universal, and splitting them would only add routing surface. They stay as on-demand `references/` documents, with their own trigger rows in the router so they remain reachable in repositories that keep no queue. `references/runtime-contract.md` sits next to `observable-development-loop`: that skill owns how an agent observes its own output, this one owns whether the project can be launched and observed at all without taking over the machine. `references/trouble-registry.md` sits next to `continuous-learning-v2`: that one extracts instincts from sessions via hooks, this one generalises repeated failures into counted types enforced at commit time.
 - `task-queue-loop` and `ecc-task-workflow` both create task context but at different scales: `ecc-task-workflow` spins up per-task artifacts under `.agents/ecc-workflow/tasks/` for one broad piece of work, while `task-queue-loop` operates a single long-lived queue file that outlives individual tasks. `build-playable-games/references/task-queue.md` stays the game-project cut and is cross-referenced from both directions.
 - `interview-me` and `grilling` overlap on "grill me" style triggers but differ in shape: `interview-me` asks one question at a time to recover intent behind an underspecified ask, while `grilling` asks a whole decision frontier per round to stress-test a plan that already exists. Prefer `grill-with-docs` when the grilling should also leave `CONTEXT.md` / ADR behind.
 - Internet research was not used for this pass. The better source of truth is repo-local evidence plus the existing `agent-sort` workflow.

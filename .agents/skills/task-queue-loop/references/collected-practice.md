@@ -20,6 +20,19 @@ back to the repository that paid for it.
 | `.agents/skills/build-playable-games/references/task-queue.md` | — | — | The prior game-project cut of these conventions: self-contained task blocks, the four-part definition of done, same-edit grooming, lane split between agents. |
 | `steering-health-intelligence/.claude/skills/loop/SKILL.md` | — | — | The reporting unit is the question, not the agent's work unit. Do not report per completed step. When forced to report mid-loop, state `残り N 件` and what remains. |
 
+## Sources read for the two sub-skills (2026-09-21)
+
+| Repository | File | Lines | What it contributed |
+|---|---|---|---|
+| `cdda-musou` | `run.sh` | 551 | Version = short SHA + dirty marker, written to a per-port file so a parallel session can see what is being served and leave it alone. |
+| `cdda-musou` | `docs/LEARNED.md` | 1167 | 33 entries of "what building it taught me", more about wrong designs and wrong measurements than successes. #25 is the version/seed-in-frame lesson: title bar and log carry neither into a screenshot. |
+| `cdda-musou` | `.claude/skills/gate/SKILL.md` | — | The registry generalised into a pre-flight skill: "同じ失敗を4回以上繰り返したので、着手前に必ず通す". Checks phrased as answerable questions, not warnings. |
+| `black-stela` | `run.sh` | 404 | One entry point is the only thing to memorise; bare invocation prints a menu. Fixture/gate/route lists derived from source each run so the help cannot go stale. |
+| `ecliptica` | `run.sh` | 309 | Agent lanes headless only, with the macOS focus measurement recorded next to the rule. Window-creating lanes (`record-walk`, `window-evidence`) gated behind an env flag and "only when the human asks". |
+| `rustbound` | `Run.sh`, `tools/shadow.sh`, `tools/capture_web.py`, `tools/check_background_launch.sh` | 264 + — | Exclusive lock that waits rather than kills, run-scope separation from the player's save, shadow tree for verification during play (T566: never suggest stopping the lock owner), headless 1920x1080 capture, and the window-focus rule enforced as an executable check. |
+| `rustbound` | `docs/trouble-log.md` | 385 | The generalisation move, visible: nine play-session complaints were six types, each with 症状 / 原因 / 修正 / 再発防止. |
+| `steering-health-intelligence` | `TROUBLES.md`, `.claude/skills/troubles/SKILL.md`, `scripts/sync_troubles.py`, `scripts/check_repo.py` | 1371 + — | 46 counted types sorted by recurrence (top = 11). Appending automated from a pre-commit hook into an unclassified section; `troubles classified` blocks the commit until the entry is filed under a type; `troubles registered` blocks a retraction missing from the registry; a SessionStart digest puts the types in context without anyone remembering. Five types delegated to machine checks, the rest kept as judgement questions. Limits stated in the skill itself: only noticed failures are in it, and T1 recurred after its corrective procedure was written. |
+
 ## Variations deliberately left open
 
 - **Marker set.** `[ ] [-] [x]` everywhere; `[~]` (human judgement) in

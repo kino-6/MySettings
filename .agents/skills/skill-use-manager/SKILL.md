@@ -61,6 +61,8 @@ Use these when the task matches the trigger:
 | Tool-using AI agent harness design | `agent-harness-design` |
 | Broad, risky, multi-file, or multi-session repo work | `ecc-task-workflow`, `ecc-final-check`, `ecc-finish-work` |
 | A repo keeps an active `Tasks.md` / `TASKS.md` queue, or one should be installed | `task-queue-loop` |
+| Launcher/entry-point design, agent runs stealing window focus, headless capture, seed and build stamping, gated recording | `task-queue-loop` (`references/runtime-contract.md`) |
+| The same class of mistake keeps recurring; a lessons/trouble file needs generalising into enforced types | `task-queue-loop` (`references/trouble-registry.md`), `continuous-learning-v2` |
 | Reclassifying skills, commands, rules, hooks, or extras into daily/conditional/library buckets | `agent-sort` |
 | Adjusting ECC/Codex installation, config, or project/user-level setup surfaces | `configure-ecc` |
 | Turning local agent practice into repo/team automation, review gates, or repeatable skill packaging | `ai-automation-ops` |
@@ -81,8 +83,10 @@ Use these when the task matches the trigger:
 | CI/CD, observability, deprecation, docs/ADRs, or launch readiness | `ci-cd-and-automation`, `observability-and-instrumentation`, `deprecation-and-migration`, `documentation-and-adrs`, `shipping-and-launch` |
 | Strategic wall-partner work for business ideas, product bets, career decisions, research questions, or assumption stress tests | `strategic-ai-wall-partner` |
 
-`task-queue-loop` carries the Tasks.md / CHARTER.md / archive templates and the
-second-perspective gate audit loop. `build-playable-games` keeps its own
+`task-queue-loop` carries the Tasks.md / CHARTER.md / archive templates, the
+second-perspective gate audit loop, and two on-demand sub-skills
+(`references/runtime-contract.md`, `references/trouble-registry.md`) that are
+useful in repositories with no queue at all. `build-playable-games` keeps its own
 `references/task-queue.md` as the game-project cut of the same conventions.
 
 `grill-with-docs` is a composite entry point: it is user-invoked only

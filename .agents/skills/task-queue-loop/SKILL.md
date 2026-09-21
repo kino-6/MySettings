@@ -1,6 +1,6 @@
 ---
 name: task-queue-loop
-description: Run repository work as a Tasks.md lap - read the queue and its rules file at every lap entry, take one item top down, write a gate that can FAIL, verify it yourself, commit, then hand the row to a fresh-context auditor that attacks the gate and files the refactoring rows, and groom the queue in the same edit. Use when starting or continuing work in a repo that keeps an active task queue (Tasks.md / TASKS.md), when work keeps drifting off that queue, when the queue has grown into a history dump, or when installing a queue in a new repo. Templates for Tasks.md / CHARTER.md / the archive are in templates/.
+description: Run repository work as a Tasks.md lap - read the queue and its rules file at every lap entry, take one item top down, write a gate that can FAIL, verify it yourself, commit, then hand the row to a fresh-context auditor that attacks the gate and files the refactoring rows, and groom the queue in the same edit. Use when starting or continuing work in a repo that keeps an active task queue (Tasks.md / TASKS.md), when work keeps drifting off that queue, when the queue has grown into a history dump, or when installing a queue in a new repo. Templates for Tasks.md / CHARTER.md / the archive are in templates/. Also carries two sub-skills loaded on demand: references/runtime-contract.md (single launch entry point, exclusive lock and shadow tree, headless agent lanes that never take window focus, one-command capture, seeds, version and seed stamped into the frame, gated recording) and references/trouble-registry.md (generalising repeated failures into counted types, appended automatically and classified under a commit block).
 ---
 
 # Task Queue Loop
@@ -149,6 +149,25 @@ the header has to be operable by a fresh session with this skill not loaded:
 
 Prune the template to what the repo needs. A queue with sections nobody writes
 into is as dead as a queue full of history.
+
+## Sub-skills
+
+Two documents that are part of this skill but are only worth loading when their
+problem shows up. Both were distilled from the same local repositories as the
+loop itself.
+
+- **[references/runtime-contract.md](references/runtime-contract.md)** - load when
+  step 6 is expensive: no single launch command, agent runs steal the human's
+  window, verification has to wait for the human to stop playing, or a screenshot
+  cannot tell you which build it came from. Step 6 quietly degrades into
+  "headless pass, ship it" whenever observing the real thing is costly, so this is
+  what keeps the loop honest rather than an optional nicety.
+- **[references/trouble-registry.md](references/trouble-registry.md)** - load when
+  the same *class* of mistake keeps coming back, or before writing a conclusion or
+  a report. The gate audit catches a bad gate on one row; this catches the mistake
+  you will repeat on the next twenty. Its core move is storing counted **types**
+  rather than incidents, with appending automated and classification enforced by a
+  commit block.
 
 ## Related
 

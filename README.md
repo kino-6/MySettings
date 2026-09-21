@@ -402,6 +402,13 @@ Standalone Codex skill として参照が切れないよう、upstream root の 
 - `references/collected-practice.md`: どの規則をどのリポジトリから取ったかの対応表と、規則が答えている実際の失敗例
 - `templates/`: `Tasks.md`（READ FIRST ヘッダ入り）、`CHARTER.md`、`Tasks-archive.md`、`gate-auditor.md`（`.claude/agents/` へ置く監査 subagent 定義）
 
+必要になったときだけ読む subskill を 2 本内蔵しています（どちらもほぼ汎用なので別 skill に切らず、router 側に個別の trigger 行を置いて到達性だけ確保しています）。
+
+- `references/runtime-contract.md`: **agent が操作できる runtime の契約**。単一の起動入口（help をコードから導出して嘘をつかせない）、排他ロックと run-scope 分離、プレイ中でも検証を回す shadow tree、**Agent レーンは headless のみ**（macOS でウィンドウを作ると約 0.5 秒前面化する実測つき）とそれを落とす検査、ウィンドウ無しの実画素 capture、seed 指定、**版と seed を画面内に焼く**（タイトルバーとログはスクリーンショットに写らない）、録画は人が明示したときだけの隔離レーン
+- `references/trouble-registry.md`: **過去トラの型への汎化**。個別の事象ではなく「型」を回数つきで持つ（最多 11 回）。登録は pre-commit hook が自動で未分類節へ追記し、**型への振り分けが済むまで commit を止める**。SessionStart hook で型一覧を文脈に入れ、結論を書く前に通すチェックリスト skill と対にする。機械で判定できる型は機械へ移し、人の判断が要る一覧を短く保つ
+
+実例は `cdda-musou/run.sh` + `docs/LEARNED.md`（33件）+ `gate` skill、`black-stela/run.sh`、`ecliptica/run.sh`、`rustbound/Run.sh` + `tools/shadow.sh` + `docs/trouble-log.md`、`steering-health-intelligence/TROUBLES.md`（46 型）+ `sync_troubles.py` + `check_repo.py` から取っています。
+
 Gate を書いた本人が完了も判定する自己承認が構造的な穴だったため、監査を「工程」ではなく **loop の一部**にしています（監査の出力が次の周のタスクになる）。テンプレートは実際の対象リポジトリに合わせて日本語、`SKILL.md` と `references/` は他の skill と揃えて英語です。
 
 ### Structured agent workflow
