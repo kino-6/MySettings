@@ -1,6 +1,6 @@
 ---
 name: task-queue-loop
-description: Run repository work as a Tasks.md lap - read the queue and its rules file at every lap entry, take one item top down, write a gate that can FAIL, verify it yourself, commit, hand the row to a fresh-context auditor that attacks the gate and files refactoring rows, and groom the queue in the same edit. Use when starting or continuing work in a repo with an active task queue (Tasks.md / TASKS.md), when work drifts off that queue, when the queue has become a history dump, or when installing one in a new repo. Templates in templates/. Two on-demand sub-skills: references/runtime-contract.md (launcher entry point, shadow tree, headless agent lanes that never take window focus, capture, seeds, version stamping, gated recording) and references/trouble-registry.md (repeated failures generalised into counted types, enforced at commit time).
+description: Operate a repository's active task queue (Tasks.md / TASKS.md) as a loop - one lap carries one row from not-started to committed behind a gate that can FAIL, audited by a fresh context. Use when working from such a queue, when work drifts off it, when it has become a history dump, or when installing one.
 ---
 
 # Task Queue Loop
@@ -87,21 +87,14 @@ lap ended; everything older moves to the archive.
 
 ## The audit is what makes it a loop
 
-Steps 4-6 are all run by the context that produced the diff, so the loop's one
-structural hole is self-approval: the implementer reads a green gate as
-confirmation because they know what the fix was meant to do. Step 8 closes it by
-handing the row to a perspective that was never told why the fix is correct.
+Steps 4-6 all run in the context that produced the diff, so the loop's one
+structural hole is self-approval. Step 8 is a loop rather than a checkpoint
+because **its output is work**: a broken gate sends the row back, and the
+refactoring proposals become rows that will themselves be audited.
 
-The reason this is a loop and not a checkpoint: **the audit's output is work.**
-A broken gate sends the row back with a counterexample; a valid gate archives with
-the falsification recorded as part of its 証跡; and either way the refactoring
-proposals become new rows that will themselves be audited. Verification never
-just ends in an approval.
-
-Run it per row, not per edit. [references/gate-audit-loop.md](references/gate-audit-loop.md)
-has the checks, the verdict contract, how the three verdicts translate into queue
-edits, and how to make the step mechanical rather than remembered - a hook on the
-queue file that refuses a fresh `[x]` without a recorded verdict.
+Run it per row, not per edit.
+[references/gate-audit-loop.md](references/gate-audit-loop.md) has the checks,
+the verdict contract, and how to make the step mechanical rather than remembered.
 
 ## Invariants of the file
 
