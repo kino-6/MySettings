@@ -137,11 +137,16 @@ the verdict contract, and how to make the step mechanical rather than remembered
 ## Installing a queue in a new repo
 
 Copy the templates and fill them in **in the repository's working language** -
-the header has to be operable by a fresh session with this skill not loaded:
+a fresh session with this skill not loaded has to be able to operate the queue
+from the queue header plus the file it points at:
 
-- [templates/Tasks.md](templates/Tasks.md) - the queue, with the READ FIRST
-  header, the placement map, the status legend, and the 最小検証 / Gate column
-  pair with its cadence and parallelisation rules.
+- [templates/Tasks.md](templates/Tasks.md) - the queue. A 40-line header: the
+  READ FIRST block, the placement map, the column and status legend, and the
+  cadence in one line. Nothing else - the queue does not restate the rules.
+- [templates/work-rules.md](templates/work-rules.md) - the rules the header
+  points at: the 最小検証 / Gate / 再現 contract, narrowing and parallelisation,
+  the four-part definition of done, the second-perspective check, and the
+  prohibitions. Read before starting and before writing `[x]`.
 - [templates/CHARTER.md](templates/CHARTER.md) - purpose, goal, approach, scope,
   completion criteria, constraints. The queue links to it and says "read both at
   every lap entry".
@@ -150,8 +155,15 @@ the header has to be operable by a fresh session with this skill not loaded:
 - [templates/gate-auditor.md](templates/gate-auditor.md) - drop into the repo's
   `.claude/agents/` (or mirror as a Codex role) so step 8 has someone to dispatch.
 
-Prune the template to what the repo needs. A queue with sections nobody writes
+Prune the templates to what the repo needs. A queue with sections nobody writes
 into is as dead as a queue full of history.
+
+**The queue file holds work; the rules file holds rules.** Keeping the full
+ruleset inside the queue costs a third of the 200-line budget before a single row
+exists, and it makes the queue a second reader of a question the rules file
+already owns. The surveyed repositories that run the longest queues carry the
+thinnest headers - 8 lines against 178 and 197 - because header weight and room
+for rows trade off directly.
 
 ## Sub-skills
 

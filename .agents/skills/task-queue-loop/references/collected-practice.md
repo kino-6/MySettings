@@ -59,6 +59,41 @@ The audit gained a matching check, so a minimum check that cannot see its own
 change gets caught rather than silently making every future lap on that row
 expensive.
 
+## Splitting the header out of the queue (2026-09-23)
+
+The first template carried the whole ruleset in the queue file: a **64-line
+header** against the 8-26 observed in the repositories it was distilled from, in a
+file whose own rule is a 200-line cap. It also broke two of the skill's own
+invariants - "active work only" and "one reader per question".
+
+Measured headers, first task row to top of file:
+
+| Repository | Header | Total |
+|---|---|---|
+| `steering-health-intelligence` | 8 | 178 |
+| `cdda-musou` | 8 | 197 |
+| `ecliptica` | 20 | 44 |
+| `black-stela` | 22 | 93 |
+| `rustbound` | 26 | 38 |
+
+The two longest queues carry the thinnest headers, which is the tell: header
+weight and room for rows trade against each other, and busy queues have already
+paid to find that out. `rustbound` states the split outright - "Tasks.md は
+やることの一覧だけにしてある … 守るべき決まりはここに集める" in
+`docs/work-rules.md`.
+
+The pathway was already in the template - the READ FIRST block links `CHARTER.md`
+and the placement map has a `docs/work-rules.md` row - so the fix was to put the
+rules at the far end of a link that already existed, not to invent a structure.
+Header is now 40 lines, and `templates/work-rules.md` holds the contract, the
+definition of done, the second-perspective check, narrowing and parallelisation,
+and the prohibitions.
+
+Cost, stated: a fresh session that loads neither this skill nor the rules file can
+no longer operate the queue from the header alone. The lap-entry rule covers it -
+the header's first lines say to read both - but it is a real trade, not a free
+win.
+
 ## Variations deliberately left open
 
 - **Marker set.** `[ ] [-] [x]` everywhere; `[~]` (human judgement) in
