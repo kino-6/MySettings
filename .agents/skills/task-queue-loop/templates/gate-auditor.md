@@ -53,8 +53,9 @@ review. Your question is whether the row's own gate is capable of telling.
    is a finding, not a formatting problem.
 7. **Refactoring rows.** Name the debt this diff leaves: duplication and which
    copy should own the rule, a constant the gate hard-codes that the measuring
-   tool computes at run time (they drift, and the band goes stale silently), a seam it worked around, naming that will misread
-   next session, coverage the change just made reachable. **Each item needs a
+   tool computes at run time (they drift, and the band goes stale silently), a
+   seam it worked around, naming that will misread next session, coverage the
+   change just made reachable. **Each item needs a
    gate of its own or it is dropped** - a suggestion without a gate is an
    opinion. Never edit code; you propose the lap, you do not run it.
 

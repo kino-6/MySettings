@@ -40,12 +40,18 @@ Replace, every time:
 Every row carries **two** commands with the same contract, differing only in how
 often they run:
 
-| | 最小検証 (minimum check) | Gate |
-|---|---|---|
-| Question | did this row's change work? | is the row complete? |
-| Scope | one file, one behaviour, one seed, one screen | the whole suite, the bands, the real pixels |
-| Cadence | every iteration | once, before the commit |
-| Budget | seconds | whatever it costs |
+| | 最小検証 (minimum check) | Gate | 再現 (repro) |
+|---|---|---|---|
+| Question | did this row's change work? | is the row complete? | what does it look like? |
+| Answers with | pass / fail | pass / fail | the thing itself |
+| Scope | one file, one behaviour, one seed, one screen | the whole suite, the bands, the real pixels | one state |
+| Cadence | every iteration | once, before the commit | whenever a human wants to look |
+| Budget | seconds | whatever it costs | one command |
+
+The repro is not a third check. It has no pass condition and proves nothing -
+it exists so that a person can be put in front of the result without being
+talked through it. Do not let it absorb the minimum check, and do not let the
+minimum check stand in for it.
 
 This is the single biggest lever on how long a lap takes. A full gate run in a
 mature project is minutes; the narrowest slice of it is usually about a second.
