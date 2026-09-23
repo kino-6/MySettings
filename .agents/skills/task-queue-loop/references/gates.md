@@ -35,6 +35,49 @@ Replace, every time:
 | 動く | `--state=weld` で起動し、装甲が最大の 6 割で止まる |
 | 性能が改善 | 164 歩を歩かせ、G/歩 が交易 3.5〜4.4 の帯域に入る |
 
+## The minimum check, and the gate
+
+Every row carries **two** commands with the same contract, differing only in how
+often they run:
+
+| | 最小検証 (minimum check) | Gate |
+|---|---|---|
+| Question | did this row's change work? | is the row complete? |
+| Scope | one file, one behaviour, one seed, one screen | the whole suite, the bands, the real pixels |
+| Cadence | every iteration | once, before the commit |
+| Budget | seconds | whatever it costs |
+
+This is the single biggest lever on how long a lap takes. A full gate run in a
+mature project is minutes; the narrowest slice of it is usually about a second.
+Measured in this repo's own audit run: `./Run.sh test --only=test_two_ways_to_earn`
+returned **3 tests / 37 checks in 1s**, against a full gate of **914 tests**.
+Reaching for the full gate on every edit is what makes queue work feel slow.
+
+**Narrowing has ready-made handles in most projects** - use them before inventing
+anything: `--only=<file>`, `--lane=<rules|content|ui>`, a single seed instead of
+five, one fixture, one `--state=`, one captured screen.
+
+Four rules:
+
+- **Write it at the same time as the gate,** in the same edit, before the work.
+  Deciding the cheap check afterwards means the whole iteration ran on the
+  expensive one.
+- **It must be able to go red for this row.** A minimum check that cannot fail is
+  the gate with the assertions thinned out, which is worse than nothing: it makes
+  the iteration feel verified.
+- **Falsify on the cheap one.** Watch the minimum check fail before you start;
+  save the gate's red for the cases the cheap one cannot express.
+- **Minimum green + gate red is information, not an annoyance.** The narrowing was
+  too tight. Widen the minimum check in the same edit that fixes the code, so the
+  next lap on this row does not pay the same price.
+
+Both go in the row, both with a condition:
+
+```
+最小検証: `./Run.sh test --only=test_trade_routes` — 経路が 1 本以上、parts を含まない（~1s）
+Gate:     `./Run.sh gate` — 914 tests 緑・165 帯域緑・GATE_EXIT=0
+```
+
 ## Falsification: confirm the red first
 
 **Run the gate before the fix and watch it fail.** A gate that is green before
@@ -98,3 +141,41 @@ result and the pass condition **before** running, and commit that. Then run.
 Do not flip the threshold after seeing the output, and keep the missed
 predictions on record - a prediction you can compute should be computed, not
 registered as a guess.
+
+## Parallelising, only after narrowing
+
+Parallelism is the second lever and it is strictly the weaker one. **Narrow
+first.** Running the full gate on eight cores is still the full gate; a one-second
+check does not need cores. Reach for parallelism only when the thing is already as
+narrow as it can be and is *still* slow.
+
+**When it pays**
+
+- **A long gate under a short check.** Run the gate in a duplicated tree in the
+  background while you keep iterating on the minimum check in the working tree.
+  This is what a shadow tree is for - see
+  [runtime-contract.md](runtime-contract.md).
+- **A sweep.** Parameter scans, seed sets, per-map measurements: independent by
+  construction, so split them across workers or trees.
+- **Independent rows.** Several closed rows waiting on their step 8 audit can be
+  dispatched at once - one message, several agents.
+- **A test suite that isolates per file.** If the runner already forks a process
+  per file, raising the worker count is free; check before building anything.
+
+**When it does not**
+
+- **Same tree, same lock.** Two runs in one working directory contend on the
+  engine's import cache, the build directory, or the run lock, and the usual
+  result is a hang or a corrupted cache rather than a speedup. Give each run its
+  own tree, its own lock, and its own user-data dir, or run them in sequence.
+- **Order- or state-dependent bugs.** The failure you are chasing may stop
+  reproducing under concurrency, and you will read that as fixed.
+- **Anything you have to read.** Four screenshots produced in parallel still take
+  one person one look each, and a parallel run whose output you skim is a green
+  gate.
+- **When it hides which one failed.** If the harness interleaves output so you
+  cannot tell which worker went red, the time saved is spent twice over finding
+  out.
+
+Say it in the row when a lane is parallel-safe, so the next lap does not have to
+rediscover it: `最小検証: ... （seed 5 本は並列可 / 同一木では不可）`.

@@ -33,6 +33,32 @@ back to the repository that paid for it.
 | `rustbound` | `docs/trouble-log.md` | 385 | The generalisation move, visible: nine play-session complaints were six types, each with 症状 / 原因 / 修正 / 再発防止. |
 | `steering-health-intelligence` | `TROUBLES.md`, `.claude/skills/troubles/SKILL.md`, `scripts/sync_troubles.py`, `scripts/check_repo.py` | 1371 + — | 46 counted types sorted by recurrence (top = 11). Appending automated from a pre-commit hook into an unclassified section; `troubles classified` blocks the commit until the entry is filed under a type; `troubles registered` blocks a retraction missing from the registry; a SessionStart digest puts the types in context without anyone remembering. Five types delegated to machine checks, the rest kept as judgement questions. Limits stated in the skill itself: only noticed failures are in it, and T1 recurred after its corrective procedure was written. |
 
+## The 最小検証 column (added 2026-09-23)
+
+Asked for after the loop proved slow in practice: every lap was reaching for the
+full gate. The staging already existed in `rustbound/docs/work-rules.md` as
+"検証の段階化" - one file during iteration, a lane per feature, the full suite once
+at integration, the full gate only at slice close and before reporting - but it
+lived in the rules file, not in the row, so it was a habit rather than something
+the queue made you write down. Promoting it to a column alongside `Gate` is what
+makes the cadence per-row and visible.
+
+The cost ratio is measured, from this repo's own audit run on `rustbound` T609:
+`./Run.sh test --only=test_two_ways_to_earn` returns **3 tests / 37 checks in 1s**
+against a full gate of **914 tests**. Narrowing handles (`--only=`, `--lane=`, one
+seed, one fixture, one `--state=`) already exist in every launcher surveyed here,
+which is why narrowing is the first lever and parallelism the second.
+
+Parallelisation guidance was folded into the same section rather than made its own
+document: the only forms worth reaching for are a long gate running in a shadow
+tree under a short check, a sweep, and independent rows auditing at once - and the
+counter-cases (same tree same lock, order-dependent bugs, output a human has to
+read) all come from the runtime contract that was already collected.
+
+The audit gained a matching check, so a minimum check that cannot see its own
+change gets caught rather than silently making every future lap on that row
+expensive.
+
 ## Variations deliberately left open
 
 - **Marker set.** `[ ] [-] [x]` everywhere; `[~]` (human judgement) in

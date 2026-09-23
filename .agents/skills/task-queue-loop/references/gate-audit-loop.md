@@ -48,10 +48,15 @@ The auditor's first job is to attack the gate, not the code.
    shape - flip a comparison, zero a constant, drop one branch. **The gate must go
    red for each.** A mutation the gate survives names the hole precisely, and that
    sentence goes in the verdict.
-3. **No-op check.** Does the assertion execute at all? An empty match, a skipped
+3. **Minimum check is real.** Run the row's 最小検証 under the same mutations. If
+   it stays green while the gate goes red, the row iterated on something that
+   could not see its own change - file it, because every future lap on that row
+   pays for it. If it is just the gate command again, the row has no minimum
+   check.
+4. **No-op check.** Does the assertion execute at all? An empty match, a skipped
    fixture, a loop over zero items, a regex that matched nothing - all pass
    silently. The auditor asserts on the count, not on the absence of failures.
-4. **Behaviour, not source text.** A gate that greps the source it just changed is
+5. **Behaviour, not source text.** A gate that greps the source it just changed is
    a tautology. It must open the real screen or read the real values.
 
 ## Check 2 — evidence audit
@@ -97,6 +102,7 @@ FALSIFICATION:
   revert-and-run: RED | GREEN(<why this is fatal>) | N/A(<test-or-tool-only diff>)
   mutations: <what was mutated> -> RED | GREEN(<the hole>)
   assertion-executed: YES(<count>) | NO
+  minimum-check: RED | GREEN(<the gate saw it, the cheap check did not>) | ABSENT
 REPRO: OK | FAILED(<what happened>)
 EVIDENCE: <what the auditor actually saw, in its own words>
 REFACTOR_ROWS:

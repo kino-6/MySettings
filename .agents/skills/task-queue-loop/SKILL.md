@@ -28,15 +28,20 @@ next lap to start correctly.
 3. **Take the top item.** One at a time, top down. Do not open a second item
    because the first is blocked - move the blocked one to `[~]` / `[!]` with the
    reason and take the next.
-4. **Write the gate before the work.** The row is not startable until it names a
-   gate: a command whose pass/fail a machine or an image can decide. See
-   [references/gates.md](references/gates.md) for what counts and what does not.
-5. **Confirm the gate is red now.** A gate that is already green before the fix
-   proves nothing. If you cannot make it fail, the gate is measuring the wrong
-   thing.
-6. **Do the work, then verify it yourself.** Render the real screen and actually
-   read it; probe the real values; run the gate. Headless `pass` is not a
-   substitute for looking. Verification is the implementer's job - see Never.
+4. **Write the gate and the minimum check, before the work.** The row is not
+   startable until it names both: a **gate**, the command whose pass/fail proves
+   completion, and a **minimum check**, the shortest command that can tell
+   whether this row's change worked. Same contract for both - a command, a
+   condition, and the ability to go red. They differ only in how often they run.
+   See [references/gates.md](references/gates.md).
+5. **Confirm red on the minimum check first.** It is the cheap one, so it is
+   where falsification belongs: watch it fail before you start. A check that
+   cannot fail for this row is measuring the wrong thing.
+6. **Do the work against the minimum check, then run the gate once.** Iterate on
+   the seconds-long check; run the full gate before committing, not on every
+   edit. Then verify it yourself: render the real screen and actually read it,
+   probe the real values. Headless `pass` is not a substitute for looking.
+   Verification is the implementer's job - see Never.
 7. **Commit.** Not done until committed. Never commit or push on a red gate; if
    you think the red is unrelated, first prove it reproduces on the base branch.
 8. **Audit from a second perspective.** Dispatch a fresh-context agent that
@@ -124,6 +129,10 @@ the verdict contract, and how to make the step mechanical rather than remembered
 - Batch unrelated diffs into a commit just to get a row closed.
 - Let a row exist without a gate. A row whose gate cannot be written is not yet
   a task - park it as a note until it can be.
+- Iterate on the full gate. If every edit costs a full suite run, the minimum
+  check was never written, or it was written too wide.
+- Parallelise before narrowing. Cores do not fix a check that was always going
+  to take minutes.
 
 ## Installing a queue in a new repo
 
@@ -131,7 +140,8 @@ Copy the templates and fill them in **in the repository's working language** -
 the header has to be operable by a fresh session with this skill not loaded:
 
 - [templates/Tasks.md](templates/Tasks.md) - the queue, with the READ FIRST
-  header, the placement map, and the status legend.
+  header, the placement map, the status legend, and the 最小検証 / Gate column
+  pair with its cadence and parallelisation rules.
 - [templates/CHARTER.md](templates/CHARTER.md) - purpose, goal, approach, scope,
   completion criteria, constraints. The queue links to it and says "read both at
   every lap entry".

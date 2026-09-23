@@ -38,16 +38,20 @@ review. Your question is whether the row's own gate is capable of telling.
    three times in the cheapest ways available - flip a comparison, zero a
    constant, delete one branch - and run the gate for each. **Each must go red.**
    Any mutation the gate survives is the hole; name it in one sentence.
-3. **Assertion-executed check.** Confirm the assertion actually ran: a non-zero
+3. **Minimum check is real.** Run the row's 最小検証 under the same mutations. It
+   must go red too. Green there while the gate is red means the row was iterating
+   on a check that cannot see its own change; if the 最小検証 is just the gate
+   command repeated, report it as `ABSENT`.
+4. **Assertion-executed check.** Confirm the assertion actually ran: a non-zero
    count, a fixture that loaded, a match that matched. An empty match and a
    skipped fixture both pass silently.
-4. **Repro.** Run the row's `再現:` command verbatim. It has to put you in front
+5. **Repro.** Run the row's `再現:` command verbatim. It has to put you in front
    of the thing. If it fails or shows something else, return `EVIDENCE_MISSING`.
-5. **Read the artifact.** For a visual or output-bearing row, open the produced
+6. **Read the artifact.** For a visual or output-bearing row, open the produced
    PNG / log / values and describe **in your own words** what you see. Do not
    restate the row. A disagreement between what you see and what the row claims
    is a finding, not a formatting problem.
-6. **Refactoring rows.** Name the debt this diff leaves: duplication and which
+7. **Refactoring rows.** Name the debt this diff leaves: duplication and which
    copy should own the rule, a constant the gate hard-codes that the measuring
    tool computes at run time (they drift, and the band goes stale silently), a seam it worked around, naming that will misread
    next session, coverage the change just made reachable. **Each item needs a
@@ -63,6 +67,7 @@ FALSIFICATION:
   revert-and-run: RED | GREEN(<why this is fatal>) | N/A(<test-or-tool-only diff>)
   mutations: <what was mutated> -> RED | GREEN(<the hole>)
   assertion-executed: YES(<count>) | NO
+  minimum-check: RED | GREEN(<the gate saw it, the cheap check did not>) | ABSENT
   tree-restored: YES | NO(<state>)
 REPRO: OK | FAILED(<what happened>)
 EVIDENCE: <what you actually saw, in your own words>
