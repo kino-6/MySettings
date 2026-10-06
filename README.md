@@ -433,6 +433,25 @@ Gate を書いた本人が完了も判定する自己承認が構造的な穴だ
 
 この workflow は vendor 固有の workflow directory を作らず、外部 harness の init command も実行しません。将来フル導入を試す場合は、一時 branch か scratch repo で generated diff を確認してから取り込む方針です。
 
+## MCP の版固定とセキュリティ方針
+
+`.codex/config.toml` と `~/.codex/config.toml` の MCP server は**正確な版に固定**し、`@latest` は使いません（2026-10-06 固定）。
+
+`npx -y <pkg>` は**起動ごとに npm が返したものを無審査で実行**するため、固定していないと「信頼された名前 + 新しい版」だけで任意コードが agent の環境で動きます。実際に `book-to-skill` では、名前を模した再アップロードがウォレットデータを外部送信する事例が起きています（公式 repo の `SECURITY-NOTICE.md`）。
+
+更新は自動化せず、各自が手で実施します。古さの把握だけを script に任せます。
+
+```bash
+bash scripts/mcp-doctor.sh          # pin と latest の比較、各 pin が何日古いか
+bash scripts/mcp-doctor.sh --check  # 閾値超過があれば exit 1
+```
+
+- 閾値は「latest の公開が pin より **120 日**以上新しい」。`MCP_STALE_DAYS` で変更可
+- script は**報告のみ**。install も編集もしません。取得するのは npm の読み取り専用メタデータだけ
+- `--check` が非ゼロのとき、agent は**どの pin が何日古いかを伝えて止まる**。版を上げるのは upstream の changelog を読んだ上での user の判断で、agent が勝手に pin を上げたり `@latest` へ戻したりはしません（[CLAUDE.md](CLAUDE.md) / [.codex/AGENTS.md](.codex/AGENTS.md) に明記）
+
+セキュリティ監査そのものも、**外部ツールを導入せず**この repository 内の読めるコマンドで行う方針です。スキャナを落としてきて走らせる手順は、そのスキャナの信頼を丸ごと取り込むためです。
+
 ## Future extension policy
 
 - 共通化できる設定は `settings/common/` に集約
