@@ -41,36 +41,47 @@ persistent_instructions = "Follow project AGENTS.md guidelines. Use available MC
 # MCP servers
 # Keep the default project set lean. API-backed servers inherit credentials from
 # the launching environment or can be supplied by a user-level ~/.codex/config.toml.
+#
+# Versions are PINNED on purpose (2026-10-06). `npx -y <pkg>` and `<pkg>@latest`
+# fetch and execute whatever npm serves at launch, with no review step - a
+# trusted package name plus a new release is enough to run arbitrary code, which
+# is how a compromised or typosquatted release would reach the agent.
+#
+# Updating is a deliberate act, done by hand:
+#   bash scripts/mcp-doctor.sh          # pinned vs latest, and how stale each is
+#   bash scripts/mcp-doctor.sh --check  # exit 1 when a pin is past the threshold
+# Read the upstream changelog, then edit the pin here. Do not reintroduce
+# `@latest`, and do not let an agent bump a pin on its own initiative.
 [mcp_servers.github]
 command = "npx"
-args = ["-y", "@modelcontextprotocol/server-github"]
+args = ["-y", "@modelcontextprotocol/server-github@2025.4.8"]
 startup_timeout_sec = 30
 
 [mcp_servers.context7]
 command = "npx"
 # Canonical Codex section name is `context7`; the package itself remains
 # `@upstash/context7-mcp`.
-args = ["-y", "@upstash/context7-mcp@latest"]
+args = ["-y", "@upstash/context7-mcp@4.1.1"]
 startup_timeout_sec = 30
 
 [mcp_servers.exa]
 command = "npx"
-args = ["-y", "mcp-remote", "https://mcp.exa.ai/mcp"]
+args = ["-y", "mcp-remote@0.14.3", "https://mcp.exa.ai/mcp"]
 startup_timeout_sec = 30
 
 [mcp_servers.memory]
 command = "npx"
-args = ["-y", "@modelcontextprotocol/server-memory"]
+args = ["-y", "@modelcontextprotocol/server-memory@2026.8.31"]
 startup_timeout_sec = 30
 
 [mcp_servers.playwright]
 command = "npx"
-args = ["-y", "@playwright/mcp@latest", "--extension"]
+args = ["-y", "@playwright/mcp@0.0.83", "--extension"]
 startup_timeout_sec = 30
 
 [mcp_servers.sequential-thinking]
 command = "npx"
-args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+args = ["-y", "@modelcontextprotocol/server-sequential-thinking@2026.8.31"]
 startup_timeout_sec = 30
 
 # Additional MCP servers (uncomment as needed):

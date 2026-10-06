@@ -71,6 +71,24 @@ Treat the project-local `.codex/config.toml` as the default Codex baseline for E
 
 ECC's canonical Codex section name is `[mcp_servers.context7]`. The launcher package remains `@upstash/context7-mcp`; only the TOML section name is normalized for consistency with `codex mcp list` and the reference config.
 
+### MCP version pinning
+
+MCP server versions in `.codex/config.toml` are **pinned to exact versions**, and
+`@latest` is not used. `npx -y <pkg>` executes whatever npm serves at launch, so
+an unpinned entry means a trusted package name plus a new release is enough to run
+arbitrary code here. The same applies to `~/.codex/config.toml`.
+
+**Suggest, never update.** When working in this repository, run:
+
+```bash
+bash scripts/mcp-doctor.sh --check
+```
+
+If it exits non-zero, tell the user which pins are stale and by how many days, and
+stop there. Updating a pin requires reading the upstream changelog and is the
+user's decision - do not bump a pin, and never reintroduce `@latest`, on your own
+initiative. Report it once per session rather than on every turn.
+
 ### config.toml usage
 
 This repository tracks the ECC Codex baseline directly in `.codex/config.toml`.
