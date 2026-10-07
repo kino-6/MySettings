@@ -388,7 +388,7 @@ Standalone Codex skill として参照が切れないよう、upstream root の 
 
 - `grill-with-docs`: user 明示呼び出し専用の composite entry point。単体では何もせず `grilling` と `domain-modeling` を呼ぶだけなので、3 つセットで維持する
 - `grilling`: 決定木の frontier を 1 round ずつ潰していく質問攻め。各質問に推奨解を添え、user の回答を待ってから次の round に進む
-- `domain-modeling`: 用語のブレを潰して `CONTEXT.md`（glossary）と `docs/adr/`（ADR）に落とす。format は同梱の `CONTEXT-FORMAT.md` / `ADR-FORMAT.md`
+- `domain-modeling`: 用語のブレを潰して `GLOSSARY.md`（glossary）と `docs/adr/`（ADR）に落とす。format は同梱の `GLOSSARY-FORMAT.md` / `ADR-FORMAT.md`
 
 この 3 つはローカルの全プロジェクトから参照できるよう、repo に加えて `~/.codex/skills/`（Codex CLI）と `~/.claude/skills/`（Claude Code）の両方にミラーしています。Claude Code は `~/.codex/skills` を読まないため、user-level skill を両 runtime で使う場合は両方へ配置する方針です。
 
@@ -432,6 +432,21 @@ Gate を書いた本人が完了も判定する自己承認が構造的な穴だ
 - `observable-development-loop`: diff だけで判断できない出力に対して、観察方法・固定の比較条件・機械的な検証・残す証拠を Observability Contract として決める
 
 この workflow は vendor 固有の workflow directory を作らず、外部 harness の init command も実行しません。将来フル導入を試す場合は、一時 branch か scratch repo で generated diff を確認してから取り込む方針です。
+
+## 取り込み元の記録（provenance）
+
+新しく vendor した skill は、`LICENSE` の隣に `provenance.json` を置きます。記録するのは **upstream の repo / 取得した正確な revision / ファイルごとの sha256 / 検証日**です。
+
+```bash
+bash scripts/check-provenance.sh          # 記録した revision と突き合わせて報告
+bash scripts/check-provenance.sh --check  # drift / ローカル改変 / upstream 消失があれば exit 1
+```
+
+LICENSE を同梱するだけでは「どの時点のコピーか」が残らず、upstream が動いても気づけません。実際に初回実行で、`mattpocock/skills` が **`CONTEXT.md` を `GLOSSARY.md` にリネーム**していたことが判明し、手元の `domain-modeling` は upstream が捨てた名前を教え続けていました。3 つを `6fd94792` で取り直し、この repo 側の記述も揃えています。
+
+既存の取り込み（ECC / Addy pack / yaml-to-html-skill）には `provenance.json` がありません。取得 revision が記録されておらず、推測で埋めるのは正直な欠落より悪いので、意図的に再 vendor するときに付けます。
+
+考え方は [Alder](https://github.com/mk3008/alder) から借りました（同梱の参照コピーを digest で固定している）。それ以外は採用していません。
 
 ## MCP の版固定とセキュリティ方針
 

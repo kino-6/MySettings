@@ -1,7 +1,7 @@
 # Codex Skills Inventory
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-09-21 JST
+Updated: 2026-10-07 JST
 
 Latest audit: [2026-09-14 Local / MySettings stocktake](2026-09-14-astra-stocktake.md)
 and [complete structural inventory](2026-09-14-skill-scan.tsv). That scan found
@@ -22,7 +22,7 @@ current mirror state. No skill synchronization was performed in the new audit.
 - Repository skills found: 94
 - Missing local user skills in repository: 1 (`sprite-gen`)
 - Same-name content differences: 1
-- Local Codex system skills found under `~/.codex/skills/.system`: 6
+- Local Codex system skills found under `~/.codex/skills/.system`: 5
 
 One non-system local skill is not in this repository: `sprite-gen` (Apache-2.0, appeared in `~/.codex/skills` on 2026-09-12 from another session; it is a full package with `pyproject.toml`, `scripts/`, and `tests/`, so vendoring it is a deliberate decision that has not been made yet). ECC upstream Codex skills from `affaan-m/ECC` were added in add-only mode on 2026-06-13.
 
@@ -44,7 +44,7 @@ The structured ECC workflow skills were added on 2026-06-21 as Codex skills:
 
 `build-playable-games` was added on 2026-08-11. Its SKILL.md was authored in a separate session by the user's request; this repo integrated it and authored its missing `references/` (quality-gates, genre-lenses, source-lessons distilled from `kino-6/black-stela` and `kino-6/RePrise`) and `scripts/inspect_game_project.py`. On 2026-08-12, `references/task-queue.md` was added: the Tasks.md active-queue conventions (named FAIL-able gates, four-part definition of done, same-edit grooming) distilled from the black-stela operating rules. Mirrored into local `~/.codex/skills` so game repositories can load it.
 
-`mattpocock/skills` was added in add-only mode on 2026-09-02. It contributes `grill-with-docs`, `grilling`, and `domain-modeling`. `grill-with-docs` is a user-invoked composite (`disable-model-invocation: true`) whose whole body is an instruction to call the other two, so the three are maintained as a set. `domain-modeling` keeps its `CONTEXT-FORMAT.md` and `ADR-FORMAT.md` references inside the skill directory so it stays standalone. The upstream MIT license is copied into each imported skill directory. At the user's request these three were mirrored into both `~/.codex/skills` and `~/.claude/skills` so every local project can reference them from either runtime; `~/.claude/skills` is a new distribution surface and currently holds only these three skills.
+`mattpocock/skills` was added in add-only mode on 2026-09-02. It contributes `grill-with-docs`, `grilling`, and `domain-modeling`. `grill-with-docs` is a user-invoked composite (`disable-model-invocation: true`) whose whole body is an instruction to call the other two, so the three are maintained as a set. `domain-modeling` keeps its `GLOSSARY-FORMAT.md` and `ADR-FORMAT.md` references inside the skill directory so it stays standalone. The upstream MIT license is copied into each imported skill directory. At the user's request these three were mirrored into both `~/.codex/skills` and `~/.claude/skills` so every local project can reference them from either runtime; `~/.claude/skills` is a new distribution surface and currently holds only these three skills.
 
 On 2026-09-02 the stale local copy of `skill-use-manager` was re-synced from the repository copy: it was missing the `observable-development-loop` and `build-playable-games` routing rows added earlier.
 
@@ -53,6 +53,12 @@ On 2026-09-02 the stale local copy of `skill-use-manager` was re-synced from the
 On 2026-09-21 the skill gained two on-demand sub-skills, deliberately kept inside it rather than split out: `references/runtime-contract.md` (single launch entry point, exclusive lock and run-scope separation, shadow tree, headless-only agent lanes with the macOS focus measurement and an executable focus check, windowless real-pixel capture, seeds, version and seed stamped into the frame, gated recording) and `references/trouble-registry.md` (repeated failures generalised into counted types, appended automatically by a pre-commit hook and classified under a commit block, recalled via a SessionStart digest). Both are near-universal, so splitting them would have added routing surface without adding reach; they get their own trigger rows in `skill-use-manager` instead. Sources are recorded in the skill's `references/collected-practice.md`.
 
 `context-architecture` gained a "Converting A Document You Keep Re-Reading" section on 2026-10-05. The skill already owned the retrieval side of large documents (build an index, load one section); what was missing was the authoring side - when a local document earns being restructured into a skill, and what file set to produce. The file-set shape with per-part token budgets, the trigger test ("re-open it often enough to wish you had memorized it"), and the "structure, not a summary" framing are adapted from `virgiliojr94/book-to-skill` (MIT, 33.7k stars). Only the ideas were taken: the tool is not installed, its `~/.agents/skills` root is not adopted (this setup uses `~/.codex/skills` + `~/.claude/skills`), and generated distillations of purchased books are deliberately kept out of this repository, which is public. Note that the project carries a `SECURITY-NOTICE.md` about a malicious re-upload at `Leutenegger/book-to-skill` that exfiltrated crypto-wallet data - only the official repository is safe to reference.
+
+**Import policy addition (2026-10-07): record provenance at import time.** Every newly vendored skill carries a `provenance.json` next to its `LICENSE`: the upstream repo, the exact revision fetched, a sha256 per file, and the verification date. `bash scripts/check-provenance.sh --check` re-fetches each recorded path at its recorded revision and exits 1 on drift, on a local edit to a vendored file, or on a recorded path that no longer exists upstream. The idea is borrowed from [Alder](https://github.com/mk3008/alder), which pins its bundled reference copies the same way; nothing else from that kit was adopted.
+
+The first run paid for itself. `mattpocock/skills` had **renamed `CONTEXT.md` to `GLOSSARY.md`** (and `CONTEXT-FORMAT.md` to `GLOSSARY-FORMAT.md`) between the 2026-09-02 import and 2026-10-07, so the local `domain-modeling` copy was teaching a filename upstream had abandoned - silently, with no signal. The three mattpocock skills were re-vendored at `6fd94792` and this repository's own references were updated to match. Note that `~/work/little-reef/CONTEXT.md` is a real glossary in this skill's format and was **not** renamed: it belongs to that project, and the updated skill will look for `GLOSSARY.md` there.
+
+Pre-existing imports (ECC, Addy pack, yaml-to-html-skill) have no `provenance.json`: the revision they were taken from was never recorded and guessing one would be worse than an honest gap. They get a manifest the next time they are deliberately re-vendored.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 

@@ -1,0 +1,29 @@
+{
+  "upstream": "https://github.com/mattpocock/skills",
+  "license": "MIT",
+  "revision": "6fd947921b935b7e1e69293a200400f0fdd5c15f",
+  "verified": "2026-10-07",
+  "note": "Vendored add-only. Digests verified byte-identical against this upstream revision. Re-verify before relying on the copy; upstream renamed CONTEXT.md to GLOSSARY.md between 2026-09-02 and this revision, which a digest check caught.",
+  "files": {
+    "SKILL.md": {
+      "source": "skills/engineering/domain-modeling/SKILL.md",
+      "sha256": "7b925d7b1e341a2eeae33ad68a8a8c0ab889a38ddd22a7598e4c240e5a7556a3",
+      "matches_upstream": true
+    },
+    "agents/openai.yaml": {
+      "source": "skills/engineering/domain-modeling/agents/openai.yaml",
+      "sha256": "f6bf2aa996c6e6f53fdd0708e18a0d16a56aed8322cca59fedbe3c0d2c75f06b",
+      "matches_upstream": true
+    },
+    "ADR-FORMAT.md": {
+      "source": "skills/engineering/domain-modeling/ADR-FORMAT.md",
+      "sha256": "944c92aa790e8fbdc9199640b170979abb8a34ba8d0fe18c2a01a63bce140ca0",
+      "matches_upstream": true
+    },
+    "GLOSSARY-FORMAT.md": {
+      "source": "skills/engineering/domain-modeling/GLOSSARY-FORMAT.md",
+      "sha256": "21dcc40cdec8e151a829b98ab1517c1867bc444e3665134a98c6983411996801",
+      "matches_upstream": true
+    }
+  }
+}
