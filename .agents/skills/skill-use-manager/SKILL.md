@@ -52,7 +52,7 @@ Use these when the task matches the trigger:
 | Browser or UI end-to-end/runtime tests are needed | `e2e-testing`, `browser-testing-with-devtools` |
 | Requirements are unclear, vague, or need a spec | `interview-me`, `idea-refine`, `spec-driven-development`, `planning-and-task-breakdown` |
 | A plan or design already exists and should be stress-tested round by round | `grilling`, `grill-with-docs` |
-| Codebase terminology, a `CONTEXT.md` glossary, or an ADR is being written or challenged | `domain-modeling`, `documentation-and-adrs` |
+| Codebase terminology, a `GLOSSARY.md` glossary, or an ADR is being written or challenged | `domain-modeling`, `documentation-and-adrs` |
 | Prompt, reusable instruction, or output contract design | `outcome-first-prompting`, `prompt-thinking-patterns` |
 | Source-cited framework/library decisions | `source-driven-development`, `documentation-lookup` |
 | High-stakes or unfamiliar decisions need adversarial review | `doubt-driven-development`, `council` |

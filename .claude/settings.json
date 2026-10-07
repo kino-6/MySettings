@@ -77,6 +77,8 @@
       "Bash(bash scripts/wsl-doctor.sh:*)",
       "Bash(./scripts/mcp-doctor.sh:*)",
       "Bash(bash scripts/mcp-doctor.sh:*)",
+      "Bash(./scripts/check-provenance.sh:*)",
+      "Bash(bash scripts/check-provenance.sh:*)",
       "Bash(bash .agents/skills/skill-use-manager/scripts/update-inventory.sh:*)",
       "Bash(python3:*)",
       "Bash(jq:*)",

@@ -62,7 +62,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 | `idea-refine` | A vague idea needs divergent/convergent refinement before planning. |
 | `grill-with-docs` | A plan or design should be stress-tested and documented in one pass; user-invoked only, and it calls `grilling` plus `domain-modeling`. |
 | `grilling` | A plan, decision, or idea needs relentless round-based questioning until the design tree has no open branches. |
-| `domain-modeling` | Codebase terminology is being challenged or fixed, or a `CONTEXT.md` glossary / `docs/adr/` ADR is being written or edited. |
+| `domain-modeling` | Codebase terminology is being challenged or fixed, or a `GLOSSARY.md` glossary / `docs/adr/` ADR is being written or edited. |
 | `spec-driven-development` | A significant feature or project needs a PRD/spec before implementation. |
 | `planning-and-task-breakdown` | A spec or clear request needs implementable, ordered tasks. |
 | `outcome-first-prompting` | A prompt needs stable schema, format, examples, or acceptance criteria. |
@@ -128,7 +128,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 
 - `task-queue-loop`'s two sub-skills are deliberately not separate skills: both are near-universal, and splitting them would only add routing surface. They stay as on-demand `references/` documents, with their own trigger rows in the router so they remain reachable in repositories that keep no queue. `references/runtime-contract.md` sits next to `observable-development-loop`: that skill owns how an agent observes its own output, this one owns whether the project can be launched and observed at all without taking over the machine. `references/trouble-registry.md` sits next to `continuous-learning-v2`: that one extracts instincts from sessions via hooks, this one generalises repeated failures into counted types enforced at commit time.
 - `task-queue-loop` and `ecc-task-workflow` both create task context but at different scales: `ecc-task-workflow` spins up per-task artifacts under `.agents/ecc-workflow/tasks/` for one broad piece of work, while `task-queue-loop` operates a single long-lived queue file that outlives individual tasks. `build-playable-games/references/task-queue.md` stays the game-project cut and is cross-referenced from both directions.
-- `interview-me` and `grilling` overlap on "grill me" style triggers but differ in shape: `interview-me` asks one question at a time to recover intent behind an underspecified ask, while `grilling` asks a whole decision frontier per round to stress-test a plan that already exists. Prefer `grill-with-docs` when the grilling should also leave `CONTEXT.md` / ADR behind.
+- `interview-me` and `grilling` overlap on "grill me" style triggers but differ in shape: `interview-me` asks one question at a time to recover intent behind an underspecified ask, while `grilling` asks a whole decision frontier per round to stress-test a plan that already exists. Prefer `grill-with-docs` when the grilling should also leave `GLOSSARY.md` / ADR behind.
 - Internet research was not used for this pass. The better source of truth is repo-local evidence plus the existing `agent-sort` workflow.
 - `LIBRARY` skills should stay installed and searchable. They are just not worth loading by default for this repository.
 - Revisit this classification when the repo gains application code, CI, package manifests, hooks, or new project-local MCP configuration.

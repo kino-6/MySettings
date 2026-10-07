@@ -35,6 +35,36 @@ Replace, every time:
 | 動く | `--state=weld` で起動し、装甲が最大の 6 割で止まる |
 | 性能が改善 | 164 歩を歩かせ、G/歩 が交易 3.5〜4.4 の帯域に入る |
 
+## Concrete does not mean invented
+
+Pressing for concreteness has a failure mode: asked for a number, write one that
+nothing supports. A gate built on an invented threshold is worse than a vague one,
+because it looks checkable and will be defended.
+
+**Never silently fill in these five.** When the value is not established, say it is
+unknown and ask, or mark the row `[~]`:
+
+| | A silent fill looks like |
+|---|---|
+| **policy** | "cancelling frees the slot immediately" - nobody said it frees it |
+| **permissions** | "the operator can approve it" - access was never stated |
+| **timing** | "within 200ms" - no requirement said 200 |
+| **cardinality** | "one per account" - one was assumed, never confirmed |
+| **failure behaviour** | "retries three times" - retrying at all is an invention |
+
+The tell is a sentence that sounds like a natural consequence. A natural-sounding
+consequence is still a policy when it changes availability, authorization, state,
+or what happens next. If the source does not establish it, the gate cannot assert
+it - and "when X becomes available" presupposes that X becomes available, so ask
+*whether* before asking *when*.
+
+Numbers that came out of a measurement are concrete. Numbers that came out of the
+drafting are decoration. Say which one each is.
+
+(The five-way split is borrowed from [Alder](https://github.com/mk3008/alder),
+whose business-design skill refuses to fill in "policy, permissions, timing,
+cardinality, or failure behavior". The rest of that kit was not adopted.)
+
 ## The minimum check, and the gate
 
 Every row carries **two** commands with the same contract, differing only in how
