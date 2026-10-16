@@ -433,6 +433,21 @@ Gate を書いた本人が完了も判定する自己承認が構造的な穴だ
 
 この workflow は vendor 固有の workflow directory を作らず、外部 harness の init command も実行しません。将来フル導入を試す場合は、一時 branch か scratch repo で generated diff を確認してから取り込む方針です。
 
+## 応答の作法（`~/.claude/CLAUDE.md`）
+
+`settings/common/.claude/CLAUDE.md` を `~/.claude/CLAUDE.md` へ配置します（`deploy_tree` が hidden dir も含めて `$HOME` に展開するため、setup script の変更は不要）。
+
+**2026-10-16 の指摘「黙って裏で数分やって回答が来る。酷い時は 1 時間続けて、その合間に返す」への対応です。** 問題は作業量ではなく、作業中に何も返らないこと。
+
+- tool 呼び出しを 3 回以上、文章なしで続けない
+- 30 秒以上かかりそうな手の前に、何を走らせて何が分かるはずかを 1 行書く
+- 依頼が複数あるときは着手前に並べ、**1 件終わるたびに報告する**
+- 残件を並べるなら各項目に判定を付ける。判定を書けないならその節を書かない
+
+**なぜ skill ではなく `~/.claude/CLAUDE.md` なのか**: skill は description が引っかかったときだけ読まれるので、毎ターン効かせる規律には向きません。さらに、指摘の出どころである `~/work/layered_dreams` には `CLAUDE.md` が 1 つも無く、user レベルの指示面も存在しなかったため、**あの repo では何も効いていませんでした**。全プロジェクトを覆うのは `~/.claude/CLAUDE.md` だけです。
+
+**強制はできません。** hook はコマンドを実行する仕組みで、発話させる手段がないため、これは指示にとどまります。
+
 ## 取り込み元の記録（provenance）
 
 新しく vendor した skill は、`LICENSE` の隣に `provenance.json` を置きます。記録するのは **upstream の repo / 取得した正確な revision / ファイルごとの sha256 / 検証日**です。
