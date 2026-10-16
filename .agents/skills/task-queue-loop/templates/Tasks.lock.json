@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "id_pattern": "#?[A-Z]*-?\\d+[a-z]?",
+  "rows": {
+    "<T001>": {
+      "title": "<達成すれば終わりと言える一文>",
+      "min_check": "`<最短のコマンド>` — <条件>",
+      "gate": "`<コマンド>` — <条件>",
+      "locked": "<2026-01-01>",
+      "passes": false,
+      "amendments": []
+    }
+  }
+}

@@ -154,6 +154,27 @@ And the incentive, which no rule removes: running everything is defensible witho
 judgement, while a selected run carries the risk of having chosen wrong. "Don't
 run full" does not change that arithmetic. Making the selection citable does.
 
+## Tasks.lock.json (added 2026-10-16)
+
+From Anthropic's "Effective harnesses for long-running agents": its feature list
+starts all-failing and the agent may only flip `passes` to true - editing or
+deleting entries is forbidden - so that completion cannot be reached by moving
+the criteria. This skill had no equivalent; an agent could loosen a row's gate in
+Tasks.md until it matched what the work did.
+
+The article stores the list as JSON on the grounds that models rewrite it less
+casually than prose. Tasks.md is also read and edited by people, so instead of
+replacing it the user proposed that the agent manage a JSON file alongside. The
+relationship is a lockfile's: Tasks.md is the display, `Tasks.lock.json` is the
+seal, and `scripts/check_tasks_lock.py` enforces both their agreement and the
+seal's mutation rules (only `passes` flips freely; a sealed gate changes only with
+an amendment naming the field and a reason; an unfinished row may not leave).
+
+The checker was falsified on nine cases before being trusted, and the pre-push
+hook had a real bug caught the same way: `--base @{upstream} || --base HEAD`
+turned a genuine failure against upstream into a pass via the fallback. The base
+is now decided before the check runs.
+
 ## Variations deliberately left open
 
 - **Marker set.** `[ ] [-] [x]` everywhere; `[~]` (human judgement) in

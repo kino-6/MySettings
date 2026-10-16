@@ -400,7 +400,8 @@ Standalone Codex skill として参照が切れないよう、upstream root の 
 - `references/gates.md`: 落とせる Gate の書き方。曖昧語を数値とキー名へ落とす、修正前に赤を確認する、機械判定が書けない場合の扱い
 - `references/gate-audit-loop.md`: **別視点エージェントによる Gate 監査ループ**。差分ではなく Gate を攻める（差分を戻して赤くなるか、挙動を壊して赤くなるか、assertion が実際に走ったか）。判定は `GATE_VALID` / `GATE_BROKEN` / `EVIDENCE_MISSING` の固定書式で返し、refactoring 案は **Gate 付きの行**としてキューへ積む。自動化は subagent への dispatch と、キューファイルへの `PostToolUse` hook（監査記録の無い `[x]` を拒否）の 2 段
 - `references/collected-practice.md`: どの規則をどのリポジトリから取ったかの対応表と、規則が答えている実際の失敗例
-- `templates/`: `Tasks.md`（READ FIRST ヘッダ入りのキュー）、`work-rules.md`（規律の実体）、`CHARTER.md`、`Tasks-archive.md`、`gate-auditor.md`（`.claude/agents/` へ置く監査 subagent 定義）
+- `templates/`: `Tasks.md`（READ FIRST ヘッダ入りのキュー）、`work-rules.md`（規律の実体）、`CHARTER.md`、`Tasks-archive.md`、`gate-auditor.md`（`.claude/agents/` へ置く監査 subagent 定義）、`Tasks.lock.json` と `hooks/`（pre-commit / pre-push）
+- `scripts/check_tasks_lock.py`: 着手済みの行の最小検証と Gate を `Tasks.lock.json` に封印し、**緩めるには理由つきの amendment を要求**する。Tasks.md は人が読む表示、lock は agent が黙って変えられない封印（lockfile と同じ関係）
 
 行の列は「何を・なぜ・**最小検証**・Gate・状態」。最小検証は Gate と同じ契約（コマンド + 条件 + 落とせること）を負い、違うのは頻度だけです（最小検証は毎回・秒で、Gate は commit 直前に一度）。実測では絞った 1 本が 1 秒 / 3 tests に対しフル Gate は 914 tests で、反復のたびにフル Gate を回すのが遅さの主因でした。並列化は**絞ったあとの第二の梃子**として、効く場合と効かない場合を併記しています。
 

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# The full run belongs here and only here: it is the backstop that makes every
+# earlier skip affordable. Install: cp to .git/hooks/pre-push && chmod +x.
+# Do not bypass with --no-verify; a skipped pre-push run means nothing was verified.
+set -euo pipefail
+
+# Decide the base first. Falling back with `check --base @{upstream} || check
+# --base HEAD` would turn a genuine failure against upstream into a pass.
+if base="$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null)"; then
+  python3 tools/check_tasks_lock.py --base "$base"
+else
+  python3 tools/check_tasks_lock.py --base HEAD
+fi
+
+# Replace the body with this repository's full gate, e.g. `./Run.sh gate`.
+# Until then the hook fails closed: no push without a configured full run.
+full_gate() {
+  echo "pre-push: edit .git/hooks/pre-push and put this repo's full gate in full_gate()" >&2
+  return 1
+}
+full_gate

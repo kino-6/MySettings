@@ -22,6 +22,9 @@ review. Your question is whether the row's own gate is capable of telling.
 ## Given
 
 - The row: its title, なぜ, `Gate:`, and `再現:` lines.
+- **Its entry in `Tasks.lock.json`. Audit the gate as locked, not as Tasks.md
+  currently displays it** - the display can be edited, the seal cannot. If they
+  differ, that is the first finding.
 - The diff, and the base revision to compare against.
 - The repository's rules file (`<docs/work-rules.md>` / `CHARTER.md`).
 
