@@ -80,6 +80,7 @@ Use these when the task matches the trigger:
 | Production-quality UI layout, visual hierarchy, interaction states, responsiveness, and design-system fit | `frontend-ui-engineering` |
 | Designing or implementing sensitive behavior with untrusted input, auth, storage, secrets, or external integrations | `security-and-hardening` |
 | Reviewing or auditing changes for vulnerabilities, secrets, auth gaps, injection risks, or missing security tests | `security-review` |
+| Before a repo goes public, gets a new remote, or is shared; or checking whether anything sensitive is committed | `repo-preflight` |
 | Performance requirements, regressions, Core Web Vitals, or profiling are relevant | `performance-optimization` |
 | CI/CD, observability, deprecation, docs/ADRs, or launch readiness | `ci-cd-and-automation`, `observability-and-instrumentation`, `deprecation-and-migration`, `documentation-and-adrs`, `shipping-and-launch` |
 | Strategic wall-partner work for business ideas, product bets, career decisions, research questions, or assumption stress tests | `strategic-ai-wall-partner` |

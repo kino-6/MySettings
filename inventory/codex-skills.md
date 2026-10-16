@@ -18,8 +18,8 @@ current mirror state. No skill synchronization was performed in the new audit.
 
 ## Merge Summary
 
-- Local user skills found: 98
-- Repository skills found: 95
+- Local user skills found: 99
+- Repository skills found: 96
 - Missing local user skills in repository: 4 (`sprite-gen`, `illustration-to-rigged-avatar-parts`, `image-to-3d-avatar-triage`, `rigged-anime-avatar-base`)
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 5
@@ -61,6 +61,8 @@ The first run paid for itself. `mattpocock/skills` had **renamed `CONTEXT.md` to
 Pre-existing imports (ECC, Addy pack, yaml-to-html-skill) have no `provenance.json`: the revision they were taken from was never recorded and guessing one would be worse than an honest gap. They get a manifest the next time they are deliberately re-vendored.
 
 `progress-contract` was added on 2026-10-16 from a user report that recent models "黙って裏で数分やって回答が来る" and occasionally work for an hour while answering only in the gaps. It is the mirror of `observable-development-loop`: that skill owns the agent seeing its own output, this one owns the person seeing the agent. It carries narration thresholds (including a row whose correct answer is silence, because a line per tool call trains the reader to skip all of them), the handling of a message that bundles several requests, per-item reporting, and `templates/response-cadence.md` for installation into an always-loaded instruction file. Its `references/collected-practice.md` counts the specific failures out of the attached transcript. Deliberately not held in the skill body alone: cadence must apply on turns that trigger no skill, and the repository the report came from had no instruction surface at all, so the missing piece was a place to put rules rather than the rules. This repo's instance is `settings/common/.claude/CLAUDE.md`, deployed to `~/.claude/CLAUDE.md` by the existing `deploy_tree`.
+
+`repo-preflight` was added on 2026-10-16 at the user's request: work happens mostly in private repositories, so accidents stay invisible until a repo goes public or gains a remote. It scans tracked, untracked and (with `--history`) every commit for secrets, personal data and risky files, and classifies each by the state that decides the fix - `.gitignore` only prevents untracked files, so tracked secrets need `git rm --cached` and anything ever committed needs rotation. It changes nothing and every proposed fix needs the user's confirmation. Secret values are masked in its output. Standard library only, no network, in keeping with this repo's rule of auditing through readable commands rather than a downloaded scanner. Mirrored into both `~/.codex/skills` and `~/.claude/skills`.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 
