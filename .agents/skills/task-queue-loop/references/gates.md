@@ -65,157 +65,102 @@ drafting are decoration. Say which one each is.
 whose business-design skill refuses to fill in "policy, permissions, timing,
 cardinality, or failure behavior". The rest of that kit was not adopted.)
 
-## The minimum check, and the gate
+## Three commands per row, three runs
 
-Every row carries **two** commands with the same contract, differing only in how
-often they run:
+Every row names three commands. Two are checks with the same contract - a
+command, a condition, the ability to go red - and differ only in when they run.
+The third is not a check.
 
-| | 最小検証 (minimum check) | Gate | 再現 (repro) |
+| | 最小検証 | Gate | 再現 |
 |---|---|---|---|
-| Question | did this row's change work? | is the row complete? | what does it look like? |
+| Asks | did this row's change work? | is the row complete? | what does it look like? |
 | Answers with | pass / fail | pass / fail | the thing itself |
-| Scope | one file, one behaviour, one seed, one screen | the whole suite, the bands, the real pixels | one state |
-| Cadence | every iteration | once, before closing the row | whenever a human wants to look |
-| Budget | seconds | whatever it costs | one command |
+| Scope | one file, behaviour, seed, screen | the row's own proving command | one state |
 
-The repro is not a third check. It has no pass condition and proves nothing -
-it exists so that a person can be put in front of the result without being
-talked through it. Do not let it absorb the minimum check, and do not let the
-minimum check stand in for it.
+**The repro proves nothing.** It has no pass condition; it puts a person in front
+of the result in one command (a fixture, a boot flag, a `--state=`). "Walk there
+in game" or a `.png` path does not count.
 
-This is the single biggest lever on how long a lap takes. A full gate run in a
-mature project is minutes; the narrowest slice of it is usually about a second.
-Measured in this repo's own audit run: `./Run.sh test --only=test_two_ways_to_earn`
-returned **3 tests / 37 checks in 1s**, against a full gate of **914 tests**.
-Reaching for the full gate on every edit is what makes queue work feel slow.
+**The row's Gate is the row's own proving command, not the whole suite.** Writing
+the full-gate command in a row's Gate column is the single habit that turns every
+lap into a full-suite run.
 
-**Narrowing has ready-made handles in most projects** - use them before inventing
-anything: `--only=<file>`, `--lane=<rules|content|ui>`, a single seed instead of
-five, one fixture, one `--state=`, one captured screen.
+### Three runs
 
-Four rules:
+| Run | When | Budget |
+|---|---|---|
+| **最小検証** | every iteration | seconds |
+| **行の Gate + 未検査ぶん** | before closing the row | **~2 min, 1 for some people** |
+| **フル** | **before push only** | as long as it takes |
 
-- **Write it at the same time as the gate,** in the same edit, before the work.
-  Deciding the cheap check afterwards means the whole iteration ran on the
-  expensive one.
-- **It must be able to go red for this row.** A minimum check that cannot fail is
-  the gate with the assertions thinned out, which is worse than nothing: it makes
-  the iteration feel verified.
-- **Falsify on the cheap one.** Watch the minimum check fail before you start;
-  save the gate's red for the cases the cheap one cannot express.
-- **Minimum green + gate red is information, not an annoyance.** The narrowing was
-  too tight. Widen the minimum check in the same edit that fixes the code, so the
-  next lap on this row does not pay the same price.
+The middle figure is the one that matters, because it is paid every lap. It is a
+threshold of human attention, not a technical limit: past a couple of minutes the
+person stops waiting and the loop stops being a loop. Put the project's own
+measured number in its rules file. The full run is exempt by design - once per
+push barely costs per lap. A commit is cheap and local; a push is what other
+people and machines see, so the complete run goes right before the work leaves
+the machine.
 
-Both go in the row, both with a condition. **The row's Gate is the row's own
-proving command - not the whole suite.** The full suite is a separate, pre-push
-run; see [Three runs, not one](#three-runs-not-one).
+For scale: a narrowed run in `rustbound` returned 3 tests / 37 checks in 1s,
+against a full gate of 914 tests.
 
-```
-最小検証: `./Run.sh test --only=test_trade_routes` — 経路が 1 本以上、parts を含まない（~1s）
-Gate:     `./Run.sh test --lane=rules` + `capture verify_trade verify_trade_03_routes`
-          — 経路行が差額順・2 行組、916 tests 緑（~40s）
-```
+### The minimum check
 
-Writing `./Run.sh gate` in a row's Gate column is the mistake that turns every
-lap into a full-suite run. The suite proves the project; the row's gate proves
-the row.
+- **Write it with the gate, before the work.** Chosen afterwards, the iteration
+  already ran on the expensive one.
+- **It must be able to go red for this row,** or it is the gate with the
+  assertions thinned out - worse than nothing, because it feels verified.
+- **Falsify on the cheap one first.**
+- **Minimum green + gate red is information:** the narrowing was too tight. Widen
+  it in the same edit that fixes the code.
 
-## Three runs, not one
-
-The gates are not a cost to be trimmed. They are the accumulated record of what
-this project learned the hard way, and an agent making broad changes needs *more*
-of that, not less. Deleting a gate because it never goes red deletes the guard
-that lets the next broad change be safe - the quiet gate is the one doing its
-job.
-
-So the thing to shrink is **the run, not the suite**. Three levels, each with its
-own trigger:
-
-| Run | When | Scope | Budget |
-|---|---|---|---|
-| **最小検証** | every iteration | the row's own cheap check | seconds |
-| **行の Gate + 未検査ぶん** | before closing the row | the row's proving command, plus whatever the change could have affected and no green run covers | **~2 min, 1 for some people** |
-| **フル** | **before push only** | everything | as long as it takes |
-
-The two-minute figure is the one that matters, because it is paid **every lap**.
-It is a threshold of human attention, not a technical budget: past a couple of
-minutes the person stops waiting, goes elsewhere, and the loop stops being a
-loop. Some people are out at one minute. Put the project's own number in its
-rules file rather than inheriting this one.
-
-The full run is deliberately exempt. It happens once per push, so ten minutes
-there costs almost nothing per lap - which is the whole reason for moving it to
-the push. **A budget on the rare run buys nothing; a budget on the per-lap run
-buys the loop.**
-
-The middle one is the change. Previously this skill said "full gate before the
-commit", which in a mature suite is the hour-per-lap problem by itself. A commit
-is cheap and local; a push is what other people and other machines see. **Put the
-expensive, complete run at the last moment before the work leaves the machine.**
+Narrowing handles usually exist already: `--only=<file>`, `--lane=`, one seed
+instead of five, one fixture, one `--state=`, one captured screen.
 
 ### Skipping what is already verified
 
-A gate whose covered area the change could not have touched, and which has a
-green run on exactly this content, does not need re-running. That is the lever
-with the most slack in it, and the most danger, so one rule governs it:
+A gate whose area the change could not have touched, with a green run on exactly
+this content, need not re-run. **The skip must be derived, not asserted** - "I
+didn't touch that" is the belief that lets regressions through.
 
-**The skip must be derived, not asserted.** "I didn't touch that" is a belief,
-and it is precisely the belief that lets regressions through. Legitimate sources,
-strongest first:
+| Source, strongest first | Existing tools |
+|---|---|
+| Content identity: inputs byte-identical to the last green run | Bazel, Pants, Buck, Gradle build and test caching |
+| A tool that computes impact | `pytest-testmon`, Jest `--changedSince`, Vitest `--changed`, Nx `affected` |
+| A declared ownership map in the rules file | lanes such as `--lane=rules\|content\|ui` |
 
-1. **Content identity.** The gate's inputs are byte-identical to the last green
-   run - hash the files it reads and the files it exercises. Nothing believed.
-2. **A tool that computes impact.** Test-impact analysis, coverage-derived
-   mapping, a dependency graph the build already maintains.
-3. **A declared ownership map.** Lanes written down in the rules file (`rules` /
-   `content` / `ui`), so the mapping is reviewable even though it is coarse.
+Godot projects rarely have either of the first two; declared lanes are the
+realistic option there. With none of the three, there is no skip - run the suite
+and file a row to build one.
 
-If none of the three exists, there is no skip - run the suite, and file a row for
-building one of them. An undeclared skip is not a faster test, it is an untested
-change.
-
-**Record what was skipped, in the row.** The skip is a claim, and the pre-push
-full run is what falsifies it. A wrong skip is then caught before the work leaves
-the machine, which is the entire reason the full run still exists.
-
-**Never skip into a push.** The full run is the backstop that makes every earlier
-skip affordable; skipping it too means nothing was ever verified.
+**Record the skip in the row.** It is a claim, and the pre-push full run is what
+falsifies it. **Never skip into a push**: that run is what makes every earlier
+skip affordable.
 
 ### What still earns deletion
 
-Cost is not a reason. Being wrong is:
+Cost is not a reason; being wrong is - a gate pinned to a closed row's incidental
+numbers, a gate on unreachable behaviour, a duplicate whose failure does not
+locate the fault. **Promote to a cheaper fixture before deleting**: the same
+assertion made cheap beats one fewer assertion. Archive a deletion with what it
+used to catch, or the next session re-adds it.
 
-- **A gate pinned to a closed row's incidental numbers** rather than to the
-  invariant the row was about. The specifics should not outlive the row.
-- **A gate on behaviour nothing can reach any more.** Delete the gate and the
-  dead path in the same lap.
-- **Duplicate coverage where one gate's failure does not locate the fault.**
-  Keep the one with the better failure message.
-- **Promote rather than delete.** The same assertion on a cheaper fixture is
-  strictly better than one fewer assertion. This is where the real wins are.
-
-Archive a deletion with what it used to catch, or the next session re-adds it.
+The gates are the accumulated record of what the project learned, and they are
+what lets an agent make broad changes safely. A gate that never goes red is the
+guard doing its job. **Shrink the run, not the suite.**
 
 ### Why full gets reached for anyway
 
-Worth naming, because it is an incentive and not ignorance: **running everything
-is defensible without judgement.** Running a selected subset requires having
-chosen correctly and owning the risk. Under that asymmetry, full is rational, and
-telling an agent "don't" does not change the arithmetic.
+An incentive, not ignorance: running everything is defensible without judgement,
+while a selected run carries the risk of having chosen wrong. "Don't" does not
+change that arithmetic. Making the selection **citable** does - the minimum check
+sealed in `Tasks.lock.json` before the work, the skip derived from a source above,
+the full run guaranteed before push. Absent that record, full is correct and the
+defect is in the row.
 
-What changes it is making the selection **citable**: the minimum check written in
-the row before the work, the skip derived from one of the three sources above,
-and the full run guaranteed before push. Then the narrow choice points at a
-recorded decision with a backstop, not at a guess. Absent that, reaching for full
-is correct behaviour and the defect is in the row.
-
-### Lap time is a number
-
-"Development is not progressing" is a complaint. **Minutes per lap** is a
-measurement, and it splits: gate run, re-render, a skip that turned out wrong and
-cost a full run anyway, waiting on a human. Measure a few laps before optimising;
-the cost is usually not where it feels like it is.
+**Minutes per lap** is the measurement behind "development isn't progressing".
+It splits into gate run, re-render, a wrong skip that cost a full run anyway, and
+waiting on a human. Measure a few laps before optimising.
 
 ## Falsification: confirm the red first
 
@@ -261,18 +206,6 @@ user checks it" in the gate; the user gets the questions that need taste or a
 product decision, and nothing else. If you are tempted to hand over a
 verification chore, the gate is not finished yet.
 
-## One command to reproduce
-
-Every row names a single command that puts a reader in front of the thing:
-a fixture name, a boot flag, a `--state=` scenario, a script invocation. This is
-separate from the gate and equally required - the gate proves it works, the repro
-lets someone see it.
-
-```
-Repro: `./Run.sh play --state=hunt`
-Repro: fixture `equip_screen_min` / boot flag `--scene=equip`
-```
-
 ## Pre-registration, for measurements
 
 When the row's outcome is a number rather than a behaviour, write the expected
@@ -283,38 +216,21 @@ registered as a guess.
 
 ## Parallelising, only after narrowing
 
-Parallelism is the second lever and it is strictly the weaker one. **Narrow
-first.** Running the full gate on eight cores is still the full gate; a one-second
-check does not need cores. Reach for parallelism only when the thing is already as
-narrow as it can be and is *still* slow.
+Parallelism is the weaker lever. Eight cores running the full gate still run the
+full gate, and a one-second check needs no cores. Reach for it only when the run
+is already as narrow as it can be and still slow.
 
-**When it pays**
+**Pays:** a long gate in a duplicated tree under a short check in the working
+tree (what a shadow tree is for - see [runtime-contract.md](runtime-contract.md));
+sweeps over seeds or parameters; several closed rows auditing at once; raising
+the worker count on a runner that already isolates per file.
 
-- **A long gate under a short check.** Run the gate in a duplicated tree in the
-  background while you keep iterating on the minimum check in the working tree.
-  This is what a shadow tree is for - see
-  [runtime-contract.md](runtime-contract.md).
-- **A sweep.** Parameter scans, seed sets, per-map measurements: independent by
-  construction, so split them across workers or trees.
-- **Independent rows.** Several closed rows waiting on their step 8 audit can be
-  dispatched at once - one message, several agents.
-- **A test suite that isolates per file.** If the runner already forks a process
-  per file, raising the worker count is free; check before building anything.
+**Does not:** two runs in one tree on one lock (they contend on the engine's
+cache or the build dir and hang - give each its own tree, lock and user-data
+dir); order- or state-dependent bugs, which stop reproducing and get read as
+fixed; anything a person has to read, since four screenshots in parallel are
+still four looks; harnesses that interleave output until you cannot tell which
+worker went red.
 
-**When it does not**
-
-- **Same tree, same lock.** Two runs in one working directory contend on the
-  engine's import cache, the build directory, or the run lock, and the usual
-  result is a hang or a corrupted cache rather than a speedup. Give each run its
-  own tree, its own lock, and its own user-data dir, or run them in sequence.
-- **Order- or state-dependent bugs.** The failure you are chasing may stop
-  reproducing under concurrency, and you will read that as fixed.
-- **Anything you have to read.** Four screenshots produced in parallel still take
-  one person one look each, and a parallel run whose output you skim is a green
-  gate.
-- **When it hides which one failed.** If the harness interleaves output so you
-  cannot tell which worker went red, the time saved is spent twice over finding
-  out.
-
-Say it in the row when a lane is parallel-safe, so the next lap does not have to
+Say it in the row when a lane is parallel-safe so the next lap need not
 rediscover it: `最小検証: ... （seed 5 本は並列可 / 同一木では不可）`.

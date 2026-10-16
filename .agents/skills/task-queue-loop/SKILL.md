@@ -33,7 +33,8 @@ next lap to start correctly.
    completion, and a **minimum check**, the shortest command that can tell
    whether this row's change worked. Same contract for both - a command, a
    condition, and the ability to go red. They differ only in how often they run.
-   See [references/gates.md](references/gates.md).
+   **Write both into `Tasks.lock.json` too** - that copy is the seal. See
+   [references/gates.md](references/gates.md).
 5. **Confirm red on the minimum check first.** It is the cheap one, so it is
    where falsification belongs: watch it fail before you start. A check that
    cannot fail for this row is measuring the wrong thing.
@@ -86,25 +87,15 @@ Do not write `[x]` until all four hold:
    `.png` do not count.
 4. The change is committed.
 
-Those four make the row **`[x]`-proposed**. It is only archived once the step 8
-audit returns `GATE_VALID`; a `GATE_BROKEN` verdict sends it back to `[-]` and the
-gate gets fixed before the code. The commit stands either way - the fix continues
-on the branch rather than rewriting history.
+Flip `passes` to `true` in `Tasks.lock.json` at the same time. That flip is the
+only edit an agent makes to a locked row without an amendment.
+
+Those four make the row **`[x]`-proposed**; it is archived only after the step 8
+audit returns `GATE_VALID`.
 
 **A human play-through is never a completion condition.** Keep exactly one `[x]`
 row in the queue as a boundary marker so the next session can see where the last
 lap ended; everything older moves to the archive.
-
-## The audit is what makes it a loop
-
-Steps 4-6 all run in the context that produced the diff, so the loop's one
-structural hole is self-approval. Step 8 is a loop rather than a checkpoint
-because **its output is work**: a broken gate sends the row back, and the
-refactoring proposals become rows that will themselves be audited.
-
-Run it per row, not per edit.
-[references/gate-audit-loop.md](references/gate-audit-loop.md) has the checks,
-the verdict contract, and how to make the step mechanical rather than remembered.
 
 ## Invariants of the file
 
@@ -134,22 +125,13 @@ the verdict contract, and how to make the step mechanical rather than remembered
 - Batch unrelated diffs into a commit just to get a row closed.
 - Let a row exist without a gate. A row whose gate cannot be written is not yet
   a task - park it as a note until it can be.
-- Iterate on the full gate. If every edit costs a full suite run, the minimum
-  check was never written, or it was written too wide.
-- Write `./Run.sh gate` (the whole suite) as a row's Gate. That single habit
-  turns every lap into a full-suite run. The row's gate proves the row; the
-  suite runs before the push.
-- Skip a check on a belief. "I didn't touch that" is what lets regressions
-  through - a skip has to come from content identity, an impact tool, or a
-  declared ownership map, and it has to be recorded in the row so the pre-push
-  full run can falsify it. See [references/gates.md](references/gates.md).
-- Skip the pre-push full run. It is what makes every earlier skip affordable;
-  without it nothing was verified.
-- Delete a gate because the suite is slow. The gates are the accumulated record
-  of what this project learned; an agent making broad changes needs more of
-  that, not less. Shrink the run, not the suite.
-- Parallelise before narrowing. Cores do not fix a check that was always going
-  to take minutes.
+- Loosen a sealed gate to match what the work did. Changing a locked 最小検証 or
+  Gate takes an amendment naming the field and the reason; the pre-commit hook
+  refuses anything else.
+- Iterate on the full suite, put the suite in a row's Gate column, skip on a
+  belief, skip the pre-push full run, delete a gate because the suite is slow, or
+  parallelise before narrowing. **Shrink the run, not the suite** - the rules and
+  their reasons are in [references/gates.md](references/gates.md).
 
 ## Installing a queue in a new repo
 
@@ -171,35 +153,29 @@ from the queue header plus the file it points at:
   one record per task with its gate and date.
 - [templates/gate-auditor.md](templates/gate-auditor.md) - drop into the repo's
   `.claude/agents/` (or mirror as a Codex role) so step 8 has someone to dispatch.
+- [templates/Tasks.lock.json](templates/Tasks.lock.json) +
+  [scripts/check_tasks_lock.py](scripts/check_tasks_lock.py) (copy to `tools/`) +
+  [templates/hooks/](templates/hooks/) - the sealed contract behind each started
+  row. People read Tasks.md; the lock is what the agent may not quietly change.
+  `pre-commit` checks the lock, `pre-push` checks it against upstream and runs
+  the full gate. Set an upstream, or `pre-push` can only see uncommitted drift.
 
-Prune the templates to what the repo needs. A queue with sections nobody writes
-into is as dead as a queue full of history.
-
-**The queue file holds work; the rules file holds rules.** Keeping the full
-ruleset inside the queue costs a third of the 200-line budget before a single row
-exists, and it makes the queue a second reader of a question the rules file
-already owns. The surveyed repositories that run the longest queues carry the
-thinnest headers - 8 lines against 178 and 197 - because header weight and room
-for rows trade off directly.
+Prune the templates to what the repo needs. **The queue holds work; the rules
+file holds rules** - the longest queues surveyed carry the thinnest headers (8
+lines against 178 and 197), because header weight and room for rows trade off.
 
 ## Sub-skills
 
-Two documents that are part of this skill but are only worth loading when their
-problem shows up. Both were distilled from the same local repositories as the
-loop itself.
+Load only when the problem shows up.
 
-- **[references/runtime-contract.md](references/runtime-contract.md)** - load when
-  step 6 is expensive: no single launch command, agent runs steal the human's
-  window, verification has to wait for the human to stop playing, or a screenshot
-  cannot tell you which build it came from. Step 6 quietly degrades into
-  "headless pass, ship it" whenever observing the real thing is costly, so this is
-  what keeps the loop honest rather than an optional nicety.
-- **[references/trouble-registry.md](references/trouble-registry.md)** - load when
-  the same *class* of mistake keeps coming back, or before writing a conclusion or
-  a report. The gate audit catches a bad gate on one row; this catches the mistake
-  you will repeat on the next twenty. Its core move is storing counted **types**
-  rather than incidents, with appending automated and classification enforced by a
-  commit block.
+- **[references/runtime-contract.md](references/runtime-contract.md)** - step 6 is
+  expensive: no single launch command, agent runs steal the human's window,
+  verification waits for the human to stop playing, or a screenshot cannot tell
+  which build it came from. Costly observation degrades into "headless pass, ship
+  it".
+- **[references/trouble-registry.md](references/trouble-registry.md)** - the same
+  *class* of mistake keeps coming back. Store counted **types**, not incidents;
+  append automatically, block the commit until each is classified.
 
 ## Related
 
