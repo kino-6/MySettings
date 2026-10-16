@@ -94,33 +94,65 @@ no longer operate the queue from the header alone. The lap-entry rule covers it 
 the header's first lines say to read both - but it is a real trade, not a free
 win.
 
-## Gate inflation (added 2026-10-16)
+## Run selection, and a rejected framing (2026-10-16)
 
-Reported after the 最小検証 column was already in: "Gateが過剰になり、Full を AI は
-回したがるので、1h/1task のようになり開発が進まない". The cadence rules answered *how
-often* to run the full gate; they did not answer the suite growing until even
-once-per-lap is an hour.
+Reported after the 最小検証 column was in: "Gateが過剰になり、Full を AI は回したがる
+ので、1h/1task のようになり開発が進まない". The cadence rules answered *how often* to
+run the full suite; they did not answer the suite growing until once per lap is an
+hour.
 
-The cause is in this skill. "Every row names a gate" with no deletion story is
-**add-only by construction**, and `rustbound` is the measured endpoint: 914 tests
-and 165 bands. So the counterweight is now written down - a stated ceiling, and
-exceeding it files a pruning lap rather than being treated as fate.
+**The first answer was wrong and the user rejected it.** It framed the suite as a
+cost with a budget, and prescribed pruning laps - including deleting gates that
+had never gone red. The objection: "それはわかるんだが、AI開発のコンセプトに合わない".
 
-Two things that needed naming rather than ruling:
+That objection is correct, and worth recording as the reasoning rather than just
+the outcome. The gates are the accumulated record of what a project learned the
+hard way, and they are what lets an agent make broad changes safely. An agent
+needs *more* of that, not less. A gate that never goes red is not dead weight -
+it is the guard doing its job, and deleting it removes exactly the protection
+that makes the next broad change affordable. Pruning to fit a time budget trades
+the thing that has lasting value for the thing that is merely annoying today.
 
-- **Reaching for the full gate is an incentive, not ignorance.** Running
-  everything is defensible without judgement; running the narrow check carries
-  the risk of having chosen wrong. Under that asymmetry "don't run full" does not
-  change the arithmetic. What changes it is making the narrow choice citable -
-  written before the work, falsified, recorded in the row. Absent that record,
-  full is the correct move and the defect is in the row.
-- **Deletion needs its own record.** A pruned gate whose purpose is not archived
-  gets re-added by the next session, and the suite ratchets. Same shape as the
-  trouble registry: the decision is cheap, remembering why is not.
+**The landing point the user proposed, which is what is written now:**
 
-Left open on purpose: the ceiling itself. Three minutes is the template's
-placeholder, not a finding - picking it without measuring minutes-per-lap would
-be exactly the invented number that gates.md warns against.
+1. **検査済みの Skip** - do not re-run what the change could not have touched and
+   a green run already covers.
+2. **Push 前のフルのみ許可** - the complete run belongs before the push, not
+   before every commit.
+3. **Tasks.md 記載の最小検証で作業する** - iterate on the row's own cheap check.
+
+So the lever is **shrink the run, not the suite**, and the earlier rule "full gate
+before the commit" moved to "before the push". A commit is cheap and local; a push
+is what other people and machines see.
+
+Added on top of the proposal, because skipping is where the danger is: a skip must
+be **derived, not asserted** - content identity, an impact tool, or a declared
+ownership map, in that order of strength - and recorded in the row, because the
+pre-push full run is what falsifies it. "I didn't touch that" is a belief, and it
+is precisely the belief that lets regressions through. With no backstop, a skip is
+not a faster test; it is an untested change.
+
+**Where the time figure went.** The rejected version budgeted the *suite* at
+three minutes. The user's correction - "3分じゃなくて2分、人によっては1分でしょう" -
+is about a different thing once the suite budget is gone: the run that is paid
+**every lap**, which is now the row-closing one. Two minutes is a threshold of
+human attention rather than a technical limit; past it the person stops waiting
+and the loop stops being a loop, and for some people that happens at one minute.
+The full pre-push run is deliberately exempt, because a budget on a run that
+happens once per push buys nothing while a budget on the per-lap run buys the
+loop. The template carries `<2>` as a placeholder for the project's own measured
+number.
+
+Also kept from the rejected version, because it survives the objection: deletion
+is still right when a gate is *wrong* (pinned to a closed row's incidental
+numbers, guarding unreachable behaviour, a duplicate whose failure does not locate
+the fault), and **promotion beats deletion** - the same assertion on a cheaper
+fixture is strictly better than one fewer assertion. Cost is not a reason; being
+wrong is.
+
+And the incentive, which no rule removes: running everything is defensible without
+judgement, while a selected run carries the risk of having chosen wrong. "Don't
+run full" does not change that arithmetic. Making the selection citable does.
 
 ## Variations deliberately left open
 
