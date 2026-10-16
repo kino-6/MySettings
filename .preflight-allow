@@ -1,0 +1,11 @@
+# repo-preflight allowlist. One entry per line: a path glob, or path:line to
+# suppress a single line only. Give the reason after `#`. Prefer path:line so
+# a real secret added elsewhere in the same file is still caught.
+
+# ECC (affaan-m/ECC), vendored 2026-06-04. A comment showing the placeholder
+# URL that this function strips credentials from; `ghp_xxxx` is not a token.
+.agents/skills/continuous-learning-v2/scripts/detect-project.sh:96  # upstream comment example in a credential-stripping helper
+
+# ECC plugin manifest, vendored 2026-06-13. The upstream author's own published
+# contact in the manifest's author field - not this repository's owner.
+plugins/ecc/.codex-plugin/plugin.json:7  # upstream plugin author contact, published by them

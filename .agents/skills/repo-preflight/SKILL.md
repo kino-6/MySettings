@@ -1,13 +1,14 @@
 ---
 name: repo-preflight
-description: Check a git repository for secrets, personal data and risky files before it goes public, gets a new remote, or is shared - and propose .gitignore / untrack / rotation fixes that run only after the user confirms. Use before publishing or pushing to a new remote, when a private repo has never been audited, or when the user asks whether anything sensitive is committed.
+description: Check a git repository for secrets, personal data and risky files before it goes public, gets a new remote, or is shared - and propose .gitignore / untrack / rotation fixes that run only after the user confirms. Use before publishing or pushing to a new remote, right after vendoring a third-party bundle, when a private repo has never been audited, or when the user asks whether anything sensitive is committed.
 ---
 
 # Repo Preflight
 
 Private repositories hide accidents: nothing goes wrong until the day the repo
 is made public, given a second remote, or zipped up for someone. Run this before
-that day, not after.
+that day, not after - and right after importing a third-party bundle wholesale,
+which is the moment unread content arrives all at once.
 
 **Report first, act only on confirmation.** The scanner changes nothing. Every
 fix it suggests - an ignore line, an untrack, a history rewrite, a rotation - is
