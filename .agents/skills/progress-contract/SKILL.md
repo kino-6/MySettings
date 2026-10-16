@@ -1,6 +1,6 @@
 ---
 name: progress-contract
-description: What an agent owes the person waiting while it works and when it reports - narration thresholds, handling a message that carries several requests, and a report that is short, answers first, and lists no passed checks. Use when an agent goes quiet for minutes during long work, when a multi-request message gets a single late answer, or when installing cadence rules into a project or user-level instruction file. Template in templates/.
+description: What an agent owes the person waiting while it works and when it reports - narration thresholds, handling a message that carries several requests, and a report that is short, answers first, lists no passed checks, and is written in plain phrasing. Use when an agent goes quiet for minutes during long work, when a multi-request message gets a single late answer, or when installing cadence rules into a project or user-level instruction file. Template in templates/.
 ---
 
 # Progress Contract
@@ -63,8 +63,9 @@ silence twice as bad.
 ## The report itself
 
 The message that ends the work is the one the person has to read, and
-AI-written ones are reliably too long: answer first, no list of passed checks,
-around ten lines, structure and bold only where they earn it, plumbing last.
+AI-written ones are reliably too long and over-decorated: answer first, no list
+of passed checks, around ten lines, plain phrasing without "——" insertions or
+aphorisms, plumbing last.
 [references/report.md](references/report.md) has the rules, where they came
 from, measurements, and an optional Stop hook
 ([scripts/report_check.py](scripts/report_check.py)) that sends an egregious
