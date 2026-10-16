@@ -51,7 +51,7 @@ def problems(m: dict, env=os.environ) -> list[str]:
         out.append(f"「——」での挿入（{m['dash']} 箇所。平易な文に直す）")
     if m["dewanaku"] > int(env.get("REPORT_MAX_DEWANAKU", 2)):
         out.append(f"「ではなく」の繰り返し（{m['dewanaku']} 回）")
-    if env.get("REPORT_LANG", "ja") == "ja" and m["chars"] > 300 and m["ja_ratio"] < 0.3:
+    if env.get("REPORT_LANG", "ja") == "ja" and m["chars"] > 100 and m["ja_ratio"] < 0.3:
         out.append("日本語で書かれていない")
     return out
 
