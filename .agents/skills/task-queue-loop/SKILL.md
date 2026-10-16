@@ -37,13 +37,17 @@ next lap to start correctly.
 5. **Confirm red on the minimum check first.** It is the cheap one, so it is
    where falsification belongs: watch it fail before you start. A check that
    cannot fail for this row is measuring the wrong thing.
-6. **Do the work against the minimum check, then run the gate once.** Iterate on
-   the seconds-long check; run the full gate before committing, not on every
-   edit. Then verify it yourself: render the real screen and actually read it,
-   probe the real values. Headless `pass` is not a substitute for looking.
-   Verification is the implementer's job - see Never.
-7. **Commit.** Not done until committed. Never commit or push on a red gate; if
-   you think the red is unrelated, first prove it reproduces on the base branch.
+6. **Do the work against the minimum check, then run the row's gate once.**
+   Iterate on the seconds-long check. To close the row, run its own gate plus
+   whatever the change could have affected and no green run covers - the **full
+   suite waits for the push**. Then verify it yourself: render the real screen
+   and actually read it, probe the real values. Headless `pass` is not a
+   substitute for looking. Verification is the implementer's job - see Never.
+7. **Commit.** Not done until committed. A commit is cheap and local, so it does
+   not owe the full suite - **the full run is owed before the push**, and it is
+   the backstop that makes every earlier skip affordable. Never commit or push on
+   a red gate; if you think the red is unrelated, first prove it reproduces on
+   the base branch.
 8. **Audit from a second perspective.** Dispatch a fresh-context agent that
    attacks the gate rather than the diff: revert the change and prove the gate
    goes red, mutate the behaviour and prove it goes red again, run the named
@@ -73,8 +77,9 @@ minimum set. Two rules regardless of which set:
 
 Do not write `[x]` until all four hold:
 
-1. The gate is green in the final run - not behind `test.fail()`, `xfail`, or any
-   expected-failure marker.
+1. The row's gate is green in the final run - not behind `test.fail()`, `xfail`,
+   or any expected-failure marker. The row's gate is its own proving command, not
+   the whole suite; the suite runs before the push.
 2. You verified the real build or the real values yourself.
 3. A one-command reproduction exists and is named in the row: a fixture name, a
    boot flag, a `--state=` scenario. "Walk there in game" and pointing at a
@@ -131,11 +136,18 @@ the verdict contract, and how to make the step mechanical rather than remembered
   a task - park it as a note until it can be.
 - Iterate on the full gate. If every edit costs a full suite run, the minimum
   check was never written, or it was written too wide.
-- Add a gate every lap and never remove one. The loop is add-only by
-  construction, so the suite needs a stated ceiling and the occasional pruning
-  lap - otherwise "run the full gate before committing" grows into an hour per
-  lap and the queue becomes a batch. See
-  [references/gates.md](references/gates.md).
+- Write `./Run.sh gate` (the whole suite) as a row's Gate. That single habit
+  turns every lap into a full-suite run. The row's gate proves the row; the
+  suite runs before the push.
+- Skip a check on a belief. "I didn't touch that" is what lets regressions
+  through - a skip has to come from content identity, an impact tool, or a
+  declared ownership map, and it has to be recorded in the row so the pre-push
+  full run can falsify it. See [references/gates.md](references/gates.md).
+- Skip the pre-push full run. It is what makes every earlier skip affordable;
+  without it nothing was verified.
+- Delete a gate because the suite is slow. The gates are the accumulated record
+  of what this project learned; an agent making broad changes needs more of
+  that, not less. Shrink the run, not the suite.
 - Parallelise before narrowing. Cores do not fix a check that was always going
   to take minutes.
 

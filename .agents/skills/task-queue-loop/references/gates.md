@@ -75,7 +75,7 @@ often they run:
 | Question | did this row's change work? | is the row complete? | what does it look like? |
 | Answers with | pass / fail | pass / fail | the thing itself |
 | Scope | one file, one behaviour, one seed, one screen | the whole suite, the bands, the real pixels | one state |
-| Cadence | every iteration | once, before the commit | whenever a human wants to look |
+| Cadence | every iteration | once, before closing the row | whenever a human wants to look |
 | Budget | seconds | whatever it costs | one command |
 
 The repro is not a third check. It has no pass condition and proves nothing -
@@ -107,71 +107,115 @@ Four rules:
   too tight. Widen the minimum check in the same edit that fixes the code, so the
   next lap on this row does not pay the same price.
 
-Both go in the row, both with a condition:
+Both go in the row, both with a condition. **The row's Gate is the row's own
+proving command - not the whole suite.** The full suite is a separate, pre-push
+run; see [Three runs, not one](#three-runs-not-one).
 
 ```
 最小検証: `./Run.sh test --only=test_trade_routes` — 経路が 1 本以上、parts を含まない（~1s）
-Gate:     `./Run.sh gate` — 914 tests 緑・165 帯域緑・GATE_EXIT=0
+Gate:     `./Run.sh test --lane=rules` + `capture verify_trade verify_trade_03_routes`
+          — 経路行が差額順・2 行組、916 tests 緑（~40s）
 ```
 
-## Gate inflation, and the suite's budget
+Writing `./Run.sh gate` in a row's Gate column is the mistake that turns every
+lap into a full-suite run. The suite proves the project; the row's gate proves
+the row.
 
-This skill is **add-only by construction**: every row names a gate, and nothing
-in the lap ever removes one. Three hundred laps later the full gate is 900 tests
-and several minutes, the rule "run the full gate before committing" costs an hour
-per lap, and the queue has stopped being a loop - it is a batch. The add-only
-mechanism is the cause, so the counterweight has to be written down too.
+## Three runs, not one
 
-**Give the suite a stated ceiling**, in the rules file, as a number:
+The gates are not a cost to be trimmed. They are the accumulated record of what
+this project learned the hard way, and an agent making broad changes needs *more*
+of that, not less. Deleting a gate because it never goes red deletes the guard
+that lets the next broad change be safe - the quiet gate is the one doing its
+job.
 
-```
-フル Gate の予算: 3 分 / 1 回。超えたら、次の周は Gate を削る周にする。
-```
+So the thing to shrink is **the run, not the suite**. Three levels, each with its
+own trigger:
 
-Exceeding it is **a row**, not fate. File it like any other: what to prune, the
-minimum check that proves the suite still catches what matters, and the gate -
-the suite's own wall-clock, back under the ceiling.
+| Run | When | Scope | Budget |
+|---|---|---|---|
+| **最小検証** | every iteration | the row's own cheap check | seconds |
+| **行の Gate + 未検査ぶん** | before closing the row | the row's proving command, plus whatever the change could have affected and no green run covers | **~2 min, 1 for some people** |
+| **フル** | **before push only** | everything | as long as it takes |
 
-### What earns deletion
+The two-minute figure is the one that matters, because it is paid **every lap**.
+It is a threshold of human attention, not a technical budget: past a couple of
+minutes the person stops waiting, goes elsewhere, and the loop stops being a
+loop. Some people are out at one minute. Put the project's own number in its
+rules file rather than inheriting this one.
 
-- **A gate that has never gone red since it was written.** Ask once whether the
-  behaviour it guards can still change. If the code is gone or frozen, drop it;
-  if it is a live regression guard, a quiet gate is doing its job - keep it and
-  say so in the row so the question is not reopened every pruning lap.
-- **Duplicate coverage, not duplicate names.** Two gates asserting one invariant
-  from different angles: keep the one whose failure message locates the fault.
+The full run is deliberately exempt. It happens once per push, so ten minutes
+there costs almost nothing per lap - which is the whole reason for moving it to
+the push. **A budget on the rare run buys nothing; a budget on the per-lap run
+buys the loop.**
+
+The middle one is the change. Previously this skill said "full gate before the
+commit", which in a mature suite is the hour-per-lap problem by itself. A commit
+is cheap and local; a push is what other people and other machines see. **Put the
+expensive, complete run at the last moment before the work leaves the machine.**
+
+### Skipping what is already verified
+
+A gate whose covered area the change could not have touched, and which has a
+green run on exactly this content, does not need re-running. That is the lever
+with the most slack in it, and the most danger, so one rule governs it:
+
+**The skip must be derived, not asserted.** "I didn't touch that" is a belief,
+and it is precisely the belief that lets regressions through. Legitimate sources,
+strongest first:
+
+1. **Content identity.** The gate's inputs are byte-identical to the last green
+   run - hash the files it reads and the files it exercises. Nothing believed.
+2. **A tool that computes impact.** Test-impact analysis, coverage-derived
+   mapping, a dependency graph the build already maintains.
+3. **A declared ownership map.** Lanes written down in the rules file (`rules` /
+   `content` / `ui`), so the mapping is reviewable even though it is coarse.
+
+If none of the three exists, there is no skip - run the suite, and file a row for
+building one of them. An undeclared skip is not a faster test, it is an untested
+change.
+
+**Record what was skipped, in the row.** The skip is a claim, and the pre-push
+full run is what falsifies it. A wrong skip is then caught before the work leaves
+the machine, which is the entire reason the full run still exists.
+
+**Never skip into a push.** The full run is the backstop that makes every earlier
+skip affordable; skipping it too means nothing was ever verified.
+
+### What still earns deletion
+
+Cost is not a reason. Being wrong is:
+
 - **A gate pinned to a closed row's incidental numbers** rather than to the
-  invariant the row was about. The specifics usually should not outlive the row.
+  invariant the row was about. The specifics should not outlive the row.
 - **A gate on behaviour nothing can reach any more.** Delete the gate and the
   dead path in the same lap.
-- **Promote before deleting.** Often the same assertion survives on a cheaper
-  fixture. A slow gate made fast is strictly better than a slow gate removed.
+- **Duplicate coverage where one gate's failure does not locate the fault.**
+  Keep the one with the better failure message.
+- **Promote rather than delete.** The same assertion on a cheaper fixture is
+  strictly better than one fewer assertion. This is where the real wins are.
 
-Record a deletion in the archive with what it used to catch. Otherwise the next
-session re-adds it, and the suite ratchets.
+Archive a deletion with what it used to catch, or the next session re-adds it.
 
-### Why full gets run anyway
+### Why full gets reached for anyway
 
 Worth naming, because it is an incentive and not ignorance: **running everything
-is defensible without judgement.** Running the narrow check requires having
-chosen correctly and owning the risk, and if it later turns out the narrow choice
-missed something, that is on the chooser. Under that asymmetry, full is the
-rational move, and telling an agent "don't" does not change the arithmetic.
+is defensible without judgement.** Running a selected subset requires having
+chosen correctly and owning the risk. Under that asymmetry, full is rational, and
+telling an agent "don't" does not change the arithmetic.
 
-What changes it is making the narrow choice **citable**. The minimum check is
-written before the work, falsified, and recorded in the row - so "I ran the
-minimum check" points at a line someone agreed to, not at a guess made under
-time pressure. Without that record in the row, reaching for the full gate is
-correct behaviour and the fix belongs in the row, not in the agent.
+What changes it is making the selection **citable**: the minimum check written in
+the row before the work, the skip derived from one of the three sources above,
+and the full run guaranteed before push. Then the narrow choice points at a
+recorded decision with a backstop, not at a guess. Absent that, reaching for full
+is correct behaviour and the defect is in the row.
 
 ### Lap time is a number
 
 "Development is not progressing" is a complaint. **Minutes per lap** is a
-measurement, and it splits: gate run, re-render, a narrowing that missed and
-cost a second full run, waiting on a human. Measure it for a few laps before
-optimising - the fix is usually not where it feels like it is, and a suite
-ceiling you picked without measuring is the same invented number
-[the section above](#concrete-does-not-mean-invented) warns about.
+measurement, and it splits: gate run, re-render, a skip that turned out wrong and
+cost a full run anyway, waiting on a human. Measure a few laps before optimising;
+the cost is usually not where it feels like it is.
 
 ## Falsification: confirm the red first
 
