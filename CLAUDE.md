@@ -25,6 +25,8 @@ changelog を読む必要があり、それは user の判断。**自分の判�
 
 ## 検証の作法
 
+- **push は `bash scripts/push.sh` で行う**（branch なら `--merge`）。素の `git push` は使わない。
+  外に出す前の関門 `scripts/check.sh` を必ず通し、検査した内容と push する内容を一致させる
 - shell / lua の検査は `bash scripts/lint.sh`
 - skill inventory の drift は `bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check`
 - セキュリティ監査は、**外部ツールを導入せず**この repository 内の読めるコマンドで行う。
