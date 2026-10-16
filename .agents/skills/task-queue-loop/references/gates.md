@@ -114,6 +114,65 @@ Both go in the row, both with a condition:
 Gate:     `./Run.sh gate` — 914 tests 緑・165 帯域緑・GATE_EXIT=0
 ```
 
+## Gate inflation, and the suite's budget
+
+This skill is **add-only by construction**: every row names a gate, and nothing
+in the lap ever removes one. Three hundred laps later the full gate is 900 tests
+and several minutes, the rule "run the full gate before committing" costs an hour
+per lap, and the queue has stopped being a loop - it is a batch. The add-only
+mechanism is the cause, so the counterweight has to be written down too.
+
+**Give the suite a stated ceiling**, in the rules file, as a number:
+
+```
+フル Gate の予算: 3 分 / 1 回。超えたら、次の周は Gate を削る周にする。
+```
+
+Exceeding it is **a row**, not fate. File it like any other: what to prune, the
+minimum check that proves the suite still catches what matters, and the gate -
+the suite's own wall-clock, back under the ceiling.
+
+### What earns deletion
+
+- **A gate that has never gone red since it was written.** Ask once whether the
+  behaviour it guards can still change. If the code is gone or frozen, drop it;
+  if it is a live regression guard, a quiet gate is doing its job - keep it and
+  say so in the row so the question is not reopened every pruning lap.
+- **Duplicate coverage, not duplicate names.** Two gates asserting one invariant
+  from different angles: keep the one whose failure message locates the fault.
+- **A gate pinned to a closed row's incidental numbers** rather than to the
+  invariant the row was about. The specifics usually should not outlive the row.
+- **A gate on behaviour nothing can reach any more.** Delete the gate and the
+  dead path in the same lap.
+- **Promote before deleting.** Often the same assertion survives on a cheaper
+  fixture. A slow gate made fast is strictly better than a slow gate removed.
+
+Record a deletion in the archive with what it used to catch. Otherwise the next
+session re-adds it, and the suite ratchets.
+
+### Why full gets run anyway
+
+Worth naming, because it is an incentive and not ignorance: **running everything
+is defensible without judgement.** Running the narrow check requires having
+chosen correctly and owning the risk, and if it later turns out the narrow choice
+missed something, that is on the chooser. Under that asymmetry, full is the
+rational move, and telling an agent "don't" does not change the arithmetic.
+
+What changes it is making the narrow choice **citable**. The minimum check is
+written before the work, falsified, and recorded in the row - so "I ran the
+minimum check" points at a line someone agreed to, not at a guess made under
+time pressure. Without that record in the row, reaching for the full gate is
+correct behaviour and the fix belongs in the row, not in the agent.
+
+### Lap time is a number
+
+"Development is not progressing" is a complaint. **Minutes per lap** is a
+measurement, and it splits: gate run, re-render, a narrowing that missed and
+cost a second full run, waiting on a human. Measure it for a few laps before
+optimising - the fix is usually not where it feels like it is, and a suite
+ceiling you picked without measuring is the same invented number
+[the section above](#concrete-does-not-mean-invented) warns about.
+
 ## Falsification: confirm the red first
 
 **Run the gate before the fix and watch it fail.** A gate that is green before
