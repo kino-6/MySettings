@@ -131,6 +131,11 @@ the verdict contract, and how to make the step mechanical rather than remembered
   a task - park it as a note until it can be.
 - Iterate on the full gate. If every edit costs a full suite run, the minimum
   check was never written, or it was written too wide.
+- Add a gate every lap and never remove one. The loop is add-only by
+  construction, so the suite needs a stated ceiling and the occasional pruning
+  lap - otherwise "run the full gate before committing" grows into an hour per
+  lap and the queue becomes a batch. See
+  [references/gates.md](references/gates.md).
 - Parallelise before narrowing. Cores do not fix a check that was always going
   to take minutes.
 
