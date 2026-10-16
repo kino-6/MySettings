@@ -2,14 +2,12 @@
 
 This is the project-local Codex guidance for this dotfiles repository.
 
-## Model Recommendations
+## Model
 
-| Task Type | Recommended Model |
-|-----------|------------------|
-| Routine coding, tests, formatting | GPT 5.4 |
-| Complex features, architecture | GPT 5.4 |
-| Debugging, refactoring | GPT 5.4 |
-| Security review | GPT 5.4 |
+The model is set in `~/.codex/config.toml` (`model = ...`), which is the only
+place it lives. This file used to restate it as a table of four rows that all
+named the same model, and it had drifted to a model no longer in use - a second
+reader of one question, going stale exactly as such copies do.
 
 ## Skills Discovery
 
