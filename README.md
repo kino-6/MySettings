@@ -459,6 +459,8 @@ python3 .agents/skills/repo-preflight/scripts/preflight.py --history  # 全 comm
 検出した値は先頭 4 文字と長さだけ表示します（報告から会話ログへ再流出させないため）。標準ライブラリだけで、通信もしません。`gitleaks` / `trufflehog` の方が対応形式は広いですが、導入はユーザの判断です。
 
 
+## 応答の作法（progress-contract）
+
 「黙って裏で数分やって回答が来る。酷い時は 1 時間続けて、その合間に返す」という指摘（2026-10-16）を汎化した skill です。**問題は作業量ではなく、作業中に何も返らないこと** —— 十分やってから答えるのは、遅いのではなく「居ない」。
 
 `observable-development-loop` と対になります。あちらは **agent が自分の出力を見る**側、こちらは **人が agent を見る**側です。
