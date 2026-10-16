@@ -1,7 +1,7 @@
 # Codex Skills Inventory
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-10-07 JST
+Updated: 2026-10-16 JST
 
 Latest audit: [2026-09-14 Local / MySettings stocktake](2026-09-14-astra-stocktake.md)
 and [complete structural inventory](2026-09-14-skill-scan.tsv). That scan found
@@ -18,13 +18,13 @@ current mirror state. No skill synchronization was performed in the new audit.
 
 ## Merge Summary
 
-- Local user skills found: 94
-- Repository skills found: 94
-- Missing local user skills in repository: 1 (`sprite-gen`)
+- Local user skills found: 98
+- Repository skills found: 95
+- Missing local user skills in repository: 4 (`sprite-gen`, `illustration-to-rigged-avatar-parts`, `image-to-3d-avatar-triage`, `rigged-anime-avatar-base`)
 - Same-name content differences: 1
 - Local Codex system skills found under `~/.codex/skills/.system`: 5
 
-One non-system local skill is not in this repository: `sprite-gen` (Apache-2.0, appeared in `~/.codex/skills` on 2026-09-12 from another session; it is a full package with `pyproject.toml`, `scripts/`, and `tests/`, so vendoring it is a deliberate decision that has not been made yet). ECC upstream Codex skills from `affaan-m/ECC` were added in add-only mode on 2026-06-13.
+Four non-system local skills are not in this repository. `illustration-to-rigged-avatar-parts`, `image-to-3d-avatar-triage` and `rigged-anime-avatar-base` appeared in `~/.codex/skills` on 2026-10-16 from another session - in-progress VRM/avatar work in Codex, deliberately left there rather than vendored. `sprite-gen` (Apache-2.0, appeared in `~/.codex/skills` on 2026-09-12 from another session; it is a full package with `pyproject.toml`, `scripts/`, and `tests/`, so vendoring it is a deliberate decision that has not been made yet). ECC upstream Codex skills from `affaan-m/ECC` were added in add-only mode on 2026-06-13.
 
 `hirokita117/yaml-to-html-skill` was added in add-only mode on 2026-06-18. It contributes `generate-explainer-yaml` and `generate-explainer-html`, both kept as project-local skills under `.agents/skills/`; the upstream MIT license is copied into each imported skill directory.
 
@@ -59,6 +59,8 @@ On 2026-09-21 the skill gained two on-demand sub-skills, deliberately kept insid
 The first run paid for itself. `mattpocock/skills` had **renamed `CONTEXT.md` to `GLOSSARY.md`** (and `CONTEXT-FORMAT.md` to `GLOSSARY-FORMAT.md`) between the 2026-09-02 import and 2026-10-07, so the local `domain-modeling` copy was teaching a filename upstream had abandoned - silently, with no signal. The three mattpocock skills were re-vendored at `6fd94792` and this repository's own references were updated to match. Note that `~/work/little-reef/CONTEXT.md` is a real glossary in this skill's format and was **not** renamed: it belongs to that project, and the updated skill will look for `GLOSSARY.md` there.
 
 Pre-existing imports (ECC, Addy pack, yaml-to-html-skill) have no `provenance.json`: the revision they were taken from was never recorded and guessing one would be worse than an honest gap. They get a manifest the next time they are deliberately re-vendored.
+
+`progress-contract` was added on 2026-10-16 from a user report that recent models "黙って裏で数分やって回答が来る" and occasionally work for an hour while answering only in the gaps. It is the mirror of `observable-development-loop`: that skill owns the agent seeing its own output, this one owns the person seeing the agent. It carries narration thresholds (including a row whose correct answer is silence, because a line per tool call trains the reader to skip all of them), the handling of a message that bundles several requests, per-item reporting, and `templates/response-cadence.md` for installation into an always-loaded instruction file. Its `references/collected-practice.md` counts the specific failures out of the attached transcript. Deliberately not held in the skill body alone: cadence must apply on turns that trigger no skill, and the repository the report came from had no instruction surface at all, so the missing piece was a place to put rules rather than the rules. This repo's instance is `settings/common/.claude/CLAUDE.md`, deployed to `~/.claude/CLAUDE.md` by the existing `deploy_tree`.
 
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 

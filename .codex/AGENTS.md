@@ -46,6 +46,7 @@ Available skills:
 - product-capability — Product capability definition and delivery framing
 - ecc-task-workflow — Lightweight structured task context for broad or multi-session work
 - task-queue-loop — Operate a repository's active Tasks.md queue as an audited work loop; templates and gate audit included
+- progress-contract — What an agent owes the person waiting: narration thresholds, bundled requests, per-item reporting; installable cadence template
   - `references/runtime-contract.md` — Single launch entry point, shadow tree, headless agent lanes that never take focus, capture, seeds, version stamping, gated recording
   - `references/trouble-registry.md` — Generalise repeated failures into counted types; automatic appending, classification enforced by a commit block
 - ecc-final-check — Final diff/scope/verification review before substantial work is summarized

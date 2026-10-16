@@ -61,6 +61,7 @@ Use these when the task matches the trigger:
 | Tool-using AI agent harness design | `agent-harness-design` |
 | Broad, risky, multi-file, or multi-session repo work | `ecc-task-workflow`, `ecc-final-check`, `ecc-finish-work` |
 | A repo keeps an active `Tasks.md` / `TASKS.md` queue, or one should be installed | `task-queue-loop` |
+| An agent goes quiet during long work, a multi-request message gets one late answer, or cadence rules should be installed | `progress-contract` |
 | Launcher/entry-point design, agent runs stealing window focus, headless capture, seed and build stamping, gated recording | `task-queue-loop` (`references/runtime-contract.md`) |
 | The same class of mistake keeps recurring; a lessons/trouble file needs generalising into enforced types | `task-queue-loop` (`references/trouble-registry.md`), `continuous-learning-v2` |
 | Reclassifying skills, commands, rules, hooks, or extras into daily/conditional/library buckets | `agent-sort` |
