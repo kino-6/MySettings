@@ -1,6 +1,7 @@
 venvs are in ~/.local/pipx/venvs
 apps are exposed on your $PATH at ~/.local/bin
 manual pages are exposed at ~/.local/share/man
-   package numpy 2.4.6, installed using Python 3.13.0
+shell completions are exposed at ~/.local/share
+   package numpy 2.5.4, installed using Python 3.13.0
     - f2py
     - numpy-config
