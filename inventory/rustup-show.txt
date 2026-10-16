@@ -1,5 +1,5 @@
 Default host: aarch64-apple-darwin
-rustup home:  /Users/kinoshitayuki/.rustup
+rustup home:  ~/.rustup
 
 installed toolchains
 --------------------

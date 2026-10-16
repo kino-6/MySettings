@@ -104,6 +104,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 | `frontend-ui-engineering` | Production-quality UI layout, visual hierarchy, interaction states, responsiveness, or design-system fit is needed. |
 | `security-and-hardening` | Designing or implementing sensitive behavior with untrusted input, auth, storage, secrets, or external integrations. |
 | `security-review` | Reviewing or auditing changes for vulnerabilities, secrets, auth gaps, injection risks, or missing security tests. |
+| `repo-preflight` | A repository is about to go public, get a new remote, or be shared, or the user asks whether anything sensitive is committed. Distinct from `security-review`: this is about what the repo contains, not whether the code is safe. |
 | `performance-optimization` | Performance requirements, regressions, Core Web Vitals, or profiling are relevant. |
 | `ci-cd-and-automation` | CI/CD pipelines, quality gates, or deployment automation are being set up or changed. |
 | `observability-and-instrumentation` | Logging, metrics, tracing, or production diagnosability are needed. |
