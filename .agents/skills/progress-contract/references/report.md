@@ -1,0 +1,99 @@
+# The report itself
+
+The cadence rules cover what is owed *during* the work. This covers the message
+that ends it - the one the person actually has to read.
+
+**A report's job is to lower the reader's load.** Measure it by how fast the
+reader gets what they need, not by how much was written. AI-written reports are
+widely found long and hard to read; the person ends up doing the summarising the
+agent should have done.
+
+## Where this came from
+
+Two local repositories had already paid for it, independently:
+
+- `steering-health-intelligence/.claude/skills/report` - written after "使えない
+  新人と会話しているようだ". Conclusion first (BLUF / Minto), outcome not activity,
+  body within ten lines, file and script names last.
+- `cdda-musou/.claude/skills/report` - written after "作業報告じゃなくて、
+  マイルストーンに対して、簡潔に報告するようにしてほしい". "4 行で足りる"; the work
+  list only when asked; corrections in one or two sentences without excuses.
+
+The lesson that decides the design is steering's: **"この Skill は既に存在して
+いたのに守れなかったので、型を機械で検査する形にした."** The skill alone was not
+followed. Hence the optional Stop hook below.
+
+Measured on this skill's own author before writing it - 35 end-of-turn reports in
+one session: median 1,071 characters (p90 2,150), median 3 headings, **median 11
+bold spans** (max 24), 14 of 35 over 1,200 characters, 2 written in English to a
+user writing Japanese. Bold was the worst offender, and neither source skill
+mentions it.
+
+## Rules
+
+1. **Answer in the first one or two sentences** - what happened, in the reader's
+   terms. Not the order you did things in.
+2. **A list of what you did is not a report.** Checks that passed are the
+   expectation, not news; "lint ok, links ok, mirrors synced" is noise. Report
+   what failed, what changed, and what needs a decision.
+3. **Short by default.** Around ten lines of body for routine work. Longer only
+   when the person asked for detail, or a decision genuinely needs it.
+4. **Structure only when it earns it.** A table for three or more parallel items
+   of the same kind; a heading only when sections would otherwise run together;
+   bold on the one or two things that must not be missed. When everything is
+   bold, nothing is.
+5. **Plumbing last, one line** - commit, branch, file paths.
+6. **Corrections in one or two sentences**, at the top only if they change a
+   decision. No apology, no account of how the mistake happened.
+7. **At most one question, at the end**, and only if it blocks.
+8. **Write in the person's language.** Switching mid-session is a defect.
+9. **No coined terms.** A label you invented this session means nothing to the
+   reader; say the thing.
+
+Mid-work status lines (the cadence rules) are not reports. They are one line
+each. The report comes once, when the work is done.
+
+## A default shape
+
+For substantial work, not for a quick answer:
+
+```
+<1-2 sentences: what is now true>
+<only if needed: the one decision the person has to make>
+<only if needed: 2-3 lines of grounds>
+<last line: commit / files>
+```
+
+If it does not fit, the work probably has not converged yet - that is worth
+saying instead of writing around it.
+
+## The mechanical check
+
+`scripts/report_check.py` is a Claude Code `Stop` hook. It reads the turn's
+final message (`last_assistant_message`) and, when the message is long and
+over-structured, sends **one** revision request back as `additionalContext`.
+It checks only what can be checked with high precision: length, heading count,
+bold count, and language. It does not judge whether the answer comes first;
+that stays with the rules above.
+
+It is one-shot by construction: when `stop_hook_active` is true the agent is
+already revising because of a stop hook, and the check lets it stop whatever
+the result. Claude Code also caps consecutive stop-hook continuations at eight.
+
+Each trigger costs one extra model turn, so thresholds are set to catch the
+egregious reports, not the median one. Tune with environment variables:
+`REPORT_MAX_CHARS` (1500), `REPORT_MAX_HEADINGS` (4), `REPORT_MAX_BOLD` (6),
+`REPORT_LANG` (`ja`; set empty to disable the language check).
+
+Install in `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {"hooks": [{"type": "command",
+                  "command": "python3 ~/.claude/skills/progress-contract/scripts/report_check.py"}]}
+    ]
+  }
+}
+```
