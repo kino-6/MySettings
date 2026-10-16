@@ -1,14 +1,17 @@
+blackhole-2ch
 brave-browser
 codex
 font-blex-mono-nerd-font
 font-fira-code
 ghostty
+godot
 google-chrome
 iterm2
 kiro
 microsoft-auto-update
 microsoft-teams
 obsidian
+realvnc-connect-viewer
 slack
 sonic-visualiser
 tuxguitar
