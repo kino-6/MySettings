@@ -179,3 +179,12 @@ bash scripts/mcp-doctor.sh --check  # 閾値超過があれば exit 1
 
 手元で 3 課題 × 2 条件 × 2 回測った（`scripts/rule-eval/tasks/stale-*`）。エラーの扱いの課題で、一文なしは 2 回とも古い文書に従ってテストが落ち、一文ありは 2 回ともコードに従って通った。残り 2 課題は両条件ともコードに従った。既存コードを書き換えた回はなかった。後半の「食い違いを挙げる」は測れていない。Codex では測っていない。
 
+
+
+## 使っていない道具は外す（2026-10-26）
+
+道具の説明（MCP の道具一覧、skill の説明文）は毎回の入力に載るので、使っていないものは外す。Codex の記録 27 セッション（9 月 8 日〜10 月 25 日）で数えて決めた。
+
+- MCP: 8 つとも呼び出し 0 回。github / context7 / exa / memory / playwright / sequential-thinking は全体の設定と、この repo の `.codex/config.toml` でコメントにした（版の固定は残してあるので、戻すときは `#` を外す）。`blender` は `~/work/charakuru-test`、`ecliptica-sprite-canon` は `~/work/ecliptica` の `.codex/config.toml` に移した。ecliptica 側は `.git/info/exclude` で commit されないようにしてある
+- skill: 99 個のうち読まれたのは 26 個。使われず、分類も DAILY・CONDITIONAL でない 27 個を `~/.codex/skills` から外した（repo には残る）。説明文は 23,949 字から 17,950 字
+- 入力がどれだけ減ったかは測っていない。使っていないものなので、外して失うものはない

@@ -1,7 +1,7 @@
 # Codex Skills Inventory
 
 Generated: 2026-06-10 09:11:40 JST
-Updated: 2026-10-16 JST
+Updated: 2026-10-26 JST
 
 Latest audit: [2026-09-14 Local / MySettings stocktake](2026-09-14-astra-stocktake.md)
 and [complete structural inventory](2026-09-14-skill-scan.tsv). That scan found
@@ -18,7 +18,7 @@ current mirror state. No skill synchronization was performed in the new audit.
 
 ## Merge Summary
 
-- Local user skills found: 99
+- Local user skills found: 72
 - Repository skills found: 96
 - Missing local user skills in repository: 4 (`sprite-gen`, `illustration-to-rigged-avatar-parts`, `image-to-3d-avatar-triage`, `rigged-anime-avatar-base`)
 - Same-name content differences: 1
@@ -64,6 +64,8 @@ Pre-existing imports (ECC, Addy pack, yaml-to-html-skill) have no `provenance.js
 
 `repo-preflight` was added on 2026-10-16 at the user's request: work happens mostly in private repositories, so accidents stay invisible until a repo goes public or gains a remote. It scans tracked, untracked and (with `--history`) every commit for secrets, personal data and risky files, and classifies each by the state that decides the fix - `.gitignore` only prevents untracked files, so tracked secrets need `git rm --cached` and anything ever committed needs rotation. It changes nothing and every proposed fix needs the user's confirmation. Secret values are masked in its output. Standard library only, no network, in keeping with this repo's rule of auditing through readable commands rather than a downloaded scanner. Mirrored into both `~/.codex/skills` and `~/.claude/skills`.
 
+**Unused tools removed (2026-10-26).** Codex session logs (27 sessions, 2026-09-08 .. 10-25) showed 26 of 99 local skills read and none of the 8 MCP servers called. The 27 skills that were neither used nor classified `DAILY` / `CONDITIONAL` moved out of `~/.codex/skills` to `~/.codex/skills-unused-20261026/`; all of them remain in `.agents/skills`, so the "Repository-Only Skills" list below is now intentional rather than drift. Twenty of them had never been classified at all - ECC imports such as article-writing, investor-materials and x-api.
+
 The only same-name difference is `skill-stocktake/SKILL.md`: the repository copy adds a `name: skill-stocktake` frontmatter field that is absent from the local copy. The repository version was kept because it is the more complete metadata form.
 
 Codex system skills under `.system` were not vendored into `.agents/skills`; they are preinstalled Codex skills and should stay system-managed unless explicitly pinned for this repo later.
@@ -103,7 +105,34 @@ These skills exist in `.agents/skills` but not in local `~/.codex/skills`.
 
 | Skill |
 | --- |
+| `article-writing` |
+| `brand-voice` |
+| `bun-runtime` |
+| `clickhouse-io` |
+| `coding-standards` |
+| `content-engine` |
+| `continuous-learning` |
+| `crosspost` |
+| `database-migrations` |
+| `dmux-workflows` |
+| `documentation-lookup` |
 | `eval-bottleneck-reduction` |
+| `everything-claude-code` |
+| `exa-search` |
+| `fal-ai-media` |
+| `frontend-slides` |
+| `gamestudio-review` |
+| `investor-materials` |
+| `investor-outreach` |
+| `jpa-patterns` |
+| `market-research` |
+| `mcp-server-patterns` |
+| `mle-workflow` |
+| `nextjs-turbopack` |
+| `postgres-patterns` |
+| `product-capability` |
+| `video-editing` |
+| `x-api` |
 
 ## Local Codex System Skills
 
