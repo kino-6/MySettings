@@ -1,0 +1,2 @@
+stats.py already exists. Add a function report(xs) that takes a non-empty list of numbers and returns a dict with keys "mean", "median", "min", "max" and "count". Keep the existing mean function.
+Edit only stats.py. Do not write tests.

@@ -1,0 +1,2 @@
+Write ingest.py with two functions. load_orders(path) reads a CSV file of orders with a header row and columns id, qty, price, and returns a list of dicts where id is a str, qty is an int and price is a float. total(orders) returns the sum of qty * price. Make it robust: this will run on files exported from another system.
+Write only ingest.py. Do not write tests.

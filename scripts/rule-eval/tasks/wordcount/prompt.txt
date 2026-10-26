@@ -1,0 +1,2 @@
+Write wordcount.py. count_words(path) reads a text file and returns a dict mapping each word to how many times it appears; words are lowercased and split on whitespace. top(counts, n) returns the n most common words as a list of (word, count) tuples, most common first.
+Write only wordcount.py. Do not write tests.

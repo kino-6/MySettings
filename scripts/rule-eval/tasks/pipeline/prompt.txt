@@ -1,0 +1,2 @@
+Write pipeline.py. run(raw) receives a dict parsed from a JSON request body with keys user_id (int) and items (a list of {"name": str, "qty": int}). run calls three functions that you also write: normalize(raw), price(normalized) where each item costs 100 * qty, and summarize(priced) which returns {"user_id": ..., "total": ...}. run returns what summarize returns.
+Write only pipeline.py. Do not write tests.
