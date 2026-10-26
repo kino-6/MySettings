@@ -72,3 +72,4 @@
 4. keep functions whole unless splitting makes them reused or easier to read.
 5. cut any label or explainer text the UI doesn't need, and if it breaks without them, fix the layout.
 6. keep docstrings on public functions.
+7. When a repository's documentation and its existing code disagree, follow the conventions used in the existing code, and in your final reply point out each inconsistency you found between the documentation and the code.

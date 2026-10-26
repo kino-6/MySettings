@@ -173,3 +173,9 @@ bash scripts/mcp-doctor.sh --check  # 閾値超過があれば exit 1
 
 実験の一式は [scripts/rule-eval/](../scripts/rule-eval/README.md) にある。次に規則を試すときは `candidate.md` を書き換えて回す。
 
+## 古い指示ファイルとコードが食い違うとき
+
+`~/.claude/CLAUDE.md` の 7 と `~/.codex/AGENTS.md` の「Docs vs code」は、arXiv:2610.30571 が勧める一文。指示ファイルの記述がコードと食い違うと、agent は古い記述に従いやすいという報告。
+
+手元で 3 課題 × 2 条件 × 2 回測った（`scripts/rule-eval/tasks/stale-*`）。エラーの扱いの課題で、一文なしは 2 回とも古い文書に従ってテストが落ち、一文ありは 2 回ともコードに従って通った。残り 2 課題は両条件ともコードに従った。既存コードを書き換えた回はなかった。後半の「食い違いを挙げる」は測れていない。Codex では測っていない。
+
