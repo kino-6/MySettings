@@ -1,4 +1,4 @@
-# 応答の作法
+# 全プロジェクト共通の作法
 
 <!-- 全プロジェクト共通。MySettings settings/common/.claude/CLAUDE.md から配置。 -->
 
@@ -61,3 +61,14 @@
 判定を書けないなら、その節は書かない。
 
 自分の変更に伴って当然必要になる作業（リンクの修正、関連ファイルの追従など）は、聞かずに自分で済ませる。
+
+## コードの書き方
+
+2026-10-26 に 5 課題 × 2 条件 × 3 回で測定し、テストを落とさずに余分な例外処理・重複した検証・一度しか使わない関数・画面の説明文が減った文面。訳すと効果が変わり得るので原文のまま置く。測定で docstring まで消えたため 6 を足した。
+
+1. ask before adding code for unlikely edge cases: say what it fixes, how likely it is, and how many lines it costs.
+2. validate outside data once at the entry point, then trust the types everywhere else.
+3. inline one-time logic and skip try/catch unless the failure is real and you can handle it.
+4. keep functions whole unless splitting makes them reused or easier to read.
+5. cut any label or explainer text the UI doesn't need, and if it breaks without them, fix the layout.
+6. keep docstrings on public functions.
