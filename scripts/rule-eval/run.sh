@@ -13,7 +13,9 @@ cd "$d" || exit 1
 [[ -d "$T/seed" ]] && cp "$T/seed/"* .
 # A task may ship its own CLAUDE.md in seed/; the candidate is appended to it.
 [[ "$arm" == rules ]] && cat "$E/candidate.md" >>CLAUDE.md
-claude -p "$(cat "$T/prompt.txt")" --allowedTools Read Write Edit --permission-mode acceptEdits \
+# The user-level Stop hook would add a Japanese rewrite turn to every run and
+# skew time and cost, so its language check is switched off here.
+REPORT_LANG="" claude -p "$(cat "$T/prompt.txt")" --allowedTools Read Write Edit --permission-mode acceptEdits \
   --output-format json >agent.json 2>agent.err
 cp "$T/test_hidden.py" .
 python3 - "$d" "$T" "$E" "$task" "$arm" "$rep" <<'PY'

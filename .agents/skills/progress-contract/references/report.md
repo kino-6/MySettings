@@ -106,3 +106,20 @@ Install in `~/.claude/settings.json`:
   }
 }
 ```
+
+## Installed (2026-10-27): language check only
+
+After the language rule was loaded, 5 of 28 replies of 100+ characters were still
+in English and the user had to ask for Japanese three times. The other checks
+were no longer firing much, so the hook is installed with `REPORT_CHECKS=lang`:
+
+```
+REPORT_CHECKS=lang python3 ~/.claude/skills/progress-contract/scripts/report_check.py
+```
+
+It sees only `last_assistant_message`, so mid-work status lines are untouched -
+the user reads only the final reply. Verified end to end with `claude -p`: the hook
+fired (30 ms) and its feedback reached the model. That test asked for English
+explicitly, and the model rightly kept English; the feedback now says so.
+`scripts/rule-eval/run.sh` sets `REPORT_LANG=""` so measurements are not skewed.
+
