@@ -17,6 +17,16 @@ The goal is to keep the always-on surface small while preserving access to speci
 
 `LIBRARY` never means delete. It means searchable and selective.
 
+## What gets loaded everywhere
+
+`~/.codex/skills` is loaded into every Codex session, descriptions included, so it
+holds only skills that were actually used or are classified `DAILY` /
+`CONDITIONAL`. `LIBRARY` and unclassified skills stay in `.agents/skills` only,
+where they are available when working in this repository. Measured 2026-10-26:
+26 of 99 skills were read across 27 sessions; 27 unused ones moved to
+`~/.codex/skills-unused-20261026/`, cutting the loaded descriptions from 23,949
+to 17,950 characters.
+
 ## Metadata Policy
 
 `agents/openai.yaml` is optional by default. Add or maintain it when a skill is

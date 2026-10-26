@@ -68,12 +68,17 @@ pinned="$(
     | grep -oE '"(@[a-z0-9._-]+/)?[a-z0-9._-]+@[0-9][0-9A-Za-z.+-]*"' \
     | tr -d '"' \
     | sort -u
-)"
+)" || true # no match is a valid state (all servers disabled); pipefail must not end the run
 
 if [[ -z "$pinned" ]]; then
-  echo "No pinned MCP packages found in $config."
-  echo "Every npx entry is unpinned - that is the condition this script exists to prevent."
-  exit 1
+  # No active npx entry at all is fine (servers can be disabled); an active one
+  # without a version pin is the condition this script exists to prevent.
+  if grep -qE '^command = "npx"' "$config"; then
+    echo "Active npx MCP entries in $config are unpinned."
+    exit 1
+  fi
+  echo "No npx MCP servers enabled in $config; nothing to check."
+  exit 0
 fi
 
 epoch_of() { # ISO8601 -> epoch seconds, portable between BSD and GNU date
