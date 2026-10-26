@@ -1,6 +1,6 @@
 ~/.nodebrew/node/v24.5.0/lib
-├── @anthropic-ai/claude-code@2.1.300
+├── @anthropic-ai/claude-code@2.1.310
 ├── @vscode/vsce@4.0.0
 ├── corepack@0.34.7
 ├── ecc-universal@2.2.3
-└── npm@11.21.0
+└── npm@11.21.1
