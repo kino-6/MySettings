@@ -41,17 +41,20 @@ def measure(text: str) -> dict:
 
 
 def problems(m: dict, env=os.environ) -> list[str]:
+    # REPORT_CHECKS picks which checks run (comma list of length, headings,
+    # dash, dewanaku, lang). Default: all of them.
+    on = set((env.get("REPORT_CHECKS") or "length,headings,dash,dewanaku,lang").split(","))
     out = []
     max_chars = int(env.get("REPORT_MAX_CHARS", 1500))
-    if m["chars"] > max_chars:
+    if "length" in on and m["chars"] > max_chars:
         out.append(f"長い（{m['chars']} 字。目安 {max_chars} 字）")
-    if m["headings"] > int(env.get("REPORT_MAX_HEADINGS", 4)):
+    if "headings" in on and m["headings"] > int(env.get("REPORT_MAX_HEADINGS", 4)):
         out.append(f"見出しが多い（{m['headings']} 個）")
-    if m["dash"] > int(env.get("REPORT_MAX_DASH", 1)):
+    if "dash" in on and m["dash"] > int(env.get("REPORT_MAX_DASH", 1)):
         out.append(f"「——」での挿入（{m['dash']} 箇所。平易な文に直す）")
-    if m["dewanaku"] > int(env.get("REPORT_MAX_DEWANAKU", 2)):
+    if "dewanaku" in on and m["dewanaku"] > int(env.get("REPORT_MAX_DEWANAKU", 2)):
         out.append(f"「ではなく」の繰り返し（{m['dewanaku']} 回）")
-    if env.get("REPORT_LANG", "ja") == "ja" and m["chars"] > 100 and m["ja_ratio"] < 0.3:
+    if "lang" in on and env.get("REPORT_LANG", "ja") == "ja" and m["chars"] > 100 and m["ja_ratio"] < 0.3:
         out.append("日本語で書かれていない")
     return out
 
@@ -98,7 +101,7 @@ def main() -> int:
         "直前の報告を読み手の負担が減る形に直してください: " + " / ".join(found) + "。"
         "最初の 1〜2 文で答え、通った検査や作業の一覧は削り、commit やファイル名は最後に 1 行。"
         "倒置・対句・体言止め・「——」での挿入を使わず、平易な日本語で。"
-        "依頼が詳しさを求めていたなら、そのままでかまいません（再検査はしません）。"
+        "依頼が詳しさや英語を求めていたなら、そのままでかまいません（再検査はしません）。"
     )
     print(json.dumps({"hookSpecificOutput": {"hookEventName": "Stop", "additionalContext": reason}},
                      ensure_ascii=False))
