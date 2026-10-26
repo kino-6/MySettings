@@ -1,0 +1,2 @@
+Write form.html: a single page with a form to create a user account. It needs an email field, a password field and a submit button. Plain HTML with minimal CSS, no JavaScript.
+Write only form.html.

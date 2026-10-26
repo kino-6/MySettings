@@ -1,0 +1,1 @@
+{"file":"pipeline.py","public":["run","normalize","price","summarize"],"entry":["run","normalize"],"lang":"py"}

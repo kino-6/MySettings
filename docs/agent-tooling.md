@@ -171,3 +171,5 @@ bash scripts/mcp-doctor.sh --check  # 閾値超過があれば exit 1
 - 測れていないこと: テストは正常な入力だけを見ている。規則 1 の「足す前に聞く」は、人のいない実行では確かめられない
 - 元の規則 6（「良くなるなら出す」）は判断を変えないので入れていない。この repo では Gate と push 前の検査がその役を持つ
 
+実験の一式は [scripts/rule-eval/](../scripts/rule-eval/README.md) にある。次に規則を試すときは `candidate.md` を書き換えて回す。
+
