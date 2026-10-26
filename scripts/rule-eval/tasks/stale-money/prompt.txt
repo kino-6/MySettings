@@ -1,0 +1,2 @@
+Add a function to orders.py that takes items and a percentage and returns the order total after that discount.
+Edit only orders.py. Do not write tests.

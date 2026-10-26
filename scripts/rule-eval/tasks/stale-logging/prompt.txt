@@ -1,0 +1,2 @@
+Add a function export(records, path) to sync.py that writes each record on its own line to path and returns how many were written. Warn when records is empty.
+Edit only sync.py. Do not write tests.
