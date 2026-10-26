@@ -11,7 +11,8 @@ rm -rf "$d"
 mkdir -p "$d"
 cd "$d" || exit 1
 [[ -d "$T/seed" ]] && cp "$T/seed/"* .
-[[ "$arm" == rules ]] && cp "$E/candidate.md" CLAUDE.md
+# A task may ship its own CLAUDE.md in seed/; the candidate is appended to it.
+[[ "$arm" == rules ]] && cat "$E/candidate.md" >>CLAUDE.md
 claude -p "$(cat "$T/prompt.txt")" --allowedTools Read Write Edit --permission-mode acceptEdits \
   --output-format json >agent.json 2>agent.err
 cp "$T/test_hidden.py" .
@@ -29,5 +30,8 @@ if os.path.exists(f):
     out |= json.loads(subprocess.run(["python3", f"{E}/runtests.py"], cwd=d, capture_output=True, text=True).stdout or "{}")
 else:
     out["error"] = "file not written"
+if os.path.exists(f"{T}/check.py"):
+    r = subprocess.run(["python3", f"{T}/check.py"], cwd=d, capture_output=True, text=True)
+    out |= json.loads(r.stdout or "{}")
 print(json.dumps(out, ensure_ascii=False))
 PY
