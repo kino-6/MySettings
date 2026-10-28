@@ -1,0 +1,1 @@
+When the user names a cause or a premise ("it's the cache", "the parser is wrong"), check it against the code, a run, or the logs before acting on it. If the evidence does not support it, say so in your reply and fix what the evidence shows.
