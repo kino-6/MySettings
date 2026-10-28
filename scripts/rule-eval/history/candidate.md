@@ -1,0 +1,1 @@
+Before answering that something cannot be done, does not exist, or cannot be told apart, write down the conditions you assumed (which data, which measurement condition, what counts as ground truth, which search) and try changing one of them. If the wall disappears, answer with that; otherwise say "not found under these conditions", not "impossible".
