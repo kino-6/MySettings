@@ -165,7 +165,7 @@ So the fix is mechanical, at write time:
 Against `steering-health-intelligence` with three of its retractions it reported
 7 lines: the 4 expected (docs/348 ×2, QUESTION.md V-6 and V-19), 2 copies nobody
 had listed (docs/366, the docs/373 title), and 1 pre-registered decision rule
-that is a condition, not a claim - narrow the pattern or exempt such lines. It
+that is a condition, not a claim. A pre-registration must not be edited, so such a line goes in `allow` as `path:line`. It
 passes the documents already carrying a note, and fails again when the note is
 removed.
 

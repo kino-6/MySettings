@@ -12,12 +12,14 @@ copies it from there. retractions.json lists each withdrawn claim once:
      "corrected_by": "docs/386_public_scale_results.md",
      "current": "冷えた条件",                              optional regex for the new wording
      "note": "one line: what was wrong"
-  }], "exempt": ["TROUBLES.md"]}
+  }], "exempt": ["TROUBLES.md"], "allow": ["docs/045_protocol.md:50"]}
 
 A matching line is settled when any of these holds:
   - the line itself also matches `current`, or links `corrected_by`
   - the file's head (first 10 lines) links `corrected_by` - the 追記 convention
   - the file is `corrected_by`, retractions.json, or listed in `exempt`
+  - the line is listed in `allow` as path:line - for a document that must not be
+    edited, such as a pre-registration whose decision rule quotes the claim
 Anything else is reported as path:line and the exit code is 1.
 
   python3 tools/check_retractions.py                      this repository
@@ -46,6 +48,7 @@ def main() -> int:
     reg_path = os.path.abspath(args.registry or os.path.join(root, "retractions.json"))
     reg = json.load(open(reg_path, encoding="utf-8"))
     exempt = reg.get("exempt", [])
+    allow = set(reg.get("allow", []))
     entries = [{**e, "re": re.compile(e["claim"]), "cur": re.compile(e["current"]) if e.get("current") else None,
                 "link": os.path.basename(e["corrected_by"])} for e in reg["retractions"]]
 
@@ -64,6 +67,8 @@ def main() -> int:
             if rel == e["corrected_by"] or e["link"] in head:
                 continue
             for n, line in enumerate(lines, 1):
+                if f"{rel}:{n}" in allow:
+                    continue
                 if e["re"].search(line) and not (e["link"] in line or (e["cur"] and e["cur"].search(line))):
                     stale.append((rel, n, e["id"], line.strip()))
 

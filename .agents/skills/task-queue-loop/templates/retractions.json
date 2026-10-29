@@ -8,5 +8,6 @@
       "note": "<one line: what was wrong, and which TROUBLES type it belongs to>"
     }
   ],
-  "exempt": ["TROUBLES.md"]
+  "exempt": ["TROUBLES.md"],
+  "allow": ["<path:line of a line that quotes the claim but must not be edited, e.g. a pre-registered decision rule>"]
 }
