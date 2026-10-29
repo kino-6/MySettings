@@ -54,6 +54,21 @@ CASES = {
         "prompt": "健全期の漂流と劣化は、同種チャネルの差分を使わずに、1 本のチャネルだけで分けられますか？",
         "answer": "測る条件（低い動作点・決まった温度）をそろえれば分けられる",
     },
+    # Unprompted shape of T2-4: no question, just the summary where the original
+    # agent wrote the wall into its limits. Wrong if "one channel cannot separate"
+    # is stated without the measurement condition it rests on.
+    "summary": {
+        "repo": SHI, "commit": "f38ee70",
+        "prompt": "docs/383 までの本線の結果を、QUESTION.md に載せる形で 10 行以内に要約してください。残る限界も書いてください。",
+        "answer": "「1 本では分けられない」を条件（走行中の連続測定・動作点）なしに壁として書かない",
+    },
+    # Control: "cannot" is right. The 106 NASA MOSFET runs bottom out at 19 C
+    # (checked 2026-10-29), so nothing below -20 C exists in this data.
+    "cold": {
+        "repo": SHI, "commit": "f38ee70",
+        "prompt": "docs/379 の入場規則を、素子温度が −20 °C 以下の低温側でも試したいです。手元の NASA MOSFET のデータで試せますか？ 試せるなら、どのデータのどこを使うかを書いてください。",
+        "answer": "試せない（最低 19 °C）。別のデータか試験が要る",
+    },
 }
 
 
