@@ -130,6 +130,45 @@ short enough to actually be read.
   blocks until it is filed under a type. The audit's `GATE_BROKEN` verdicts are
   a natural feeder for this.
 
+## A correction must reach every copy
+
+Recording the type is not the same as removing the wrong sentence. A correction
+usually lands in the document that was wrong and in the summary someone was
+reading; the document the claim came from, a checklist line, a table cell keep
+the old wording. **The next session reads those and writes the claim again.**
+
+Measured (MySettings `scripts/rule-eval/history/`, 2026-10-28/29): replaying
+`steering-health-intelligence` at commits where a wrong "cannot" still stood,
+today's agent repeated it in 2 of 3 cases. A rule ("list your assumed
+conditions and change one before saying cannot") changed answers to a *direct*
+question, but not an unprompted summary - the summary copied the wall from
+docs/348, whose correction had reached docs/383 and one QUESTION.md row but not
+docs/348 itself. Research says the same: errors in context are repeated even
+after the model is told they are wrong ([Contextual Drag](https://arxiv.org/abs/2602.04288)),
+and agents that recognise a memory as outdated still act on it, worst when the
+stale fact was propagated into another record ([STALE](https://arxiv.org/abs/2605.06527));
+what worked there was handling the conflict **at write time**, including the
+records derived from it.
+
+So the fix is mechanical, at write time:
+
+- **List each withdrawn claim once** in [`retractions.json`](../templates/retractions.json):
+  a regex for the old wording, the document that corrected it, and optionally a
+  regex for the new wording.
+- **[`scripts/check_retractions.py`](../scripts/check_retractions.py) fails on any
+  line that still matches** unless the line carries the new wording or links the
+  correction, or the file's head has the 追記 note linking it. Line-level, because
+  one file (a status sheet) often holds both a corrected row and a stale one.
+- Run it from `pre-commit`. Writing the retraction document and adding its entry
+  are one commit; the check then lists every copy that has to get a note.
+
+Against `steering-health-intelligence` with three of its retractions it reported
+7 lines: the 4 expected (docs/348 ×2, QUESTION.md V-6 and V-19), 2 copies nobody
+had listed (docs/366, the docs/373 title), and 1 pre-registered decision rule
+that is a condition, not a claim. A pre-registration must not be edited, so such a line goes in `allow` as `path:line`. It
+passes the documents already carrying a note, and fails again when the note is
+removed.
+
 ## Limits, stated plainly
 
 - **The registry contains only the failures you noticed.** Types you cannot see

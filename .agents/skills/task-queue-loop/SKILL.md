@@ -99,8 +99,21 @@ lap ended; everything older moves to the archive.
 
 ## Invariants of the file
 
-- **Cap it.** Keep the queue at or under 200 lines. Over the cap is the signal
-  to archive, not to widen the file.
+- **Cap it, and check the cap.** The queue stays at or under 200 lines, the rules
+  file at or under 150: both are read every lap, so their size is paid every lap
+  as context, and a long session compacts sooner. A cap stated only in prose did
+  not hold - two local queues had reached 420 and 488 lines, and the one rules
+  file that predates this skill 702 - so `pre-commit` counts lines and refuses
+  the commit. Over the cap is the signal to take stock, not to widen the file.
+- **Take stock on the cap, and monthly.** When the check fires, and when the
+  archive rolls over to a new month, go through both files:
+  - queue: `[x]` rows beyond the one boundary marker go to the archive
+  - rules: each rule names the incident or decision it came from; a rule with
+    no origin is a candidate to drop
+  - a rule that a script now enforces shrinks to one line naming the script
+  - a rule that repeats Tasks.md, CHARTER.md, or this skill is deleted
+  - background and worked examples move to `docs/rules/<topic>.md`, read only
+    when that topic comes up, with a one-line pointer left behind
 - **Active work only.** History, design rationale, long RED/GREEN logs, and
   unapproved future ideas are not queue content. They have their own homes -
   write the placement map into the queue header so there is no guessing.
@@ -175,7 +188,9 @@ Load only when the problem shows up.
   it".
 - **[references/trouble-registry.md](references/trouble-registry.md)** - the same
   *class* of mistake keeps coming back. Store counted **types**, not incidents;
-  append automatically, block the commit until each is classified.
+  append automatically, block the commit until each is classified. A withdrawn
+  claim goes in `retractions.json`, and `scripts/check_retractions.py` finds every
+  copy the correction has not reached.
 
 ## Related
 
