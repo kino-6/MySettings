@@ -1,0 +1,12 @@
+{
+  "retractions": [
+    {
+      "id": "R1",
+      "claim": "<regex for the withdrawn wording, loose enough to catch paraphrases>",
+      "corrected_by": "<docs/NNN_the_document_that_corrected_it.md>",
+      "current": "<optional regex for the corrected wording; a line containing it counts as updated>",
+      "note": "<one line: what was wrong, and which TROUBLES type it belongs to>"
+    }
+  ],
+  "exempt": ["TROUBLES.md"]
+}

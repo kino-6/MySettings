@@ -3,3 +3,5 @@
 # runs on every commit. Install: cp to .git/hooks/pre-commit && chmod +x.
 set -euo pipefail
 python3 tools/check_tasks_lock.py --staged
+# A withdrawn claim must not survive in another copy (references/trouble-registry.md).
+if [[ -f retractions.json ]]; then python3 tools/check_retractions.py; fi

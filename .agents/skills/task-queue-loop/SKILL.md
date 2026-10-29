@@ -175,7 +175,9 @@ Load only when the problem shows up.
   it".
 - **[references/trouble-registry.md](references/trouble-registry.md)** - the same
   *class* of mistake keeps coming back. Store counted **types**, not incidents;
-  append automatically, block the commit until each is classified.
+  append automatically, block the commit until each is classified. A withdrawn
+  claim goes in `retractions.json`, and `scripts/check_retractions.py` finds every
+  copy the correction has not reached.
 
 ## Related
 
