@@ -3,5 +3,17 @@
 # runs on every commit. Install: cp to .git/hooks/pre-commit && chmod +x.
 set -euo pipefail
 python3 tools/check_tasks_lock.py --staged
+# Both files are read every lap, so their size is paid every lap. Adjust paths.
+cap() {
+  [[ -f "$1" ]] || return 0
+  local n
+  n=$(($(wc -l <"$1"))) # BSD wc pads with spaces
+  if ((n > $2)); then
+    echo "$1: $n lines, cap $2. Take stock (task-queue-loop SKILL.md, Invariants) before committing." >&2
+    return 1
+  fi
+}
+cap Tasks.md 200
+cap docs/work-rules.md 150
 # A withdrawn claim must not survive in another copy (references/trouble-registry.md).
 if [[ -f retractions.json ]]; then python3 tools/check_retractions.py; fi
