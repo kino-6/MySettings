@@ -35,6 +35,7 @@
   - 最小検証: `grep -c 'morning-board' scripts/check.sh README.md` — それぞれ 1 以上
   - Gate: `bash scripts/check.sh --offline` — `morning-board` の段が ok
   - 再現: `python3 scripts/morning-board/board.py`
+  - 監査: GATE_VALID。段を報告だけ（note）に変えても気づけない穴は、差分に出る意図的な変更なので行にしない
 - [x] **T006 — 表の形でも `[!]` の行が消えたら試験が赤になる**
   - なぜ: T001 の監査。表の試験データに `[!]` の行が無く、表の正規表現から `!` を外しても全試験が通った
   - 最小検証: `python3 scripts/morning-board/test_board.py Rows` — 表の正規表現から `!` を外すと赤
@@ -45,12 +46,13 @@
   - 最小検証: `python3 scripts/morning-board/test_board.py Since` — 上の 2 つの変異でどちらも赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/test_board.py Since -v`
-- [ ] **T008 — 題の崩れを、題を整える関数とは別の物差しで見る**
+- [x] **T008 — 題の崩れを、題を整える関数とは別の物差しで見る**
   - なぜ: T004 の監査。`malformed()` が `clean_title()` 自身で判定するため、`TITLE_LEAD` から担当の印を外す後戻りが、実データの `--check` では通ってしまった
   - 最小検証: `python3 scripts/morning-board/test_board.py Shapes` — `TITLE_LEAD` から `〔[^〕]*〕|` を外すと赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check`
-- [ ] **T009 — `claude agents` が `null` や数だけを返しても、表は出る**
+  - 着手時の注記: 封印した最小検証は着手前から赤（Shapes の別の試験が落ちる）で、この行を確かめられない。追加の確かめとして、同じ変異で実データの `--check` が直す前 0・直した後 1 になることを見た
+- [-] **T009 — `claude agents` が `null` や数だけを返しても、表は出る**
   - なぜ: T003 の再監査。一覧でないことを確かめる行を外しても全試験が通った（試験の `{"sessions": []}` は別の確かめで落ちる）
   - 最小検証: `python3 scripts/morning-board/test_board.py LiveAgents` — `if not isinstance(data, list)` を外すと赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る

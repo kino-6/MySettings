@@ -101,6 +101,11 @@ class Shapes(unittest.TestCase):
     def test_check_counts_nothing_here(self):
         self.assertEqual(board.malformed(board.read_rows(os.path.join(FIX, "shapes.md"))), [])
 
+    def test_check_does_not_lean_on_clean_title(self):
+        bad = [board.Row("~", "T1", "〔担当：Codex〕 x"), board.Row("~", "T2", "** x"), board.Row("-", "S1", "S1 / P0 — x")]
+        self.assertEqual(len(board.malformed(bad)), 3)
+        self.assertEqual(board.malformed([board.Row("~", "T3", "石碑が低い〔M7〕")]), [])
+
     def test_check_catches_a_title_that_starts_with_its_id(self):
         bad = [board.Row("-", "S1", "S1 / P0 — x"), board.Row("~", None, "no id"), board.Row("x", None, "done, no id")]
         self.assertEqual(len(board.malformed(bad)), 2)

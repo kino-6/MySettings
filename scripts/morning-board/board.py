@@ -32,6 +32,8 @@ RANGE = re.compile(r"([A-Z]{1,3}-?)(\d+)\s*[〜~]\s*\1?(\d+)")
 TITLE_LEAD = re.compile(r"^(?:\s|\*|〔[^〕]*〕|(?:" + ID.pattern + r"\s*[+/、,]\s*)*" + ID.pattern
                         + r"(?:\s*/\s*P\d)?\s*[—:-]\s*)+")
 EMPTY_TREE = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+# judged apart from TITLE_LEAD, so a regression there shows up in --check
+BAD_LEAD = re.compile(r"^(\*\*|〔|" + ID.pattern + r"\b)")
 SHOWN = (("~", "判断待ち"), ("!", "止まっている"), ("-", "進行中"))
 
 
@@ -92,8 +94,7 @@ def _parse(lines: list[str]) -> list[Row]:
 def malformed(rows: list[Row]) -> list[Row]:
     """Shown rows ([~] [!] [-]) whose ID was not read or whose title still opens with a mark."""
     shown = {m for m, _ in SHOWN}
-    return [r for r in rows if r.mark in shown and (r.id is None or not r.title or clean_title(r.title) != r.title
-                                                    or (r.id and r.title.startswith(r.id)))]
+    return [r for r in rows if r.mark in shown and (r.id is None or not r.title or BAD_LEAD.match(r.title))]
 
 
 def _heading_ids(rest: str) -> set[str]:
