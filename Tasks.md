@@ -52,7 +52,7 @@
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check`
   - 着手時の注記: 封印した最小検証は着手前から赤（Shapes の別の試験が落ちる）で、この行を確かめられない。追加の確かめとして、同じ変異で実データの `--check` が直す前 0・直した後 1 になることを見た
-- [-] **T009 — `claude agents` が `null` や数だけを返しても、表は出る**
+- [x] **T009 — `claude agents` が `null` や数だけを返しても、表は出る**
   - なぜ: T003 の再監査。一覧でないことを確かめる行を外しても全試験が通った（試験の `{"sessions": []}` は別の確かめで落ちる）
   - 最小検証: `python3 scripts/morning-board/test_board.py LiveAgents` — `if not isinstance(data, list)` を外すと赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る

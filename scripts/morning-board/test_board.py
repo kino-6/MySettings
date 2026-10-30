@@ -200,6 +200,12 @@ class LiveAgents(unittest.TestCase):
         self.fake("""echo '{"sessions": []}'""")
         self.assertEqual(self.board_runs(), [])
 
+    def test_null_or_a_number_instead_of_a_list(self):
+        for body in ("echo null", "echo 3"):
+            with self.subTest(body=body):
+                self.fake(body)
+                self.assertEqual(self.board_runs(), [])
+
     def test_null_cwd_is_dropped(self):
         self.fake("""echo '[{"cwd": null, "name": "a"}, {"cwd": "/x", "name": "b"}]'""")
         self.assertEqual([a["name"] for a in self.board_runs()], ["b"])

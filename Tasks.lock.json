@@ -77,7 +77,7 @@
       "min_check": "`python3 scripts/morning-board/test_board.py LiveAgents` — `if not isinstance(data, list)` を外すと赤",
       "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
-      "passes": false,
+      "passes": true,
       "amendments": []
     }
   }
