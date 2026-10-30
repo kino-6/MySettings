@@ -26,7 +26,7 @@ class Rows(unittest.TestCase):
 
     def test_table(self):
         rows = board.read_rows(os.path.join(FIX, "repo-b", "TASKS.md"))
-        self.assertEqual({(r.mark, r.id) for r in rows}, {("~", "V-6"), ("-", "E-1"), (" ", "E-2")})
+        self.assertEqual({(r.mark, r.id) for r in rows}, {("~", "V-6"), ("-", "E-1"), ("!", "E-3"), (" ", "E-2")})
         self.assertEqual(next(r.title for r in rows if r.id == "V-6"), "漂流の形を決める")
 
     def test_nested_breakdown_is_not_a_row(self):

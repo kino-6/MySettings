@@ -6,7 +6,7 @@
 > 最小検証と Gate は着手前に書き、`Tasks.lock.json` に封印する。フルの検査は push の直前（`bash scripts/push.sh` が `scripts/check.sh` を走らせる）。
 > 完了した行は 1 件だけ下に残し、それより古いものは消す（この branch の試行では履歴ファイルを持たない。記録は commit）。
 
-次に起票する ID は **T008 以降**。
+次に起票する ID は **T009 以降**。
 
 ## 本線 A — 朝の 1 枚（2026-10-31〜）
 
@@ -28,13 +28,14 @@
   - Gate: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check` — 表に出す行（`[~]` `[!]` `[-]`）で、ID を読めない行と、題が ID・優先度・担当の印で始まる行が 0。加えて `test_board.py` の Shapes と Archive が通る
   - 修正（2026-10-31）: Gate。実データには ID の無い完了行が 234 行あり（AutoRogue・codex-game-test など。表には出ない）、元の条件は満たせない。代わりに表に出る行の題の崩れと、完了記録の 3 つの書き方を条件に足した
   - 着手時の注記: 最小検証は着手前から 1（T376 は T001 から出ていた）。この行の変更では赤にできない。後戻りを見張る役で残す
+  - 監査: GATE_VALID。修正理由の「234 行」は数え違いで、ID の無い行は 229 行（完了 192・未着手 37）。ID の無い `[x]` は「終わった」に出ない（受け入れ済み）。残る穴は T008
   - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00`
 - [x] **T005 — 全体の検査に試験を入れ、README に使い方を書く**
   - なぜ: 試験が push 前に走らなければ、壊れても気づかない
   - 最小検証: `grep -c 'morning-board' scripts/check.sh README.md` — それぞれ 1 以上
   - Gate: `bash scripts/check.sh --offline` — `morning-board` の段が ok
   - 再現: `python3 scripts/morning-board/board.py`
-- [ ] **T006 — 表の形でも `[!]` の行が消えたら試験が赤になる**
+- [x] **T006 — 表の形でも `[!]` の行が消えたら試験が赤になる**
   - なぜ: T001 の監査。表の試験データに `[!]` の行が無く、表の正規表現から `!` を外しても全試験が通った
   - 最小検証: `python3 scripts/morning-board/test_board.py Rows` — 表の正規表現から `!` を外すと赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
@@ -44,3 +45,8 @@
   - 最小検証: `python3 scripts/morning-board/test_board.py Since` — 上の 2 つの変異でどちらも赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/test_board.py Since -v`
+- [ ] **T008 — 題の崩れを、題を整える関数とは別の物差しで見る**
+  - なぜ: T004 の監査。`malformed()` が `clean_title()` 自身で判定するため、`TITLE_LEAD` から担当の印を外す後戻りが、実データの `--check` では通ってしまった
+  - 最小検証: `python3 scripts/morning-board/test_board.py Shapes` — `TITLE_LEAD` から `〔[^〕]*〕|` を外すと赤
+  - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
+  - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check`
