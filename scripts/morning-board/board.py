@@ -127,6 +127,8 @@ def _done_ids(lines: list[str]) -> set[str]:
 
 def finished_since(path: str, queue: str, since: str) -> tuple[list[str], list[str]]:
     """Commits after `since`, and IDs that became [x] (or were archived) after it."""
+    if os.path.realpath(git(path, "rev-parse", "--show-toplevel").strip() or "/nonexistent") != os.path.realpath(path):
+        return [], []  # not a repository of its own: git would report the enclosing one
     commits = git(path, "log", f"--since={since}", "--format=%h %s").splitlines()
     if not commits:
         return [], []
@@ -139,32 +141,44 @@ def finished_since(path: str, queue: str, since: str) -> tuple[list[str], list[s
 
 
 def load_agents(path: str | None) -> list[dict]:
-    """Sessions from a saved JSON file, or live from `claude agents --json`."""
+    """Sessions from a saved JSON file, or live from `claude agents --json`.
+
+    In a saved file a relative cwd is read from the file's directory, so a sample
+    travels with its fixtures. Anything unexpected yields no sessions, never an
+    error: the board still has to show the queues.
+    """
     if path:
         with open(path, encoding="utf-8") as f:
-            return json.load(f)
-    try:
-        p = subprocess.run(["claude", "agents", "--json"], capture_output=True, text=True, timeout=30)
-        return json.loads(p.stdout) if p.returncode == 0 else []
-    except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError):
-        return []  # no claude on PATH, or it did not answer: the board still shows the queues
+            data = json.load(f)
+        base = os.path.dirname(os.path.abspath(path))
+    else:
+        try:
+            p = subprocess.run(["claude", "agents", "--json"], capture_output=True, text=True, timeout=30)
+            data = json.loads(p.stdout) if p.returncode == 0 else []
+        except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError):
+            data = []
+        base = None
+    if not isinstance(data, list):
+        return []
+    out = []
+    for a in data:
+        if isinstance(a, dict) and isinstance(a.get("cwd"), str):
+            out.append({**a, "cwd": os.path.join(base, a["cwd"]) if base else a["cwd"]})
+    return out
 
 
 def sessions_under(repo: str, agents: list[dict]) -> list[dict]:
     """Sessions whose working directory is the repository or inside it."""
     repo = os.path.normpath(repo)
-    return [a for a in agents if os.path.normpath(a.get("cwd", "")) == repo
-            or os.path.normpath(a.get("cwd", "")).startswith(repo + os.sep)]
+    return [a for a in agents if os.path.normpath(a["cwd"]) == repo or os.path.normpath(a["cwd"]).startswith(repo + os.sep)]
 
 
-def scan(path: str, since: str | None, agents: list[dict], root: str | None = None) -> Repo:
-    """Collect what the board shows for one repository. `root` stands in for the
-    parent directory when matching session cwds (tests run on copies elsewhere)."""
+def scan(path: str, since: str | None, agents: list[dict]) -> Repo:
+    """Collect what the board shows for one repository."""
     q = queue_file(path)
     rows = read_rows(q) if q else []
     commits, done = finished_since(path, q, since) if q and since else ([], [])
-    name = os.path.basename(path)
-    return Repo(name, rows, commits, done, sessions_under(os.path.join(root, name) if root else path, agents))
+    return Repo(os.path.basename(path), rows, commits, done, sessions_under(path, agents))
 
 
 def render(repos: list[Repo], since: str | None) -> str:
@@ -202,8 +216,9 @@ def main() -> int:
     ap.add_argument("--check", action="store_true", help="exit 1 if a shown row was misread")
     args = ap.parse_args()
     since = args.since or (datetime.date.today() - datetime.timedelta(days=1)).isoformat() + "T18:00"
-    dirs = sorted(os.path.join(args.root, d) for d in os.listdir(args.root)
-                  if os.path.isdir(os.path.join(args.root, d)) and not d.startswith((".", "!")))
+    root = os.path.abspath(args.root)
+    dirs = sorted(os.path.join(root, d) for d in os.listdir(root)
+                  if os.path.isdir(os.path.join(root, d)) and not d.startswith((".", "!")))
     agents = load_agents(args.agents_json)
     repos = [scan(d, since, agents) for d in dirs if queue_file(d)]
     sys.stdout.write(render(repos, since))

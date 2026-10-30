@@ -23,7 +23,7 @@
       "min_check": "`python3 scripts/morning-board/test_board.py Agents` — 試験用の JSON で、cwd が repo の下にある session だけがその repo に付く",
       "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
-      "passes": false,
+      "passes": true,
       "amendments": []
     },
     "T004": {

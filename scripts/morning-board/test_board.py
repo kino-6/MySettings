@@ -129,21 +129,75 @@ class Agents(unittest.TestCase):
     def setUp(self):
         self.agents = board.load_agents(os.path.join(FIX, "agents.json"))
 
+    def under(self, name):
+        return sorted(a["name"] for a in board.sessions_under(os.path.join(FIX, name), self.agents))
+
     def test_session_belongs_to_the_repo_it_runs_under(self):
-        self.assertEqual(sorted(a["name"] for a in board.sessions_under("/work/repo-a", self.agents)), ["repo-a-1", "repo-a-2"])
+        self.assertEqual(self.under("repo-a"), ["repo-a-1", "repo-a-2"])
 
     def test_prefix_of_a_name_is_not_under_it(self):
-        self.assertEqual([a["name"] for a in board.sessions_under("/work/repo-ab", self.agents)], ["repo-ab-1"])
+        self.assertEqual(self.under("repo-ab"), ["repo-ab-1"])
 
     def test_same_basename_elsewhere_is_not_under_it(self):
-        self.assertEqual(board.sessions_under("/work/repo-b", self.agents), [])
+        self.assertEqual(self.under("repo-b"), [])
+
+    def test_repro_command_shows_sessions_and_no_enclosing_commits(self):
+        out = subprocess.run([sys.executable, os.path.join(HERE, "board.py"), "--root", os.path.relpath(FIX),
+                              "--agents-json", os.path.relpath(os.path.join(FIX, "agents.json")), "--since", "2000-01-01T00:00"],
+                             capture_output=True, text=True, check=True).stdout
+        self.assertIn("repo-a-1（busy", out)
+        self.assertNotIn("commit", out)
 
     def test_report_shows_status(self):
-        repo = board.scan(os.path.join(FIX, "repo-a"), None, self.agents, root="/work")
-        out = board.render([repo], None)
+        out = board.render([board.scan(os.path.join(FIX, "repo-a"), None, self.agents)], None)
         self.assertIn("repo-a-1（busy", out)
         self.assertIn("repo-a-2（idle", out)
 
+
+class LiveAgents(unittest.TestCase):
+    """load_agents(None) asks `claude agents --json`; whatever it answers, the queues still render."""
+
+    def fake(self, body: str | None):
+        d = tempfile.mkdtemp(prefix="fake-claude-")
+        self.addCleanup(shutil.rmtree, d, True)
+        if body is not None:
+            path = os.path.join(d, "claude")
+            with open(path, "w") as f:
+                f.write("#!/bin/sh\n" + body + "\n")
+            os.chmod(path, 0o755)
+        old = os.environ["PATH"]
+        os.environ["PATH"] = d + ":/usr/bin:/bin"
+        self.addCleanup(os.environ.__setitem__, "PATH", old)
+
+    def board_runs(self):
+        agents = board.load_agents(None)
+        out = board.render([board.scan(os.path.join(FIX, "repo-a"), None, agents)], None)
+        self.assertIn("T101", out)
+        return agents
+
+    def test_list(self):
+        self.fake("""echo '[{"cwd": "/x", "name": "n", "status": "busy", "kind": "interactive"}]'""")
+        self.assertEqual(len(self.board_runs()), 1)
+
+    def test_missing_claude(self):
+        self.fake(None)
+        self.assertEqual(self.board_runs(), [])
+
+    def test_non_zero_exit(self):
+        self.fake("""echo '[{"cwd": "/x"}]'; exit 3""")
+        self.assertEqual(self.board_runs(), [])
+
+    def test_not_json(self):
+        self.fake("echo 'not json'")
+        self.assertEqual(self.board_runs(), [])
+
+    def test_object_instead_of_list(self):
+        self.fake("""echo '{"sessions": []}'""")
+        self.assertEqual(self.board_runs(), [])
+
+    def test_null_cwd_is_dropped(self):
+        self.fake("""echo '[{"cwd": null, "name": "a"}, {"cwd": "/x", "name": "b"}]'""")
+        self.assertEqual([a["name"] for a in self.board_runs()], ["b"])
 
 if __name__ == "__main__":
     unittest.main()

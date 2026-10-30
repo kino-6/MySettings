@@ -16,11 +16,11 @@
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T18:00`
   - 監査: GATE_VALID（変異 8 件中 6 件で赤。残る 2 件は T007）
-- [ ] **T003 — いま動いている Claude Code の session を repo ごとに出す**
+- [x] **T003 — いま動いている Claude Code の session を repo ごとに出す**
   - なぜ: Agent View（`claude agents`）は組み込みで入れる物がない。`--json` の cwd で repo に結び付ける
   - 最小検証: `python3 scripts/morning-board/test_board.py Agents` — 試験用の JSON で、cwd が repo の下にある session だけがその repo に付く
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
-  - 再現: `python3 scripts/morning-board/board.py --agents-json scripts/morning-board/fixtures/agents.json`
+  - 再現: `python3 scripts/morning-board/board.py --root scripts/morning-board/fixtures --agents-json scripts/morning-board/fixtures/agents.json`
   - 監査: 差し戻し（2026-10-31）。再現が単独では session を出さない（試験データの cwd が `--root` の下にない）。`claude agents` が一覧でない JSON や `cwd: null` を返すと表全体が止まる。claude が無い・失敗したときの代わりの動きに試験が無い
 - [x] **T004 — 実際の `~/work` で回し、出力を読んで直す**
   - なぜ: 試験データは自分で作ったもので、実在の Tasks.md の書き方の幅を代表しない
