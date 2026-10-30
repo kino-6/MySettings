@@ -7,7 +7,8 @@ description: One page on what AI agents did overnight across every repository un
 
 Agents run at night in several repositories. In the morning the person wants one
 answer per repository: is anything still running, what got done, and what is
-waiting on them. This skill gives that page in one command and writes nothing.
+waiting on them. This skill gives that page in one command and writes nothing. Paths below are
+relative to the directory that holds this SKILL.md (SKILL.md のある directory).
 
 ```bash
 python3 scripts/board.py                              # every repo directly under ~/work, since yesterday 18:00
@@ -36,6 +37,9 @@ queue and nothing to report.
 ## Limits
 
 - A finished row with no ID is not listed under `終わった`.
+- A row added after the boundary, finished and then deleted rather than moved to
+  an archive is not listed either (境界の後に足されて消えた行): the diff never
+  shows it as `[x]`. Queues that archive finished rows do not hit this.
 - Uncommitted edits to the queue or archive do not count as finished.
 - A session whose `cwd` reaches the repo through a symlink is not matched.
 

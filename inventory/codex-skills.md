@@ -18,7 +18,7 @@ current mirror state. No skill synchronization was performed in the new audit.
 
 ## Merge Summary
 
-- Local user skills found: 72
+- Local user skills found: 73
 - Repository skills found: 97
 - Missing local user skills in repository: 4 (`sprite-gen`, `illustration-to-rigged-avatar-parts`, `image-to-3d-avatar-triage`, `rigged-anime-avatar-base`)
 - Same-name content differences: 1
@@ -130,7 +130,6 @@ These skills exist in `.agents/skills` but not in local `~/.codex/skills`.
 | `market-research` |
 | `mcp-server-patterns` |
 | `mle-workflow` |
-| `morning-board` |
 | `nextjs-turbopack` |
 | `postgres-patterns` |
 | `product-capability` |

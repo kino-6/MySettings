@@ -93,7 +93,7 @@
       "min_check": "`grep -c \"境界の後に足されて\" .agents/skills/morning-board/SKILL.md` — 1 以上",
       "gate": "`diff -r -x __pycache__ .agents/skills/morning-board ~/.claude/skills/morning-board && diff -r -x __pycache__ .agents/skills/morning-board ~/.codex/skills/morning-board && grep -q \"SKILL.md のある\" .agents/skills/morning-board/SKILL.md && bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check` — 両方の写しが repo と一致し、パスの基準と抜けが書かれ、inventory がずれていない",
       "locked": "2026-10-31",
-      "passes": false,
+      "passes": true,
       "amendments": []
     }
   }

@@ -10,16 +10,10 @@
 
 ## 本線 A — 朝の 1 枚（2026-10-31〜）
 
-- [-] **T011 — skill を他の repo の session から使えるようにする**
+- [x] **T011 — skill を他の repo の session から使えるようにする**
   - なぜ: T010 の監査。user 側の skill 置き場に写しが無く、SKILL.md のパスの基準が書かれず、境界の後に足されて消えた行が 終わった に出ない抜けが Limits に無い
   - 最小検証: `grep -c "境界の後に足されて" .agents/skills/morning-board/SKILL.md` — 1 以上
   - Gate: `diff -r -x __pycache__ .agents/skills/morning-board ~/.claude/skills/morning-board && diff -r -x __pycache__ .agents/skills/morning-board ~/.codex/skills/morning-board && grep -q "SKILL.md のある" .agents/skills/morning-board/SKILL.md && bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check` — 両方の写しが repo と一致し、パスの基準と抜けが書かれ、inventory がずれていない
   - 再現: `ls ~/.claude/skills/morning-board ~/.codex/skills/morning-board`
 
-- [x] **T010 — 朝の 1 枚を skill `morning-board` にまとめる**
-  - なぜ: user の指摘。dotfiles の scripts より、どの repo の session からも呼べる skill が置き場に合う
-  - 最小検証: `python3 .agents/skills/morning-board/scripts/test_board.py` — skill の下で全試験が通る
-  - Gate: `python3 .agents/skills/morning-board/scripts/test_board.py && ! test -e scripts/morning-board && bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check` — 試験が通り、旧置き場が無く、inventory がずれていない
-  - 再現: `python3 .agents/skills/morning-board/scripts/board.py --root .agents/skills/morning-board/scripts/fixtures --since 2000-01-01 --agents-json .agents/skills/morning-board/scripts/fixtures/agents.json`
-
-全行完了（2026-10-31）。T001〜T009 の記録は commit 履歴にある。
+全行完了（2026-10-31）。T001〜T010 の記録は commit 履歴にある。
