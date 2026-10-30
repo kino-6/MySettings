@@ -45,7 +45,7 @@
       "min_check": "`grep -c 'morning-board' scripts/check.sh README.md` — それぞれ 1 以上",
       "gate": "`bash scripts/check.sh --offline` — `morning-board` の段が ok",
       "locked": "2026-10-31",
-      "passes": false,
+      "passes": true,
       "amendments": []
     },
     "T006": {

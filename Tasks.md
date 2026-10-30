@@ -29,7 +29,7 @@
   - 修正（2026-10-31）: Gate。実データには ID の無い完了行が 234 行あり（AutoRogue・codex-game-test など。表には出ない）、元の条件は満たせない。代わりに表に出る行の題の崩れと、完了記録の 3 つの書き方を条件に足した
   - 着手時の注記: 最小検証は着手前から 1（T376 は T001 から出ていた）。この行の変更では赤にできない。後戻りを見張る役で残す
   - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00`
-- [ ] **T005 — 全体の検査に試験を入れ、README に使い方を書く**
+- [x] **T005 — 全体の検査に試験を入れ、README に使い方を書く**
   - なぜ: 試験が push 前に走らなければ、壊れても気づかない
   - 最小検証: `grep -c 'morning-board' scripts/check.sh README.md` — それぞれ 1 以上
   - Gate: `bash scripts/check.sh --offline` — `morning-board` の段が ok
