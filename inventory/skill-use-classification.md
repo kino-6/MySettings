@@ -76,6 +76,7 @@ boilerplate `agents/openai.yaml` files to every skill solely for symmetry;
 | `ecc-task-workflow` | Broad, risky, multi-file, or multi-session repo work should create lightweight task context. |
 | `task-queue-loop` | A repository keeps an active `Tasks.md` / `TASKS.md` queue, work keeps drifting off it, the queue has grown into a history dump, or a queue should be installed in a new repo. |
 | `progress-contract` | An agent works for minutes without returning anything, a message carrying several requests gets a single answer at the end, or response-cadence rules should be installed into a project or user-level instruction file. |
+| `morning-board` | The user asks what agents did overnight, which repositories wait on their judgement, or for the "朝の 1 枚": one read-only page of running sessions, commits, finished rows and `[~]` / `[!]` / `[-]` rows across every repo under a root. |
 | `task-queue-loop` / `references/runtime-contract.md` | Launcher or entry-point design; agent runs take window focus, wait on the human's session, or cannot produce a real-pixel capture; seeds and build identity are not visible in the output. |
 | `task-queue-loop` / `references/trouble-registry.md` | The same class of mistake recurs; a lessons or trouble file should become counted types with automatic appending and a commit block on unclassified entries. |
 | `ecc-final-check` | Substantial structured workflow changes need a final diff, scope, and verification review. |

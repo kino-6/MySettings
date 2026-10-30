@@ -329,7 +329,7 @@ bash scripts/push.sh           # check を通してから push
 bash scripts/push.sh --merge   # branch を main へ --no-ff で merge → push → branch 削除
 ```
 
-`check.sh` は**オフラインの検査で止め、通信する検査は表示だけ**します。止めるのは lint・repo-preflight（秘密情報）・skill inventory。表示だけなのは MCP の版・provenance・ツール一覧の古さ（版を上げるか、取り直すかは人の判断）。
+`check.sh` は**オフラインの検査で止め、通信する検査は表示だけ**します。止めるのは lint・朝の 1 枚の試験・repo-preflight（秘密情報）・skill inventory・skill の写しのずれ（`~/.claude/skills` と `~/.codex/skills`）。表示だけなのは MCP の版・provenance・ツール一覧の古さ（版を上げるか、取り直すかは人の判断）。
 
 `push.sh` は**検査した内容と push する内容を一致させる**ために、未 commit の変更があるとき・origin/main が先に進んでいるとき・`--merge` で branch が main を含んでいないときに止まります。
 
@@ -381,6 +381,17 @@ agent（Claude Code / Codex）まわりの道具と方針は [docs/agent-tooling
 - ECC / Codex baseline と、取り込んだ skill library（`.agents/skills/`）
 - `task-queue-loop` / `progress-contract` / `repo-preflight` などの自作 skill
 - MCP の版固定、取り込み元の記録（provenance）、公開前チェック
+
+### 夜間の AI 作業を朝に見る
+
+```bash
+python3 .agents/skills/morning-board/scripts/board.py         # ~/work の全 repo。既定は昨日 18:00 以降
+python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T22:00
+claude agents                                                 # Claude Code 組み込みの session 一覧（Agent View）
+```
+
+repo ごとに、動いている Claude Code の session、境界以降の commit、`[x]` になった行、
+Tasks.md の `[~]`（判断待ち）・`[!]`（止まっている）・`[-]`（進行中）を出す。読むだけで、何も書き換えない。
 
 ## Future extension policy
 

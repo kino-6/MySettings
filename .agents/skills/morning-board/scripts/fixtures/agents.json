@@ -1,0 +1,6 @@
+[
+  {"pid": 1, "cwd": "repo-a", "kind": "background", "startedAt": 1793170000000, "sessionId": "s1", "name": "repo-a-1", "status": "busy"},
+  {"pid": 2, "cwd": "repo-a/sub/dir", "kind": "interactive", "startedAt": 1793170000000, "sessionId": "s2", "name": "repo-a-2", "status": "idle"},
+  {"pid": 3, "cwd": "repo-ab", "kind": "interactive", "startedAt": 1793170000000, "sessionId": "s3", "name": "repo-ab-1", "status": "busy"},
+  {"pid": 4, "cwd": "/elsewhere/repo-b", "kind": "interactive", "startedAt": 1793170000000, "sessionId": "s4", "name": "other", "status": "busy"}
+]
