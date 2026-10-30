@@ -7,7 +7,7 @@
       "min_check": "`python3 scripts/morning-board/test_board.py Rows` — 箇条書きと表の両形式の試験データで、状態ごとの ID がすべて出る",
       "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
-      "passes": false,
+      "passes": true,
       "amendments": []
     },
     "T002": {

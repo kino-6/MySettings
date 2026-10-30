@@ -10,7 +10,7 @@
 
 ## 本線 A — 朝の 1 枚（2026-10-31〜）
 
-- [ ] **T001 — Tasks.md の `[~]` `[!]` `[-]` の行を、repo ごとに ID と題で出す**
+- [x] **T001 — Tasks.md の `[~]` `[!]` `[-]` の行を、repo ごとに ID と題で出す**
   - なぜ: user 2026-10-31「AIの作業を見たい」。既存の閲覧ツールは session 単位で、作業の列を見せない
   - 最小検証: `python3 scripts/morning-board/test_board.py Rows` — 箇条書きと表の両形式の試験データで、状態ごとの ID がすべて出る
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
