@@ -23,16 +23,22 @@
       "min_check": "`python3 scripts/morning-board/test_board.py Agents` — 試験用の JSON で、cwd が repo の下にある session だけがその repo に付く",
       "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
-      "passes": true,
+      "passes": false,
       "amendments": []
     },
     "T004": {
       "title": "実際の `~/work` で回し、出力を読んで直す",
       "min_check": "`python3 scripts/morning-board/board.py --since 2026-10-30T00:00 | grep -c 'T376'` — 1 以上（layered_dreams の人の判断待ちの行）",
-      "gate": "`python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check` — 状態の印がある行のうち、ID を読めなかった行が 0",
+      "gate": "`python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check` — 表に出す行（`[~]` `[!]` `[-]`）で、ID を読めない行と、題が ID・優先度・担当の印で始まる行が 0。加えて `test_board.py` の Shapes と Archive が通る",
       "locked": "2026-10-31",
-      "passes": false,
-      "amendments": []
+      "passes": true,
+      "amendments": [
+        {
+          "field": "gate",
+          "date": "2026-10-31",
+          "reason": "実データには ID の無い完了行が 234 行あり（表には出ない）、元の条件は満たせない。表に出る行の題の崩れと完了記録の 3 つの書き方を条件にした"
+        }
+      ]
     },
     "T005": {
       "title": "全体の検査に試験を入れ、README に使い方を書く",
@@ -45,6 +51,14 @@
     "T006": {
       "title": "表の形でも `[!]` の行が消えたら試験が赤になる",
       "min_check": "`python3 scripts/morning-board/test_board.py Rows` — 表の正規表現から `!` を外すと赤",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": false,
+      "amendments": []
+    },
+    "T007": {
+      "title": "境界の前から `[x]` の行は、後で文面が直っても「終わった」に出ない",
+      "min_check": "`python3 scripts/morning-board/test_board.py Since` — 上の 2 つの変異でどちらも赤",
       "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
       "passes": false,

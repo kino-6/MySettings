@@ -6,7 +6,7 @@
 > 最小検証と Gate は着手前に書き、`Tasks.lock.json` に封印する。フルの検査は push の直前（`bash scripts/push.sh` が `scripts/check.sh` を走らせる）。
 > 完了した行は 1 件だけ下に残し、それより古いものは消す（この branch の試行では履歴ファイルを持たない。記録は commit）。
 
-次に起票する ID は **T007 以降**。
+次に起票する ID は **T008 以降**。
 
 ## 本線 A — 朝の 1 枚（2026-10-31〜）
 
@@ -15,15 +15,19 @@
   - 最小検証: `python3 scripts/morning-board/test_board.py Since` — 一時 repo で、境界より前の commit と `[x]` を出さず、後のものだけ出す
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T18:00`
-- [x] **T003 — いま動いている Claude Code の session を repo ごとに出す**
+  - 監査: GATE_VALID（変異 8 件中 6 件で赤。残る 2 件は T007）
+- [ ] **T003 — いま動いている Claude Code の session を repo ごとに出す**
   - なぜ: Agent View（`claude agents`）は組み込みで入れる物がない。`--json` の cwd で repo に結び付ける
   - 最小検証: `python3 scripts/morning-board/test_board.py Agents` — 試験用の JSON で、cwd が repo の下にある session だけがその repo に付く
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --agents-json scripts/morning-board/fixtures/agents.json`
-- [ ] **T004 — 実際の `~/work` で回し、出力を読んで直す**
+  - 監査: 差し戻し（2026-10-31）。再現が単独では session を出さない（試験データの cwd が `--root` の下にない）。`claude agents` が一覧でない JSON や `cwd: null` を返すと表全体が止まる。claude が無い・失敗したときの代わりの動きに試験が無い
+- [x] **T004 — 実際の `~/work` で回し、出力を読んで直す**
   - なぜ: 試験データは自分で作ったもので、実在の Tasks.md の書き方の幅を代表しない
   - 最小検証: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00 | grep -c 'T376'` — 1 以上（layered_dreams の人の判断待ちの行）
-  - Gate: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check` — 状態の印がある行のうち、ID を読めなかった行が 0
+  - Gate: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check` — 表に出す行（`[~]` `[!]` `[-]`）で、ID を読めない行と、題が ID・優先度・担当の印で始まる行が 0。加えて `test_board.py` の Shapes と Archive が通る
+  - 修正（2026-10-31）: Gate。実データには ID の無い完了行が 234 行あり（AutoRogue・codex-game-test など。表には出ない）、元の条件は満たせない。代わりに表に出る行の題の崩れと、完了記録の 3 つの書き方を条件に足した
+  - 着手時の注記: 最小検証は着手前から 1（T376 は T001 から出ていた）。この行の変更では赤にできない。後戻りを見張る役で残す
   - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00`
 - [ ] **T005 — 全体の検査に試験を入れ、README に使い方を書く**
   - なぜ: 試験が push 前に走らなければ、壊れても気づかない
@@ -35,3 +39,8 @@
   - 最小検証: `python3 scripts/morning-board/test_board.py Rows` — 表の正規表現から `!` を外すと赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --root scripts/morning-board/fixtures`
+- [ ] **T007 — 境界の前から `[x]` の行は、後で文面が直っても「終わった」に出ない**
+  - なぜ: T002 の監査。引き算を外す変異と、基準を空の木にする変異が全試験を通った。試験データの T1 が HEAD で消えるため
+  - 最小検証: `python3 scripts/morning-board/test_board.py Since` — 上の 2 つの変異でどちらも赤
+  - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
+  - 再現: `python3 scripts/morning-board/test_board.py Since -v`

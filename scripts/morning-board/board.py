@@ -26,7 +26,11 @@ QUEUE_NAMES = ("Tasks.md", "TASKS.md", "tasks.md")
 ID = re.compile(r"[A-Z]{1,3}-?\d+[a-z]?")
 BULLET = re.compile(r"^- \[([ x~!-])\] (.*)$")  # top level only: nested ones are a row's breakdown
 TABLE = re.compile(r"^\|\s*\[([ x~!-])\]\s*\|(.*)$")
-ARCHIVE_HEAD = re.compile(r"^#{2,4}\s+(" + ID.pattern + r")\b")
+ARCHIVE_HEAD = re.compile(r"^#{2,4}\s+(?:\d{4}-\d{2}-\d{2}[:：\s—-]*)?(.*)$")
+RANGE = re.compile(r"([A-Z]{1,3}-?)(\d+)\s*[〜~]\s*\1?(\d+)")
+# a title may open with "S12 / P0 — ", "AS02 + S8 / P0 — " or an owner mark "〔担当：…〕"
+TITLE_LEAD = re.compile(r"^(?:\s|\*|〔[^〕]*〕|(?:" + ID.pattern + r"\s*[+/、,]\s*)*" + ID.pattern
+                        + r"(?:\s*/\s*P\d)?\s*[—:-]\s*)+")
 EMPTY_TREE = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 SHOWN = (("~", "判断待ち"), ("!", "止まっている"), ("-", "進行中"))
 
@@ -47,19 +51,25 @@ class Repo:
     sessions: list[dict]
 
 
+def clean_title(text: str) -> str:
+    """Drop the ID, priority and owner mark a title opens with, and the bold markers."""
+    return TITLE_LEAD.sub("", text).replace("**", "").strip()
+
+
 def _bullet_title(text: str) -> tuple[str | None, str]:
     m = re.match(r"\*\*(.+?)\*\*", text)
     head = m.group(1) if m else text
-    m = re.match(rf"({ID.pattern})\s*[—:-]\s*(.*)", head)
+    m = re.match(rf"({ID.pattern})\b", head)
     if m:
-        return m.group(1), m.group(2).strip()
+        return m.group(1), clean_title(head)
     m = ID.search(head)
-    return (m.group(0) if m else None), head.strip()
+    return (m.group(0) if m else None), clean_title(head)
 
 
 def read_rows(path: str) -> list[Row]:
     """Rows with a status mark, from both the bullet and the table layout."""
-    return _parse(open(path, encoding="utf-8").read().splitlines())
+    with open(path, encoding="utf-8") as f:
+        return _parse(f.read().splitlines())
 
 
 def _parse(lines: list[str]) -> list[Row]:
@@ -75,8 +85,24 @@ def _parse(lines: list[str]) -> list[Row]:
                 rows.append(Row(m.group(1), None, cells[0] if cells else ""))
             else:
                 title = cells[i + 1] if i + 1 < len(cells) else ""
-                rows.append(Row(m.group(1), cells[i].strip("*`"), title.strip("*")))
+                rows.append(Row(m.group(1), cells[i].strip("*`"), clean_title(title)))
     return rows
+
+
+def malformed(rows: list[Row]) -> list[Row]:
+    """Shown rows ([~] [!] [-]) whose ID was not read or whose title still opens with a mark."""
+    shown = {m for m, _ in SHOWN}
+    return [r for r in rows if r.mark in shown and (r.id is None or not r.title or clean_title(r.title) != r.title
+                                                    or (r.id and r.title.startswith(r.id)))]
+
+
+def _heading_ids(rest: str) -> set[str]:
+    lead = re.split(r"\s+[—:-]\s+|\s", rest.strip(), maxsplit=1)[0] if not RANGE.search(rest) else rest.split(" ")[0]
+    ids = set()
+    for m in RANGE.finditer(lead):
+        ids |= {f"{m.group(1)}{n:0{len(m.group(2))}d}" for n in range(int(m.group(2)), int(m.group(3)) + 1)}
+    ids |= set(ID.findall(RANGE.sub("", lead)))
+    return ids
 
 
 def queue_file(path: str) -> str | None:
@@ -93,7 +119,7 @@ def _done_ids(lines: list[str]) -> set[str]:
     ids = set()
     for line in lines:
         if m := ARCHIVE_HEAD.match(line):
-            ids.add(m.group(1))
+            ids |= _heading_ids(m.group(1))
         elif (m := BULLET.match(line) or TABLE.match(line)) and m.group(1) == "x":
             ids |= {r.id for r in _parse([line]) if r.id}
     return ids
@@ -106,7 +132,7 @@ def finished_since(path: str, queue: str, since: str) -> tuple[list[str], list[s
         return [], []
     base = git(path, "rev-list", "-1", f"--before={since}", "HEAD").strip() or EMPTY_TREE
     rel = os.path.relpath(queue, path)
-    diff = git(path, "diff", "-U0", base, "HEAD", "--", rel, ":(glob)**/*[Aa]rchive*.md")
+    diff = git(path, "diff", "-U0", base, "HEAD", "--", rel, ":(glob,icase)**/*archive*.md")
     added = [l[1:] for l in diff.splitlines() if l.startswith("+") and not l.startswith("+++")]
     before = git(path, "show", f"{base}:{rel}").splitlines() if base != EMPTY_TREE else []
     return commits, sorted(_done_ids(added) - _done_ids(before))
@@ -115,7 +141,8 @@ def finished_since(path: str, queue: str, since: str) -> tuple[list[str], list[s
 def load_agents(path: str | None) -> list[dict]:
     """Sessions from a saved JSON file, or live from `claude agents --json`."""
     if path:
-        return json.load(open(path, encoding="utf-8"))
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
     try:
         p = subprocess.run(["claude", "agents", "--json"], capture_output=True, text=True, timeout=30)
         return json.loads(p.stdout) if p.returncode == 0 else []
@@ -172,6 +199,7 @@ def main() -> int:
     ap.add_argument("--root", default=os.path.expanduser("~/work"))
     ap.add_argument("--since", help="ISO time; default yesterday 18:00 local")
     ap.add_argument("--agents-json", help="saved `claude agents --json` output instead of asking claude")
+    ap.add_argument("--check", action="store_true", help="exit 1 if a shown row was misread")
     args = ap.parse_args()
     since = args.since or (datetime.date.today() - datetime.timedelta(days=1)).isoformat() + "T18:00"
     dirs = sorted(os.path.join(args.root, d) for d in os.listdir(args.root)
@@ -179,6 +207,11 @@ def main() -> int:
     agents = load_agents(args.agents_json)
     repos = [scan(d, since, agents) for d in dirs if queue_file(d)]
     sys.stdout.write(render(repos, since))
+    if args.check:
+        bad = [(r.name, x) for r in repos for x in malformed(r.rows)]
+        for name, x in bad:
+            print(f"misread: {name} [{x.mark}] {x.id} {x.title[:60]}", file=sys.stderr)
+        return 1 if bad else 0
     return 0
 
 

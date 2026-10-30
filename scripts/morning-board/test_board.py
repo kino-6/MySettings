@@ -86,6 +86,45 @@ class Since(unittest.TestCase):
         self.assertNotRegex(out, r"\bT1\b")
 
 
+class Shapes(unittest.TestCase):
+    def setUp(self):
+        self.rows = {r.id: r.title for r in board.read_rows(os.path.join(FIX, "shapes.md"))}
+
+    def test_priority_and_second_id_leave_the_title(self):
+        self.assertEqual(self.rows["S12"], "人物の一致を直す。")
+        self.assertEqual(self.rows["AS02"], "敵の接地を仕上げる。")
+
+    def test_owner_mark_and_bold_leave_the_title(self):
+        self.assertTrue(self.rows["T772"].startswith("石碑が低い"), self.rows["T772"])
+        self.assertTrue(self.rows["T373"].startswith("appid 待ち"), self.rows["T373"])
+
+    def test_check_counts_nothing_here(self):
+        self.assertEqual(board.malformed(board.read_rows(os.path.join(FIX, "shapes.md"))), [])
+
+    def test_check_catches_a_title_that_starts_with_its_id(self):
+        bad = [board.Row("-", "S1", "S1 / P0 — x"), board.Row("~", None, "no id"), board.Row("x", None, "done, no id")]
+        self.assertEqual(len(board.malformed(bad)), 2)
+
+
+class Archive(unittest.TestCase):
+    def setUp(self):
+        self.repo = tempfile.mkdtemp(prefix="board-")
+        subprocess.run(["git", "init", "-q", self.repo], check=True)
+        for k, v in (("user.name", "t"), ("user.email", "t@example.invalid"), ("commit.gpgsign", "false")):
+            subprocess.run(["git", "-C", self.repo, "config", k, v], check=True)
+        os.makedirs(os.path.join(self.repo, "docs"))
+        commit(self.repo, "2026-10-30T12:00:00", "before", {"Tasks.md": "- [ ] **T050 — a**\n", "docs/TASKS-ARCHIVE.md": "# a\n"})
+        commit(self.repo, "2026-10-31T01:00:00", "after", {"docs/TASKS-ARCHIVE.md":
+               "# a\n\n## T041〜T043、T046\n\n## 2026-10-31: S12 人物の一致\n\n## 2026-08-22 実プレイで出た 12 件\n"})
+
+    def tearDown(self):
+        shutil.rmtree(self.repo, ignore_errors=True)
+
+    def test_upper_case_archive_ranges_and_date_first_headings(self):
+        r = board.scan(self.repo, "2026-10-30T18:00", [])
+        self.assertEqual(sorted(r.done), ["S12", "T041", "T042", "T043", "T046"])
+
+
 class Agents(unittest.TestCase):
     def setUp(self):
         self.agents = board.load_agents(os.path.join(FIX, "agents.json"))
