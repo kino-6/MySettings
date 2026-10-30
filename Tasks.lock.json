@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "id_pattern": "#?[A-Z]*-?\\d+[a-z]?",
+  "rows": {
+    "T001": {
+      "title": "Tasks.md の `[~]` `[!]` `[-]` の行を、repo ごとに ID と題で出す",
+      "min_check": "`python3 scripts/morning-board/test_board.py Rows` — 箇条書きと表の両形式の試験データで、状態ごとの ID がすべて出る",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T002": {
+      "title": "指定時刻以降の commit と、`[x]` になった行を repo ごとに出す",
+      "min_check": "`python3 scripts/morning-board/test_board.py Since` — 一時 repo で、境界より前の commit と `[x]` を出さず、後のものだけ出す",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T003": {
+      "title": "いま動いている Claude Code の session を repo ごとに出す",
+      "min_check": "`python3 scripts/morning-board/test_board.py Agents` — 試験用の JSON で、cwd が repo の下にある session だけがその repo に付く",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T004": {
+      "title": "実際の `~/work` で回し、出力を読んで直す",
+      "min_check": "`python3 scripts/morning-board/board.py --since 2026-10-30T00:00 | grep -c 'T376'` — 1 以上（layered_dreams の人の判断待ちの行）",
+      "gate": "`python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check` — 表に出す行（`[~]` `[!]` `[-]`）で、ID を読めない行と、題が ID・優先度・担当の印で始まる行が 0。加えて `test_board.py` の Shapes と Archive が通る",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": [
+        {
+          "field": "gate",
+          "date": "2026-10-31",
+          "reason": "実データには ID の無い完了行が 234 行あり（表には出ない）、元の条件は満たせない。表に出る行の題の崩れと完了記録の 3 つの書き方を条件にした"
+        }
+      ]
+    },
+    "T005": {
+      "title": "全体の検査に試験を入れ、README に使い方を書く",
+      "min_check": "`grep -c 'morning-board' scripts/check.sh README.md` — それぞれ 1 以上",
+      "gate": "`bash scripts/check.sh --offline` — `morning-board` の段が ok",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T006": {
+      "title": "表の形でも `[!]` の行が消えたら試験が赤になる",
+      "min_check": "`python3 scripts/morning-board/test_board.py Rows` — 表の正規表現から `!` を外すと赤",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T007": {
+      "title": "境界の前から `[x]` の行は、後で文面が直っても「終わった」に出ない",
+      "min_check": "`python3 scripts/morning-board/test_board.py Since` — 上の 2 つの変異でどちらも赤",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T008": {
+      "title": "題の崩れを、題を整える関数とは別の物差しで見る",
+      "min_check": "`python3 scripts/morning-board/test_board.py Shapes` — `TITLE_LEAD` から `〔[^〕]*〕|` を外すと赤",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T009": {
+      "title": "`claude agents` が `null` や数だけを返しても、表は出る",
+      "min_check": "`python3 scripts/morning-board/test_board.py LiveAgents` — `if not isinstance(data, list)` を外すと赤",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T010": {
+      "title": "朝の 1 枚を skill `morning-board` にまとめる",
+      "min_check": "`python3 .agents/skills/morning-board/scripts/test_board.py` — skill の下で全試験が通る",
+      "gate": "`python3 .agents/skills/morning-board/scripts/test_board.py && ! test -e scripts/morning-board && bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check` — 試験が通り、旧置き場が無く、inventory がずれていない",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T011": {
+      "title": "skill を他の repo の session から使えるようにする",
+      "min_check": "`grep -c \"境界の後に足されて\" .agents/skills/morning-board/SKILL.md` — 1 以上",
+      "gate": "`diff -r -x __pycache__ .agents/skills/morning-board ~/.claude/skills/morning-board && diff -r -x __pycache__ .agents/skills/morning-board ~/.codex/skills/morning-board && grep -q \"SKILL.md のある\" .agents/skills/morning-board/SKILL.md && bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check` — 両方の写しが repo と一致し、パスの基準と抜けが書かれ、inventory がずれていない",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    },
+    "T012": {
+      "title": "skill の写しのずれを push 前に見つける",
+      "min_check": "`bash scripts/skill-mirrors.sh --check` — 今ある 3 件のずれで赤、そろえた後は緑",
+      "gate": "`bash scripts/skill-mirrors.sh --check && grep -q \"skill-mirrors.sh --check\" scripts/check.sh && t=$(mktemp -d) && cp -R .agents/skills/morning-board \"$t\"/ && echo x >>\"$t\"/morning-board/SKILL.md && ! SKILL_MIRROR_ROOTS=\"$t\" bash scripts/skill-mirrors.sh --check` — 写しがそろい、check.sh が呼び、1 行足した写しで赤になる",
+      "locked": "2026-10-31",
+      "passes": true,
+      "amendments": []
+    }
+  }
+}
