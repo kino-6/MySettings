@@ -12,7 +12,7 @@ Screening first: one run per case, no rules arm. A rules arm is worth running
 only on a case where the error reproduces; ARM=rules puts candidate.md in the
 exported tree as CLAUDE.md.
 
-  [ARM=rules] python3 run.py [case ...]      writes results/<date>-<arm>.jsonl
+  [ARM=rules [CANDIDATE=file.md]] python3 run.py [case ...]   writes results/<date>-<arm>.jsonl
 """
 
 from __future__ import annotations
@@ -89,7 +89,7 @@ def job(args) -> dict:
     c = CASES[case]
     d = export(case, c)
     if arm == "rules":
-        shutil.copy(os.path.join(HERE, "candidate.md"), os.path.join(d, "CLAUDE.md"))
+        shutil.copy(os.path.join(HERE, os.environ.get("CANDIDATE", "candidate.md")), os.path.join(d, "CLAUDE.md"))
     cmd = ["claude", "-p", c["prompt"] + NO_EDIT, "--output-format", "json", "--max-budget-usd", "4",
            "--allowedTools", "Read", "Grep", "Glob", "Bash(python3:*)", "Bash(ls:*)", "WebSearch", "WebFetch"]
     p = subprocess.run(cmd, cwd=d, capture_output=True, text=True, env=dict(os.environ, REPORT_LANG=""))
