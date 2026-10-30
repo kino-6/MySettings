@@ -6,21 +6,16 @@
 > 最小検証と Gate は着手前に書き、`Tasks.lock.json` に封印する。フルの検査は push の直前（`bash scripts/push.sh` が `scripts/check.sh` を走らせる）。
 > 完了した行は 1 件だけ下に残し、それより古いものは消す（この branch の試行では履歴ファイルを持たない。記録は commit）。
 
-次に起票する ID は **T006 以降**。
+次に起票する ID は **T007 以降**。
 
 ## 本線 A — 朝の 1 枚（2026-10-31〜）
 
-- [x] **T001 — Tasks.md の `[~]` `[!]` `[-]` の行を、repo ごとに ID と題で出す**
-  - なぜ: user 2026-10-31「AIの作業を見たい」。既存の閲覧ツールは session 単位で、作業の列を見せない
-  - 最小検証: `python3 scripts/morning-board/test_board.py Rows` — 箇条書きと表の両形式の試験データで、状態ごとの ID がすべて出る
-  - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
-  - 再現: `python3 scripts/morning-board/board.py --root scripts/morning-board/fixtures`
 - [x] **T002 — 指定時刻以降の commit と、`[x]` になった行を repo ごとに出す**
   - なぜ: 「何が終わったか」は今の Tasks.md だけでは分からない（`[x]` は移されて消える）。差分で取る
   - 最小検証: `python3 scripts/morning-board/test_board.py Since` — 一時 repo で、境界より前の commit と `[x]` を出さず、後のものだけ出す
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T18:00`
-- [ ] **T003 — いま動いている Claude Code の session を repo ごとに出す**
+- [x] **T003 — いま動いている Claude Code の session を repo ごとに出す**
   - なぜ: Agent View（`claude agents`）は組み込みで入れる物がない。`--json` の cwd で repo に結び付ける
   - 最小検証: `python3 scripts/morning-board/test_board.py Agents` — 試験用の JSON で、cwd が repo の下にある session だけがその repo に付く
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
@@ -35,3 +30,8 @@
   - 最小検証: `grep -c 'morning-board' scripts/check.sh README.md` — それぞれ 1 以上
   - Gate: `bash scripts/check.sh --offline` — `morning-board` の段が ok
   - 再現: `python3 scripts/morning-board/board.py`
+- [ ] **T006 — 表の形でも `[!]` の行が消えたら試験が赤になる**
+  - なぜ: T001 の監査。表の試験データに `[!]` の行が無く、表の正規表現から `!` を外しても全試験が通った
+  - 最小検証: `python3 scripts/morning-board/test_board.py Rows` — 表の正規表現から `!` を外すと赤
+  - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
+  - 再現: `python3 scripts/morning-board/board.py --root scripts/morning-board/fixtures`

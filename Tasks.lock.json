@@ -23,7 +23,7 @@
       "min_check": "`python3 scripts/morning-board/test_board.py Agents` — 試験用の JSON で、cwd が repo の下にある session だけがその repo に付く",
       "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
-      "passes": false,
+      "passes": true,
       "amendments": []
     },
     "T004": {
@@ -38,6 +38,14 @@
       "title": "全体の検査に試験を入れ、README に使い方を書く",
       "min_check": "`grep -c 'morning-board' scripts/check.sh README.md` — それぞれ 1 以上",
       "gate": "`bash scripts/check.sh --offline` — `morning-board` の段が ok",
+      "locked": "2026-10-31",
+      "passes": false,
+      "amendments": []
+    },
+    "T006": {
+      "title": "表の形でも `[!]` の行が消えたら試験が赤になる",
+      "min_check": "`python3 scripts/morning-board/test_board.py Rows` — 表の正規表現から `!` を外すと赤",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
       "passes": false,
       "amendments": []

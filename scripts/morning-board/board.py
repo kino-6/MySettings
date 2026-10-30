@@ -5,7 +5,8 @@ Reads, never writes. For each repository directly under --root that has a
 Tasks.md (or TASKS.md), it lists the rows waiting on a human ([~]), blocked
 ([!]) and in progress ([-]). With a boundary time it adds the commits after it
 and the rows that became [x] after it - found in the git diff, because a
-finished row is soon moved out of the queue.
+finished row is soon moved out of the queue. Running Claude Code sessions
+come from `claude agents --json` (the built-in agent view), matched by cwd.
 
   python3 board.py [--root DIR] [--since 2026-10-30T18:00]   default: yesterday 18:00
 """
@@ -14,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import json
 import os
 import re
 import subprocess
@@ -42,6 +44,7 @@ class Repo:
     rows: list[Row]
     commits: list[str]
     done: list[str]
+    sessions: list[dict]
 
 
 def _bullet_title(text: str) -> tuple[str | None, str]:
@@ -109,12 +112,32 @@ def finished_since(path: str, queue: str, since: str) -> tuple[list[str], list[s
     return commits, sorted(_done_ids(added) - _done_ids(before))
 
 
-def scan(path: str, since: str | None, agents: list[dict]) -> Repo:
-    """Collect what the board shows for one repository."""
+def load_agents(path: str | None) -> list[dict]:
+    """Sessions from a saved JSON file, or live from `claude agents --json`."""
+    if path:
+        return json.load(open(path, encoding="utf-8"))
+    try:
+        p = subprocess.run(["claude", "agents", "--json"], capture_output=True, text=True, timeout=30)
+        return json.loads(p.stdout) if p.returncode == 0 else []
+    except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError):
+        return []  # no claude on PATH, or it did not answer: the board still shows the queues
+
+
+def sessions_under(repo: str, agents: list[dict]) -> list[dict]:
+    """Sessions whose working directory is the repository or inside it."""
+    repo = os.path.normpath(repo)
+    return [a for a in agents if os.path.normpath(a.get("cwd", "")) == repo
+            or os.path.normpath(a.get("cwd", "")).startswith(repo + os.sep)]
+
+
+def scan(path: str, since: str | None, agents: list[dict], root: str | None = None) -> Repo:
+    """Collect what the board shows for one repository. `root` stands in for the
+    parent directory when matching session cwds (tests run on copies elsewhere)."""
     q = queue_file(path)
     rows = read_rows(q) if q else []
     commits, done = finished_since(path, q, since) if q and since else ([], [])
-    return Repo(os.path.basename(path), rows, commits, done)
+    name = os.path.basename(path)
+    return Repo(name, rows, commits, done, sessions_under(os.path.join(root, name) if root else path, agents))
 
 
 def render(repos: list[Repo], since: str | None) -> str:
@@ -122,6 +145,9 @@ def render(repos: list[Repo], since: str | None) -> str:
     out, quiet = ["# 朝の 1 枚", ""] + ([f"{since} 以降", ""] if since else []), []
     for r in repos:
         parts = []
+        if r.sessions:
+            parts.append("- 動いている session: " + ", ".join(f"{a.get('name', '?')}（{a.get('status', '?')}, {a.get('kind', '?')}）"
+                                                           for a in r.sessions))
         if r.commits:
             parts.append(f"- commit {len(r.commits)} 件: " + " / ".join(c.split(" ", 1)[1][:50] for c in r.commits[:3])
                          + (" ほか" if len(r.commits) > 3 else ""))
@@ -145,11 +171,13 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=os.path.expanduser("~/work"))
     ap.add_argument("--since", help="ISO time; default yesterday 18:00 local")
+    ap.add_argument("--agents-json", help="saved `claude agents --json` output instead of asking claude")
     args = ap.parse_args()
     since = args.since or (datetime.date.today() - datetime.timedelta(days=1)).isoformat() + "T18:00"
     dirs = sorted(os.path.join(args.root, d) for d in os.listdir(args.root)
                   if os.path.isdir(os.path.join(args.root, d)) and not d.startswith((".", "!")))
-    repos = [scan(d, since, []) for d in dirs if queue_file(d)]
+    agents = load_agents(args.agents_json)
+    repos = [scan(d, since, agents) for d in dirs if queue_file(d)]
     sys.stdout.write(render(repos, since))
     return 0
 

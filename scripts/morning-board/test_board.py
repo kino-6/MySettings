@@ -86,5 +86,25 @@ class Since(unittest.TestCase):
         self.assertNotRegex(out, r"\bT1\b")
 
 
+class Agents(unittest.TestCase):
+    def setUp(self):
+        self.agents = board.load_agents(os.path.join(FIX, "agents.json"))
+
+    def test_session_belongs_to_the_repo_it_runs_under(self):
+        self.assertEqual(sorted(a["name"] for a in board.sessions_under("/work/repo-a", self.agents)), ["repo-a-1", "repo-a-2"])
+
+    def test_prefix_of_a_name_is_not_under_it(self):
+        self.assertEqual([a["name"] for a in board.sessions_under("/work/repo-ab", self.agents)], ["repo-ab-1"])
+
+    def test_same_basename_elsewhere_is_not_under_it(self):
+        self.assertEqual(board.sessions_under("/work/repo-b", self.agents), [])
+
+    def test_report_shows_status(self):
+        repo = board.scan(os.path.join(FIX, "repo-a"), None, self.agents, root="/work")
+        out = board.render([repo], None)
+        self.assertIn("repo-a-1（busy", out)
+        self.assertIn("repo-a-2（idle", out)
+
+
 if __name__ == "__main__":
     unittest.main()
