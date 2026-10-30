@@ -46,6 +46,7 @@ step lint block bash scripts/lint.sh
 step morning-board block python3 .agents/skills/morning-board/scripts/test_board.py
 step preflight block python3 .agents/skills/repo-preflight/scripts/preflight.py
 step skill-inventory block bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check
+step skill-mirrors block bash scripts/skill-mirrors.sh --check
 step tool-inventory note bash scripts/inventory.sh --check
 if ((offline == 0)); then
   step mcp-pins note bash scripts/mcp-doctor.sh --check

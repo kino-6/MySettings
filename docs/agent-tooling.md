@@ -42,6 +42,8 @@ Standalone Codex skill として参照が切れないよう、upstream root の 
 
 この 3 つはローカルの全プロジェクトから参照できるよう、repo に加えて `~/.codex/skills/`（Codex CLI）と `~/.claude/skills/`（Claude Code）の両方にミラーしています。Claude Code は `~/.codex/skills` を読まないため、user-level skill を両 runtime で使う場合は両方へ配置する方針です。
 
+写しの正本は repo の `.agents/skills/` です。repo 側を直したら `bash scripts/skill-mirrors.sh --write` で写しをそろえます（上書きする前の内容は `.bak.<日時>` に残ります）。写しの側を直した場合は、先に repo に持ち帰ります。ずれたままだと `scripts/check.sh` が止めます。
+
 ### Tasks.md の運用を skill 化（task-queue-loop）
 
 ローカルの 11 リポジトリ（`steering-health-intelligence`, `rustbound`, `black-stela`, `cdda-musou`, `ecliptica`, `virtual-ecu-peripheral-harness`, `watchless-notes`, `AutoRogue`, `codex-game-test` ほか）で実際に動いている `Tasks.md` 運用を収集し、`task-queue-loop` として 1 本にまとめています。「Tasks.md は todo list ではなく loop の状態で、1 周 = 1 タスクを未着手から緑の Gate + commit まで運ぶ」という形に整理したものです。

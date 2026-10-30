@@ -10,16 +10,10 @@
 
 ## 本線 A — 朝の 1 枚（2026-10-31〜）
 
-- [-] **T012 — skill の写しのずれを push 前に見つける**
+- [x] **T012 — skill の写しのずれを push 前に見つける**
   - なぜ: user の問い「Skill 改良の際困らないか」。写しに 1 行足しても inventory も check.sh も通った。api-design・external-ai-tools・security-review は既に `~/.codex/skills` 側が古い
   - 最小検証: `bash scripts/skill-mirrors.sh --check` — 今ある 3 件のずれで赤、そろえた後は緑
   - Gate: `bash scripts/skill-mirrors.sh --check && grep -q "skill-mirrors.sh --check" scripts/check.sh && t=$(mktemp -d) && cp -R .agents/skills/morning-board "$t"/ && echo x >>"$t"/morning-board/SKILL.md && ! SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --check` — 写しがそろい、check.sh が呼び、1 行足した写しで赤になる
   - 再現: `bash scripts/skill-mirrors.sh --check`
 
-- [x] **T011 — skill を他の repo の session から使えるようにする**
-  - なぜ: T010 の監査。user 側の skill 置き場に写しが無く、SKILL.md のパスの基準が書かれず、境界の後に足されて消えた行が 終わった に出ない抜けが Limits に無い
-  - 最小検証: `grep -c "境界の後に足されて" .agents/skills/morning-board/SKILL.md` — 1 以上
-  - Gate: `diff -r -x __pycache__ .agents/skills/morning-board ~/.claude/skills/morning-board && diff -r -x __pycache__ .agents/skills/morning-board ~/.codex/skills/morning-board && grep -q "SKILL.md のある" .agents/skills/morning-board/SKILL.md && bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check` — 両方の写しが repo と一致し、パスの基準と抜けが書かれ、inventory がずれていない
-  - 再現: `ls ~/.claude/skills/morning-board ~/.codex/skills/morning-board`
-
-全行完了（2026-10-31）。T001〜T010 の記録は commit 履歴にある。
+全行完了（2026-10-31）。T001〜T011 の記録は commit 履歴にある。

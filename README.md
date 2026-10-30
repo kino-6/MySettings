@@ -329,7 +329,7 @@ bash scripts/push.sh           # check を通してから push
 bash scripts/push.sh --merge   # branch を main へ --no-ff で merge → push → branch 削除
 ```
 
-`check.sh` は**オフラインの検査で止め、通信する検査は表示だけ**します。止めるのは lint・repo-preflight（秘密情報）・skill inventory。表示だけなのは MCP の版・provenance・ツール一覧の古さ（版を上げるか、取り直すかは人の判断）。
+`check.sh` は**オフラインの検査で止め、通信する検査は表示だけ**します。止めるのは lint・朝の 1 枚の試験・repo-preflight（秘密情報）・skill inventory・skill の写しのずれ（`~/.claude/skills` と `~/.codex/skills`）。表示だけなのは MCP の版・provenance・ツール一覧の古さ（版を上げるか、取り直すかは人の判断）。
 
 `push.sh` は**検査した内容と push する内容を一致させる**ために、未 commit の変更があるとき・origin/main が先に進んでいるとき・`--merge` で branch が main を含んでいないときに止まります。
 

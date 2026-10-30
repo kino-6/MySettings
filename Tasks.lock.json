@@ -101,7 +101,7 @@
       "min_check": "`bash scripts/skill-mirrors.sh --check` — 今ある 3 件のずれで赤、そろえた後は緑",
       "gate": "`bash scripts/skill-mirrors.sh --check && grep -q \"skill-mirrors.sh --check\" scripts/check.sh && t=$(mktemp -d) && cp -R .agents/skills/morning-board \"$t\"/ && echo x >>\"$t\"/morning-board/SKILL.md && ! SKILL_MIRROR_ROOTS=\"$t\" bash scripts/skill-mirrors.sh --check` — 写しがそろい、check.sh が呼び、1 行足した写しで赤になる",
       "locked": "2026-10-31",
-      "passes": false,
+      "passes": true,
       "amendments": []
     }
   }
