@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id_pattern": "#?[A-Z]*-?\\d+[a-z]?",
+  "rows": {
+    "T001": {
+      "title": "Tasks.md の `[~]` `[!]` `[-]` の行を、repo ごとに ID と題で出す",
+      "min_check": "`python3 scripts/morning-board/test_board.py Rows` — 箇条書きと表の両形式の試験データで、状態ごとの ID がすべて出る",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": false,
+      "amendments": []
+    },
+    "T002": {
+      "title": "指定時刻以降の commit と、`[x]` になった行を repo ごとに出す",
+      "min_check": "`python3 scripts/morning-board/test_board.py Since` — 一時 repo で、境界より前の commit と `[x]` を出さず、後のものだけ出す",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": false,
+      "amendments": []
+    },
+    "T003": {
+      "title": "いま動いている Claude Code の session を repo ごとに出す",
+      "min_check": "`python3 scripts/morning-board/test_board.py Agents` — 試験用の JSON で、cwd が repo の下にある session だけがその repo に付く",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": false,
+      "amendments": []
+    },
+    "T004": {
+      "title": "実際の `~/work` で回し、出力を読んで直す",
+      "min_check": "`python3 scripts/morning-board/board.py --since 2026-10-30T00:00 | grep -c 'T376'` — 1 以上（layered_dreams の人の判断待ちの行）",
+      "gate": "`python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check` — 状態の印がある行のうち、ID を読めなかった行が 0",
+      "locked": "2026-10-31",
+      "passes": false,
+      "amendments": []
+    },
+    "T005": {
+      "title": "全体の検査に試験を入れ、README に使い方を書く",
+      "min_check": "`grep -c 'morning-board' scripts/check.sh README.md` — それぞれ 1 以上",
+      "gate": "`bash scripts/check.sh --offline` — `morning-board` の段が ok",
+      "locked": "2026-10-31",
+      "passes": false,
+      "amendments": []
+    }
+  }
+}
