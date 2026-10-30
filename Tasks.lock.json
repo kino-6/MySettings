@@ -15,7 +15,7 @@
       "min_check": "`python3 scripts/morning-board/test_board.py Since` — 一時 repo で、境界より前の commit と `[x]` を出さず、後のものだけ出す",
       "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
-      "passes": false,
+      "passes": true,
       "amendments": []
     },
     "T003": {

@@ -15,7 +15,7 @@
   - 最小検証: `python3 scripts/morning-board/test_board.py Rows` — 箇条書きと表の両形式の試験データで、状態ごとの ID がすべて出る
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --root scripts/morning-board/fixtures`
-- [ ] **T002 — 指定時刻以降の commit と、`[x]` になった行を repo ごとに出す**
+- [x] **T002 — 指定時刻以降の commit と、`[x]` になった行を repo ごとに出す**
   - なぜ: 「何が終わったか」は今の Tasks.md だけでは分からない（`[x]` は移されて消える）。差分で取る
   - 最小検証: `python3 scripts/morning-board/test_board.py Since` — 一時 repo で、境界より前の commit と `[x]` を出さず、後のものだけ出す
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
