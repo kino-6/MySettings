@@ -385,9 +385,9 @@ agent（Claude Code / Codex）まわりの道具と方針は [docs/agent-tooling
 ### 夜間の AI 作業を朝に見る
 
 ```bash
-python3 scripts/morning-board/board.py                         # ~/work の全 repo。既定は昨日 18:00 以降
-python3 scripts/morning-board/board.py --since 2026-10-30T22:00
-claude agents                                                  # Claude Code 組み込みの session 一覧（Agent View）
+python3 .agents/skills/morning-board/scripts/board.py         # ~/work の全 repo。既定は昨日 18:00 以降
+python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T22:00
+claude agents                                                 # Claude Code 組み込みの session 一覧（Agent View）
 ```
 
 repo ごとに、動いている Claude Code の session、境界以降の commit、`[x]` になった行、

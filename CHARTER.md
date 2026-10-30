@@ -8,7 +8,7 @@
 
 ## ゴール（2026-10-31）
 
-`python3 scripts/morning-board.py` 1 回で、`~/work` の各 repo について、夜間の commit、`[x]` になった行、`[~]`・`[!]`・`[-]` の行、いま動いている session が出る。
+`python3 .agents/skills/morning-board/scripts/board.py` 1 回で、`~/work` の各 repo について、夜間の commit、`[x]` になった行、`[~]`・`[!]`・`[-]` の行、いま動いている session が出る。
 
 ## アプローチ
 
