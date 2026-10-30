@@ -61,7 +61,7 @@ class Since(unittest.TestCase):
         commit(self.repo, "2026-10-31T01:00:00", "feat: T2 closed", {
             "Tasks.md": "- [x] **T1 — done long ago**\n- [x] **T2 — tonight**\n- [ ] **T3 — archived tonight**\n"})
         commit(self.repo, "2026-10-31T02:00:00", "chore: T3 moved to archive", {
-            "Tasks.md": "- [x] **T2 — tonight**\n",
+            "Tasks.md": "- [x] **T1 — done long ago, reworded tonight**\n- [x] **T2 — tonight**\n",
             "Tasks-archive.md": "# archive\n\n### T3 — archived tonight\n\n- 完了: 2026-10-31\n"})
 
     def tearDown(self):

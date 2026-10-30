@@ -6,7 +6,7 @@
 > 最小検証と Gate は着手前に書き、`Tasks.lock.json` に封印する。フルの検査は push の直前（`bash scripts/push.sh` が `scripts/check.sh` を走らせる）。
 > 完了した行は 1 件だけ下に残し、それより古いものは消す（この branch の試行では履歴ファイルを持たない。記録は commit）。
 
-次に起票する ID は **T009 以降**。
+次に起票する ID は **T010 以降**。
 
 ## 本線 A — 朝の 1 枚（2026-10-31〜）
 
@@ -21,7 +21,7 @@
   - 最小検証: `python3 scripts/morning-board/test_board.py Agents` — 試験用の JSON で、cwd が repo の下にある session だけがその repo に付く
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --root scripts/morning-board/fixtures --agents-json scripts/morning-board/fixtures/agents.json`
-  - 監査: 差し戻し（2026-10-31）。再現が単独では session を出さない（試験データの cwd が `--root` の下にない）。`claude agents` が一覧でない JSON や `cwd: null` を返すと表全体が止まる。claude が無い・失敗したときの代わりの動きに試験が無い
+  - 監査: 差し戻し後の再監査で GATE_VALID。残る穴は T009
 - [x] **T004 — 実際の `~/work` で回し、出力を読んで直す**
   - なぜ: 試験データは自分で作ったもので、実在の Tasks.md の書き方の幅を代表しない
   - 最小検証: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00 | grep -c 'T376'` — 1 以上（layered_dreams の人の判断待ちの行）
@@ -40,7 +40,7 @@
   - 最小検証: `python3 scripts/morning-board/test_board.py Rows` — 表の正規表現から `!` を外すと赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --root scripts/morning-board/fixtures`
-- [ ] **T007 — 境界の前から `[x]` の行は、後で文面が直っても「終わった」に出ない**
+- [x] **T007 — 境界の前から `[x]` の行は、後で文面が直っても「終わった」に出ない**
   - なぜ: T002 の監査。引き算を外す変異と、基準を空の木にする変異が全試験を通った。試験データの T1 が HEAD で消えるため
   - 最小検証: `python3 scripts/morning-board/test_board.py Since` — 上の 2 つの変異でどちらも赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
@@ -50,3 +50,8 @@
   - 最小検証: `python3 scripts/morning-board/test_board.py Shapes` — `TITLE_LEAD` から `〔[^〕]*〕|` を外すと赤
   - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
   - 再現: `python3 scripts/morning-board/board.py --since 2026-10-30T00:00 --check`
+- [ ] **T009 — `claude agents` が `null` や数だけを返しても、表は出る**
+  - なぜ: T003 の再監査。一覧でないことを確かめる行を外しても全試験が通った（試験の `{"sessions": []}` は別の確かめで落ちる）
+  - 最小検証: `python3 scripts/morning-board/test_board.py LiveAgents` — `if not isinstance(data, list)` を外すと赤
+  - Gate: `python3 scripts/morning-board/test_board.py` — 全試験が通る
+  - 再現: `python3 scripts/morning-board/test_board.py LiveAgents -v`

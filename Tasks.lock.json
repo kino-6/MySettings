@@ -61,12 +61,20 @@
       "min_check": "`python3 scripts/morning-board/test_board.py Since` — 上の 2 つの変異でどちらも赤",
       "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
-      "passes": false,
+      "passes": true,
       "amendments": []
     },
     "T008": {
       "title": "題の崩れを、題を整える関数とは別の物差しで見る",
       "min_check": "`python3 scripts/morning-board/test_board.py Shapes` — `TITLE_LEAD` から `〔[^〕]*〕|` を外すと赤",
+      "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
+      "locked": "2026-10-31",
+      "passes": false,
+      "amendments": []
+    },
+    "T009": {
+      "title": "`claude agents` が `null` や数だけを返しても、表は出る",
+      "min_check": "`python3 scripts/morning-board/test_board.py LiveAgents` — `if not isinstance(data, list)` を外すと赤",
       "gate": "`python3 scripts/morning-board/test_board.py` — 全試験が通る",
       "locked": "2026-10-31",
       "passes": false,
