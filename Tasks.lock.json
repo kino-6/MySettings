@@ -79,6 +79,14 @@
       "locked": "2026-10-31",
       "passes": true,
       "amendments": []
+    },
+    "T010": {
+      "title": "朝の 1 枚を skill `morning-board` にまとめる",
+      "min_check": "`python3 .agents/skills/morning-board/scripts/test_board.py` — skill の下で全試験が通る",
+      "gate": "`python3 .agents/skills/morning-board/scripts/test_board.py && ! test -e scripts/morning-board && bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check` — 試験が通り、旧置き場が無く、inventory がずれていない",
+      "locked": "2026-10-31",
+      "passes": false,
+      "amendments": []
     }
   }
 }
