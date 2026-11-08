@@ -36,6 +36,9 @@ python3 -m json.tool settings/common/.codex/hooks.json >/dev/null
 cp settings/common/.codex/hooks.json "$task_tmp_dir/base/hooks.json"
 env CODEX_HOME="$task_tmp_dir/base" python3 - "$repo_root" <<'PY'
 import json
+import os
+from pathlib import Path
+import shlex
 import subprocess
 import sys
 
@@ -99,6 +102,54 @@ try:
             f"expected one Stop hook without diagnostics; "
             f"hooks={len(stop_hooks)} warnings={warnings} errors={errors}"
         )
+
+    hook_file = Path(os.environ["CODEX_HOME"]) / "hooks.json"
+    declaration = json.loads(hook_file.read_text(encoding="utf-8"))
+    commands = [
+        hook["command"]
+        for group in declaration["hooks"]["Stop"]
+        for hook in group["hooks"]
+        if hook["type"] == "command"
+    ]
+    if len(commands) != 1:
+        raise RuntimeError(f"expected one registered Stop command; found {len(commands)}")
+
+    tokens = shlex.split(commands[0])
+    hook_env = os.environ.copy()
+    while tokens and "=" in tokens[0] and not tokens[0].startswith(("/", "~")):
+        key, value = tokens.pop(0).split("=", 1)
+        hook_env[key] = value
+    if len(tokens) != 2 or tokens[0] != "python3":
+        raise RuntimeError(f"unexpected Stop command shape: {tokens}")
+
+    isolated_home = Path(os.environ["CODEX_HOME"]).parent / "home"
+    deployed_script = isolated_home / ".codex/skills/progress-contract/scripts/report_check.py"
+    deployed_script.parent.mkdir(parents=True)
+    deployed_script.write_bytes(
+        (Path(cwd) / ".agents/skills/progress-contract/scripts/report_check.py").read_bytes()
+    )
+    hook_env["HOME"] = str(isolated_home)
+    if tokens[1] != "~/.codex/skills/progress-contract/scripts/report_check.py":
+        raise RuntimeError(f"unexpected Stop hook target: {tokens[1]}")
+    tokens[1] = str(deployed_script)
+    hook_input = {
+        "stop_hook_active": False,
+        "last_assistant_message": (
+            "This deliberately long English response verifies that the registered "
+            "Codex Stop hook command selects the Codex continuation response format."
+        ),
+    }
+    hook_result = subprocess.run(
+        tokens,
+        input=json.dumps(hook_input),
+        text=True,
+        capture_output=True,
+        check=True,
+        env=hook_env,
+    )
+    hook_output = json.loads(hook_result.stdout)
+    if hook_output.get("decision") != "block" or not hook_output.get("reason"):
+        raise RuntimeError(f"registered Stop command did not block: {hook_output}")
 finally:
     process.terminate()
     process.wait(timeout=5)

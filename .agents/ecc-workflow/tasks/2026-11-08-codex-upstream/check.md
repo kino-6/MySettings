@@ -63,3 +63,7 @@
 - 初回 verdict: `GATE_BROKEN`。Codex 出力分岐の変異は Gate / 最小検証とも赤だったが、
   `persistent_instructions` の復活は Gate だけが赤だった。
 - 対応: 最小検証を、hook test を内包する `scripts/check-codex-config.sh` へ広げた。
+- 2 回目 verdict: `GATE_BROKEN`。`hooks.json` の runtime を `claude` へ変えても、
+  hook discovery と本体の直接試験が別々に通り、誤配線を見落とした。
+- 対応: 登録 command を隔離 HOME へ配置した script に対して実行し、Codex の
+  `decision: "block"` と `reason` が返ることを最小検証へ追加した。
