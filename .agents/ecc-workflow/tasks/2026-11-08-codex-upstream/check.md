@@ -67,3 +67,6 @@
   hook discovery と本体の直接試験が別々に通り、誤配線を見落とした。
 - 対応: 登録 command を隔離 HOME へ配置した script に対して実行し、Codex の
   `decision: "block"` と `reason` が返ることを最小検証へ追加した。
+- 最終 verdict: `GATE_VALID`。実装差分の取り消し、Codex 出力分岐の破壊、
+  `persistent_instructions` の復活、runtime の `codex` から `claude` への誤配線で、
+  最小検証と Gate はすべて赤になった。逐語の再現は `decision: "block"` を返した。
