@@ -11,7 +11,9 @@
 
 ## Verification Run
 
-- 最小検証は実装前に test file 不在で終了 2、実装後は 4 test が合格した。
+- 当初の最小検証は実装前に test file 不在で終了 2、実装後は 4 test が合格した。
+- Gate audit で廃止設定の復活を当初の最小検証が見落としたため、amendment を記録して
+  `bash scripts/check-codex-config.sh` へ広げた。
 - 行の Gate は 2026-11-08 に合格した。
 - `bash scripts/check.sh --offline` は `CHECK OK` で完了した。
 - Codex CLI 0.167.0 の `app-server --strict-config --print-startup-config` で
@@ -55,3 +57,9 @@
 
 - `computer-use` と通知 command の古い参照は、別タスクで user config と plugin cache
   の所有関係を確認してから整理する。
+
+## Gate Audit
+
+- 初回 verdict: `GATE_BROKEN`。Codex 出力分岐の変異は Gate / 最小検証とも赤だったが、
+  `persistent_instructions` の復活は Gate だけが赤だった。
+- 対応: 最小検証を、hook test を内包する `scripts/check-codex-config.sh` へ広げた。

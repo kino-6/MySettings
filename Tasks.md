@@ -12,7 +12,7 @@
 
 - [-] **T013 — Codex 設定を現行仕様へ合わせ、Stop hook と厳格検査を実証して導入する**
   - なぜ: `persistent_instructions` と旧 profile 形式が現行 CLI で効かず、AGENTS.md も hooks / multi-agent / MCP の実態とずれている
-  - 最小検証: `python3 .agents/skills/progress-contract/scripts/test_report_check.py` — Codex 用 Stop hook の英語検出・1 回だけの継続・Claude 互換出力が通る
+  - 最小検証: `bash scripts/check-codex-config.sh` — Codex 設定と profile の厳格検査、Stop hook の読み込み、英語検出・1 回だけの継続・Claude 互換出力が通る
   - Gate: `bash scripts/check-codex-config.sh && python3 .agents/skills/progress-contract/scripts/test_report_check.py && bash scripts/skill-mirrors.sh --check` — 追跡中の Codex 設定と profile が厳格検査を通り、hook の両 runtime 出力と skill の写しが一致する
   - 再現: `REPORT_CHECKS=lang REPORT_HOOK_RUNTIME=codex python3 .agents/skills/progress-contract/scripts/report_check.py <<<'{"stop_hook_active":false,"last_assistant_message":"This deliberately long English response demonstrates that the Codex Stop hook detects a final answer written in English and requests one revision before the turn is allowed to finish normally."}'`
 
