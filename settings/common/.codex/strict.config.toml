@@ -1,0 +1,5 @@
+# Read-only profile for inspection and review work.
+# Activate with: codex --profile strict
+approval_policy = "on-request"
+sandbox_mode = "read-only"
+web_search = "cached"

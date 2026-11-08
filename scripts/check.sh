@@ -43,6 +43,7 @@ step() {
 }
 
 step lint block bash scripts/lint.sh
+step codex-config block bash scripts/check-codex-config.sh
 step morning-board block python3 .agents/skills/morning-board/scripts/test_board.py
 step preflight block python3 .agents/skills/repo-preflight/scripts/preflight.py
 step skill-inventory block bash .agents/skills/skill-use-manager/scripts/update-inventory.sh --check

@@ -1,0 +1,17 @@
+{
+  "description": "User-level final-response checks shared with progress-contract.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "REPORT_CHECKS=lang REPORT_HOOK_RUNTIME=codex python3 ~/.codex/skills/progress-contract/scripts/report_check.py",
+            "timeout": 5,
+            "statusMessage": "Checking final response language"
+          }
+        ]
+      }
+    ]
+  }
+}

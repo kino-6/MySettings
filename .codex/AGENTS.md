@@ -67,7 +67,7 @@ Available skills:
 
 ## MCP Servers
 
-Treat the project-local `.codex/config.toml` as the default Codex baseline for ECC. The current ECC baseline enables GitHub, Context7, Exa, Memory, Playwright, and Sequential Thinking; add heavier extras in `~/.codex/config.toml` only when a task actually needs them.
+Treat the project-local `.codex/config.toml` as the default Codex baseline for ECC. GitHub, Context7, Exa, Memory, Playwright, and Sequential Thinking are pinned but disabled because usage measurement found no calls; enable only the server a concrete task needs.
 
 ECC's canonical Codex section name is `[mcp_servers.context7]`. The launcher package remains `@upstash/context7-mcp`; only the TOML section name is normalized for consistency with `codex mcp list` and the reference config.
 
@@ -125,9 +125,8 @@ When approval is ambiguous, produce a local plan or draft artifact instead of ta
 
 ## Multi-Agent Support
 
-Codex now supports multi-agent workflows behind the experimental `features.multi_agent` flag.
+Codex multi-agent support is stable and enabled by default in current builds. This repository keeps `features.multi_agent = true` to document that expectation explicitly.
 
-- Enable it in `.codex/config.toml` with `[features] multi_agent = true`
 - Define project-local roles under `[agents.<name>]`
 - Point each role at a TOML layer under `.codex/agents/`
 - Use `/agent` inside Codex CLI to inspect and steer child agents
@@ -162,17 +161,17 @@ explicitly asks for that trial.
 
 | Feature | Claude Code | Codex CLI |
 |---------|------------|-----------|
-| Hooks | 8+ event types | Not yet supported |
+| Hooks | Lifecycle hooks | Lifecycle hooks, including `Stop`, `PreToolUse`, and `PostToolUse` |
 | Context file | CLAUDE.md + AGENTS.md | AGENTS.md only |
 | Skills | Skills loaded via plugin | `.agents/skills/` directory |
-| Commands | `/slash` commands | Instruction-based |
+| Commands | `/slash` commands | CLI and `/slash` commands |
 | Agents | Subagent Task tool | Multi-agent via `/agent` and `[agents.<name>]` roles |
-| Security | Hook-based enforcement | Instruction + sandbox |
+| Security | Hooks + permission controls | Sandbox + approvals; hooks supplement checks |
 | MCP | Full support | Supported via `config.toml` and `codex mcp add` |
 
-## Security Without Hooks
+## Security Boundaries
 
-Since Codex lacks hooks, security enforcement is instruction-based:
+Codex hooks can request feedback or block supported operations, but a hook error or timeout can fail open. Keep security enforcement in the sandbox, approval policy, and input validation:
 1. Always validate inputs at system boundaries
 2. Never hardcode secrets — use environment variables
 3. Run `npm audit` / `pip audit` before committing

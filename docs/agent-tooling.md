@@ -6,7 +6,7 @@
 
 2026-09-14: [Local / MySettingsの棚卸し](../inventory/2026-09-14-astra-stocktake.md)と、
 [日常モデル・Astraの切替設定案](../inventory/proposals/model-switch/README.md)を追加しました。
-運用設定には未適用です。現行CLIではprofileは `~/.codex/<name>.config.toml` に分けます。
+運用設定には未適用です。現行 CLI では profile は `~/.codex/<name>.config.toml` に分けます。このリポジトリの `settings/common/.codex/strict.config.toml` と `yolo.config.toml` は setup script でその場所へ配置します。
 
 このリポジトリは [affaan-m/ECC](https://github.com/affaan-m/ECC) の Codex 向け baseline を project-local に取り込んでいます。
 
@@ -18,6 +18,10 @@
 - `.agents/ecc-workflow/`: 外部 agent harness の設計から着想を得た軽量 task / spec / journal workflow
 
 既存のローカル skill は保持し、ECC upstream 由来の不足 skill だけを add-only で追加しています。`notify` は macOS/WSL 両対応のため project baseline では無効化し、必要な host だけ `~/.codex/config.toml` で有効化する方針です。
+
+`bash scripts/check-codex-config.sh` は、一時 `CODEX_HOME` で project 設定と 2 つの profile を `--strict-config` 検査し、`hooks.json` と日本語最終返答の `Stop` hook も試します。実機固有の `~/.codex/config.toml` や認証情報は読みません。
+
+user / project hook は内容ごとに信頼確認が必要です。新しい端末へ配置したときや `hooks.json` の宣言を変えたときは Codex の `/hooks` で内容を読み、信頼してから使います。信頼した内容のハッシュは端末固有なので、このリポジトリには保存しません。
 
 追加で、`hirokita117/yaml-to-html-skill` 由来の explainer workflow を project-local skill として取り込んでいます。
 
@@ -127,7 +131,7 @@ python3 .agents/skills/repo-preflight/scripts/preflight.py --history  # 全 comm
 
 なので skill は判断を持ち、設置物は常時読まれる場所に置きます。この環境では `settings/common/.claude/CLAUDE.md` がその実体で、`deploy_tree` が `~/.claude/CLAUDE.md` へ配置します（hidden dir も展開するため setup script の変更は不要）。
 
-**強制はできません。** hook はコマンドを実行する仕組みで、発話させる手段がないため、これは指示にとどまります。
+指示だけでは抜けた実績があるため、Claude Code と Codex の `Stop` hook が、100 文字を超える英語の最終返答だけを 1 回差し戻します。両者の入力はほぼ同じですが出力形式が違うため、`REPORT_HOOK_RUNTIME` で分け、`stop_hook_active` が真なら再検査せず終了します。hook の異常終了時は処理を許す場合があるので、これは安全機能ではなく最終返答の品質検査です。
 
 ## 取り込み元の記録（provenance）
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Claude Code Stop hook: send an over-long, over-structured report back once.
+"""Claude Code and Codex Stop hook: send a poor final report back once.
 
 Reads the hook input on stdin. Uses `last_assistant_message` (the turn's final
 text) and `stop_hook_active` (true when already continuing because of a stop
@@ -12,6 +12,7 @@ the agent decides to keep (because the length was asked for) is not looped on.
 
 Thresholds (env): REPORT_MAX_CHARS=1500 REPORT_MAX_HEADINGS=4
 REPORT_MAX_DASH=1 REPORT_MAX_DEWANAKU=2 REPORT_LANG=ja (empty disables language)
+REPORT_HOOK_RUNTIME=claude|codex (default: claude)
 
   report_check.py --audit <transcript.jsonl>   how many past reports would trip
 """
@@ -90,12 +91,18 @@ def main() -> int:
     try:
         data = json.load(sys.stdin)
     except json.JSONDecodeError:
+        if os.environ.get("REPORT_HOOK_RUNTIME") == "codex":
+            print("{}")
         return 0  # never break a turn over malformed input
     if data.get("stop_hook_active"):
+        if os.environ.get("REPORT_HOOK_RUNTIME") == "codex":
+            print("{}")
         return 0  # already revising because of a stop hook: let it end
     text = data.get("last_assistant_message") or ""
     found = problems(measure(text))
     if not found:
+        if os.environ.get("REPORT_HOOK_RUNTIME") == "codex":
+            print("{}")
         return 0
     reason = (
         "直前の報告を読み手の負担が減る形に直してください: " + " / ".join(found) + "。"
@@ -103,8 +110,16 @@ def main() -> int:
         "倒置・対句・体言止め・「——」での挿入を使わず、平易な日本語で。"
         "依頼が詳しさや英語を求めていたなら、そのままでかまいません（再検査はしません）。"
     )
-    print(json.dumps({"hookSpecificOutput": {"hookEventName": "Stop", "additionalContext": reason}},
-                     ensure_ascii=False))
+    if os.environ.get("REPORT_HOOK_RUNTIME") == "codex":
+        output = {"decision": "block", "reason": reason}
+    else:
+        output = {
+            "hookSpecificOutput": {
+                "hookEventName": "Stop",
+                "additionalContext": reason,
+            }
+        }
+    print(json.dumps(output, ensure_ascii=False))
     return 0
 
 

@@ -77,7 +77,7 @@ saying instead of writing around it.
 
 ## The mechanical check
 
-`scripts/report_check.py` is a Claude Code `Stop` hook. It reads the turn's
+`scripts/report_check.py` is a Claude Code and Codex `Stop` hook. It reads the turn's
 final message (`last_assistant_message`) and, when the message is long and
 over-structured, sends **one** revision request back as `additionalContext`.
 It checks only what can be checked with high precision: length, heading count,
@@ -122,4 +122,12 @@ the user reads only the final reply. Verified end to end with `claude -p`: the h
 fired (30 ms) and its feedback reached the model. That test asked for English
 explicitly, and the model rightly kept English; the feedback now says so.
 `scripts/rule-eval/run.sh` sets `REPORT_LANG=""` so measurements are not skewed.
+
+Codex expects `decision: "block"` plus `reason` for a `Stop` continuation,
+whereas Claude Code expects `hookSpecificOutput.additionalContext`. Set
+`REPORT_HOOK_RUNTIME=codex` in `~/.codex/hooks.json`; the default remains Claude
+Code compatible. The shared `stop_hook_active` guard permits only one revision.
+Codex keeps optional user and project hooks untrusted until their current
+declaration is approved in `/hooks`; changing the declaration requires review
+again. Keep that trust hash in the user config, not in this skill or repository.
 
