@@ -131,6 +131,14 @@
           "reason": "最初の条件が Tasks.md 全体を探すため、この行の Gate の文自体に一致して決して緑にならない。探す範囲を見出しの引用行（> で始まる行）に絞る。調べる中身は変えない"
         }
       ]
+    },
+    "T015": {
+      "title": "skill の写しをそろえる処理と、その Gate の穴をふさぐ",
+      "min_check": "`t=$(mktemp -d) && cp -R .agents/skills/morning-board \"$t\"/ && mkdir \"$t\"/morning-board/d && echo q >\"$t\"/morning-board/d/f && SKILL_MIRROR_ROOTS=\"$t\" bash scripts/skill-mirrors.sh --write && SKILL_MIRROR_ROOTS=\"$t\" bash scripts/skill-mirrors.sh --check` — mirror にだけあるディレクトリが 1 回の --write で収まる",
+      "gate": "`grep -Eq \"^step skill-mirrors block bash scripts/skill-mirrors.sh --check\" scripts/check.sh && ! SKILL_MIRROR_ROOTS=/nonexistent bash scripts/skill-mirrors.sh --check && t=$(mktemp -d) && cp -R .agents/skills/morning-board \"$t\"/ && echo x >>\"$t\"/morning-board/scripts/board.py && mkdir \"$t\"/morning-board/d && echo q >\"$t\"/morning-board/d/f && ! SKILL_MIRROR_ROOTS=\"$t\" bash scripts/skill-mirrors.sh --check && SKILL_MIRROR_ROOTS=\"$t\" bash scripts/skill-mirrors.sh --write && SKILL_MIRROR_ROOTS=\"$t\" bash scripts/skill-mirrors.sh --check && ls \"$t\".bak/*/morning-board/scripts/board.py \"$t\".bak/*/morning-board/d/f` — check.sh が止める段として呼び、明示した root で 0 件なら赤、下位のずれを見つけ、--write が mirror の外に控えを残して 1 回で収まる",
+      "locked": "2026-11-10",
+      "passes": false,
+      "amendments": []
     }
   }
 }
