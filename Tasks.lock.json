@@ -121,10 +121,16 @@
     "T014": {
       "title": "完了した行を履歴ファイルに残し、憲章を本線 A・B に合わせる",
       "min_check": "`grep -c \"^### T0\" Tasks-archive.md` — 13（T001〜T013 が 1 件ずつ）",
-      "gate": "`! grep -q \"履歴ファイルを持たない\" Tasks.md && grep -q \"本線 B\" CHARTER.md && test \"$(python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T00:00 | grep -A4 \"^## MySettings\" | grep \"終わった\" | grep -o \"T0[0-9][0-9]\" | sort -u | wc -l)\" -ge 13` — 見出しと憲章が今の運用に合い、朝の 1 枚が MySettings の T001〜T013 を「終わった」に出す",
+      "gate": "`! grep -q \"^>.*履歴ファイルを持たない\" Tasks.md && grep -q \"本線 B\" CHARTER.md && test \"$(python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T00:00 | grep -A4 \"^## MySettings\" | grep \"終わった\" | grep -o \"T0[0-9][0-9]\" | sort -u | wc -l)\" -ge 13` — 見出しと憲章が今の運用に合い、朝の 1 枚が MySettings の T001〜T013 を「終わった」に出す",
       "locked": "2026-11-10",
       "passes": false,
-      "amendments": []
+      "amendments": [
+        {
+          "field": "gate",
+          "date": "2026-11-10",
+          "reason": "最初の条件が Tasks.md 全体を探すため、この行の Gate の文自体に一致して決して緑にならない。探す範囲を見出しの引用行（> で始まる行）に絞る。調べる中身は変えない"
+        }
+      ]
     }
   }
 }
