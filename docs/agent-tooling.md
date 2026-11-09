@@ -46,7 +46,7 @@ Standalone Codex skill として参照が切れないよう、upstream root の 
 
 この 3 つはローカルの全プロジェクトから参照できるよう、repo に加えて `~/.codex/skills/`（Codex CLI）と `~/.claude/skills/`（Claude Code）の両方にミラーしています。Claude Code は `~/.codex/skills` を読まないため、user-level skill を両 runtime で使う場合は両方へ配置する方針です。
 
-写しの正本は repo の `.agents/skills/` です。repo 側を直したら `bash scripts/skill-mirrors.sh --write` で写しをそろえます（上書きする前の内容は `.bak.<日時>` に残ります）。写しの側を直した場合は、先に repo に持ち帰ります。ずれたままだと `scripts/check.sh` が止めます。
+写しの正本は repo の `.agents/skills/` です。repo 側を直したら `bash scripts/skill-mirrors.sh --write` で写しをそろえます（上書きする前の写しは、置き場所の外の `~/.claude/skills.bak/<日時>/` などに丸ごと移します）。写しの側を直した場合は、先に repo に持ち帰ります。ずれたままだと `scripts/check.sh` が止めます。
 
 ### Tasks.md の運用を skill 化（task-queue-loop）
 

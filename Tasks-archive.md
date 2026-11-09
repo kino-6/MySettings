@@ -6,6 +6,15 @@
 
 ## 2026-11
 
+### T014 — 完了した行を履歴ファイルに残し、憲章を本線 A・B に合わせる
+
+- 完了: 2026-11-10
+- Gate: `! grep -q "^>.*履歴ファイルを持たない" Tasks.md && grep -q "本線 B" CHARTER.md && test "$(python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T00:00 | grep -A4 "^## MySettings" | grep "終わった" | grep -o "T0[0-9][0-9]" | sort -u | wc -l)" -ge 13` — 見出しと憲章が今の運用に合い、朝の 1 枚が MySettings の T001〜T013 を「終わった」に出す
+- 監査: 未実施
+- 再現: `python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T00:00 | grep -A4 '^## MySettings'`
+- 何が本当の原因だったか: 封印した Gate の最初の条件が Tasks.md 全体を探していて、行に書いた Gate の文自体に一致した。理由付きで、探す範囲を見出しの行に絞った
+- commit: `cf4f5f0`
+
 ### T013 — Codex 設定を現行仕様へ合わせ、Stop hook と厳格検査を実証して導入する
 
 - 完了: 2026-11-08

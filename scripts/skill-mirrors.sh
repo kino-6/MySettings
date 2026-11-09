@@ -2,8 +2,10 @@
 # The user-level skill roots hold copies of .agents/skills/<name>. A copy left
 # behind after the repo changes, or edited in place from another repository's
 # session, drifts silently. --check lists every mirrored skill whose content
-# differs; --write copies the repo version over it, keeping a .bak of what it
-# replaces. A root that does not exist on this host is skipped.
+# differs; --write moves each drifted copy to <root>.bak/<stamp>/ (outside the
+# root, so no runtime loads it as a skill) and copies the repo version in its
+# place. A default root missing on this host is skipped; a root named in
+# SKILL_MIRROR_ROOTS that yields nothing to compare is an error.
 #   bash scripts/skill-mirrors.sh --check | --write
 set -euo pipefail
 
@@ -17,6 +19,7 @@ roots="${SKILL_MIRROR_ROOTS:-$HOME/.claude/skills:${CODEX_HOME:-$HOME/.codex}/sk
 excl=(-x __pycache__ -x .DS_Store -x '*.bak.*')
 stamp="$(date +%Y%m%d-%H%M%S)"
 drift=0
+compared=0
 
 IFS=: read -ra dirs <<<"$roots"
 for root in "${dirs[@]}"; do
@@ -25,11 +28,15 @@ for root in "${dirs[@]}"; do
     name="$(basename "$mirror")"
     src=".agents/skills/$name"
     [[ -d "$src" ]] || continue
+    compared=$((compared + 1))
     if ! out="$(command diff -rq "${excl[@]}" "$src" "$mirror" 2>&1)"; then
       if [[ "$mode" == "--write" ]]; then
-        rsync -a --delete --exclude __pycache__ --exclude .DS_Store --exclude '*.bak.*' \
-          --backup --suffix=".bak.$stamp" "$src/" "$mirror"
-        echo "synced $mirror"
+        bak="${root%/}.bak/$stamp"
+        mkdir -p "$bak"
+        mv "${mirror%/}" "$bak/$name"
+        cp -R "$src" "${mirror%/}"
+        find "${mirror%/}" -name __pycache__ -type d -prune -exec rm -rf {} +
+        echo "synced $mirror (old copy: $bak/$name)"
       else
         drift=1
         echo "drift: $mirror"
@@ -39,6 +46,10 @@ for root in "${dirs[@]}"; do
   done
 done
 
+if [[ -n "${SKILL_MIRROR_ROOTS:-}" ]] && ((compared == 0)); then
+  echo "no mirrored skill found under SKILL_MIRROR_ROOTS=$SKILL_MIRROR_ROOTS" >&2
+  exit 1
+fi
 if ((drift)); then
   echo "If the copy holds the newer edit, bring it into $PWD/.agents/skills first; then run: bash scripts/skill-mirrors.sh --write" >&2
   exit 1
