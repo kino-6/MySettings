@@ -6,7 +6,15 @@
 > 最小検証と Gate は着手前に書き、`Tasks.lock.json` に封印する。フルの検査は push の直前（`bash scripts/push.sh` が `scripts/check.sh` を走らせる）。
 > 完了した行は 1 件だけ下に残し、それより古いものは消す（この branch の試行では履歴ファイルを持たない。記録は commit）。
 
-次に起票する ID は **T014 以降**。
+次に起票する ID は **T015 以降**。
+
+## 保守（2026-11-10〜）
+
+- [-] **T014 — 完了した行を履歴ファイルに残し、憲章を本線 A・B に合わせる**
+  - なぜ: 完了記録が commit にしか無く、次の改良で「何をもって完了としたか」を辿りにくい（user の指摘）。朝の 1 枚も、消された行は「終わった」に出せない。憲章は本線 A だけで、完了の判断も T001〜T005 のまま
+  - 最小検証: `grep -c "^### T0" Tasks-archive.md` — 13（T001〜T013 が 1 件ずつ）
+  - Gate: `! grep -q "履歴ファイルを持たない" Tasks.md && grep -q "本線 B" CHARTER.md && test "$(python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T00:00 | grep -A4 "^## MySettings" | grep "終わった" | grep -o "T0[0-9][0-9]" | sort -u | wc -l)" -ge 13` — 見出しと憲章が今の運用に合い、朝の 1 枚が MySettings の T001〜T013 を「終わった」に出す
+  - 再現: `python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T00:00 | grep -A4 '^## MySettings'`
 
 ## 本線 B — Codex 公式実装との整合（2026-11-08〜）
 
