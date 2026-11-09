@@ -6,11 +6,20 @@
 
 ## 2026-11
 
+### T015 — skill の写しをそろえる処理と、その Gate の穴をふさぐ
+
+- 完了: 2026-11-10
+- Gate: `grep -Eq "^step skill-mirrors block bash scripts/skill-mirrors.sh --check" scripts/check.sh && ! SKILL_MIRROR_ROOTS=/nonexistent bash scripts/skill-mirrors.sh --check && t=$(mktemp -d) && cp -R .agents/skills/morning-board "$t"/ && echo x >>"$t"/morning-board/scripts/board.py && mkdir "$t"/morning-board/d && echo q >"$t"/morning-board/d/f && ! SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --check && SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --write && SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --check && ls "$t".bak/*/morning-board/scripts/board.py "$t".bak/*/morning-board/d/f` — check.sh が止める段として呼び、明示した root で 0 件なら赤、下位のずれを見つけ、--write が mirror の外に控えを残して 1 回で収まる
+- 監査: `GATE_VALID`（2026-11-10）。修正を戻す・0 件の誤りを外す・cp で下位を落とす・check.sh の行をコメントや warn にする・控えを root の中に置く、のどれでも赤。`diff -rq` を `diff -q` にしても緑の穴は T016 に起票。同じ秒の 2 回目の --write で控えが入れ子になる、symlink の mirror が実体の写しになる、複数 root の 1 つの打ち間違いが通る、の 3 件は起きにくく元に戻せるので行にしない
+- 再現: 最小検証と同じ（`Tasks.lock.json` の T015）
+- 何が本当の原因だったか: rsync の `--backup` は控えを mirror の中に置くため、mirror にだけあるディレクトリを消せなかった。古い写しを root の外へ丸ごと移す形に変えた
+- commit: `6e1c4f6`
+
 ### T014 — 完了した行を履歴ファイルに残し、憲章を本線 A・B に合わせる
 
 - 完了: 2026-11-10
 - Gate: `! grep -q "^>.*履歴ファイルを持たない" Tasks.md && grep -q "本線 B" CHARTER.md && test "$(python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T00:00 | grep -A4 "^## MySettings" | grep "終わった" | grep -o "T0[0-9][0-9]" | sort -u | wc -l)" -ge 13` — 見出しと憲章が今の運用に合い、朝の 1 枚が MySettings の T001〜T013 を「終わった」に出す
-- 監査: 未実施
+- 監査: `GATE_VALID`（2026-11-10）。元に戻すと 3 条件とも赤、archive を消すと赤。記録 14 件の Gate と commit を lock と git で照合済み。件数の条件 `-ge 13` は後の行も数えるのでゆるいが、行は閉じているので直さない
 - 再現: `python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T00:00 | grep -A4 '^## MySettings'`
 - 何が本当の原因だったか: 封印した Gate の最初の条件が Tasks.md 全体を探していて、行に書いた Gate の文自体に一致した。理由付きで、探す範囲を見出しの行に絞った
 - commit: `cf4f5f0`

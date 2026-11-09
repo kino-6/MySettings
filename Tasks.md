@@ -10,16 +10,10 @@
 
 ## 保守（2026-11-10〜）
 
-- [-] **T016 — 写しの検査の試験を check.sh で毎回走らせ、下位だけのずれも赤にする**
+- [x] **T016 — 写しの検査の試験を check.sh で毎回走らせ、下位だけのずれも赤にする**
   - なぜ: T015 の監査。Gate の作る `d/` が skill 直下にあり、`diff -rq` を `diff -q` に退行させても緑のまま。Gate は 1 回しか走らないので、後の退行も防げない
   - 最小検証: `bash scripts/test-skill-mirrors.sh` — 下位だけのずれ・mirror にだけあるディレクトリ・--write の控えと収束・明示した root で 0 件、の 4 つを一時 root で確かめる
   - Gate: `bash scripts/test-skill-mirrors.sh && grep -Eq "^step skill-mirrors-test block bash scripts/test-skill-mirrors.sh" scripts/check.sh` — 試験が通り、check.sh が止める段として毎回走らせる。`diff -rq` を `diff -q` にすると赤
   - 再現: `bash scripts/test-skill-mirrors.sh`
 
-- [x] **T015 — skill の写しをそろえる処理と、その Gate の穴をふさぐ**
-  - なぜ: T012 の監査。mirror にだけあるディレクトリは --write で控えが中に残って消せず、何度やっても収まらない。gate は下位のずれも --write も試さず、check.sh の行がコメントでも通る。root の打ち間違いが黙って通る
-  - 最小検証: `t=$(mktemp -d) && cp -R .agents/skills/morning-board "$t"/ && mkdir "$t"/morning-board/d && echo q >"$t"/morning-board/d/f && SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --write && SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --check` — mirror にだけあるディレクトリが 1 回の --write で収まる
-  - Gate: `grep -Eq "^step skill-mirrors block bash scripts/skill-mirrors.sh --check" scripts/check.sh && ! SKILL_MIRROR_ROOTS=/nonexistent bash scripts/skill-mirrors.sh --check && t=$(mktemp -d) && cp -R .agents/skills/morning-board "$t"/ && echo x >>"$t"/morning-board/scripts/board.py && mkdir "$t"/morning-board/d && echo q >"$t"/morning-board/d/f && ! SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --check && SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --write && SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --check && ls "$t".bak/*/morning-board/scripts/board.py "$t".bak/*/morning-board/d/f` — check.sh が止める段として呼び、明示した root で 0 件なら赤、下位のずれを見つけ、--write が mirror の外に控えを残して 1 回で収まる
-  - 再現: 最小検証と同じ
-
-T001〜T014 の記録は [Tasks-archive.md](Tasks-archive.md)。
+T001〜T015 の記録は [Tasks-archive.md](Tasks-archive.md)。
