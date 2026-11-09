@@ -6,9 +6,15 @@
 > 最小検証と Gate は着手前に書き、`Tasks.lock.json` に封印する。フルの検査は push の直前（`bash scripts/push.sh` が `scripts/check.sh` を走らせる）。
 > 完了した行は 1 件だけ下に残し、それより古いものは [Tasks-archive.md](Tasks-archive.md) へ移す（1 タスク 1 レコード、Gate・監査・再現・commit）。
 
-次に起票する ID は **T016 以降**。
+次に起票する ID は **T017 以降**。
 
 ## 保守（2026-11-10〜）
+
+- [-] **T016 — 写しの検査の試験を check.sh で毎回走らせ、下位だけのずれも赤にする**
+  - なぜ: T015 の監査。Gate の作る `d/` が skill 直下にあり、`diff -rq` を `diff -q` に退行させても緑のまま。Gate は 1 回しか走らないので、後の退行も防げない
+  - 最小検証: `bash scripts/test-skill-mirrors.sh` — 下位だけのずれ・mirror にだけあるディレクトリ・--write の控えと収束・明示した root で 0 件、の 4 つを一時 root で確かめる
+  - Gate: `bash scripts/test-skill-mirrors.sh && grep -Eq "^step skill-mirrors-test block bash scripts/test-skill-mirrors.sh" scripts/check.sh` — 試験が通り、check.sh が止める段として毎回走らせる。`diff -rq` を `diff -q` にすると赤
+  - 再現: `bash scripts/test-skill-mirrors.sh`
 
 - [x] **T015 — skill の写しをそろえる処理と、その Gate の穴をふさぐ**
   - なぜ: T012 の監査。mirror にだけあるディレクトリは --write で控えが中に残って消せず、何度やっても収まらない。gate は下位のずれも --write も試さず、check.sh の行がコメントでも通る。root の打ち間違いが黙って通る

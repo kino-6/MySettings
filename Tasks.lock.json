@@ -139,6 +139,14 @@
       "locked": "2026-11-10",
       "passes": true,
       "amendments": []
+    },
+    "T016": {
+      "title": "写しの検査の試験を check.sh で毎回走らせ、下位だけのずれも赤にする",
+      "min_check": "`bash scripts/test-skill-mirrors.sh` — 下位だけのずれ・mirror にだけあるディレクトリ・--write の控えと収束・明示した root で 0 件、の 4 つを一時 root で確かめる",
+      "gate": "`bash scripts/test-skill-mirrors.sh && grep -Eq \"^step skill-mirrors-test block bash scripts/test-skill-mirrors.sh\" scripts/check.sh` — 試験が通り、check.sh が止める段として毎回走らせる。`diff -rq` を `diff -q` にすると赤",
+      "locked": "2026-11-10",
+      "passes": false,
+      "amendments": []
     }
   }
 }
