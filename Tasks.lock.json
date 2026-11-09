@@ -123,7 +123,7 @@
       "min_check": "`grep -c \"^### T0\" Tasks-archive.md` — 13（T001〜T013 が 1 件ずつ）",
       "gate": "`! grep -q \"^>.*履歴ファイルを持たない\" Tasks.md && grep -q \"本線 B\" CHARTER.md && test \"$(python3 .agents/skills/morning-board/scripts/board.py --since 2026-10-30T00:00 | grep -A4 \"^## MySettings\" | grep \"終わった\" | grep -o \"T0[0-9][0-9]\" | sort -u | wc -l)\" -ge 13` — 見出しと憲章が今の運用に合い、朝の 1 枚が MySettings の T001〜T013 を「終わった」に出す",
       "locked": "2026-11-10",
-      "passes": false,
+      "passes": true,
       "amendments": [
         {
           "field": "gate",

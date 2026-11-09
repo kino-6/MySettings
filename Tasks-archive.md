@@ -21,7 +21,7 @@
 
 - 完了: 2026-10-31
 - Gate: `bash scripts/skill-mirrors.sh --check && grep -q "skill-mirrors.sh --check" scripts/check.sh && t=$(mktemp -d) && cp -R .agents/skills/morning-board "$t"/ && echo x >>"$t"/morning-board/SKILL.md && ! SKILL_MIRROR_ROOTS="$t" bash scripts/skill-mirrors.sh --check` — 写しがそろい、check.sh が呼び、1 行足した写しで赤になる
-- 監査: 未実施（2026-11-10 に実施中）
+- 監査: `GATE_VALID`（2026-11-10）。ただし gate は下位ディレクトリのずれと `--write` を確かめず、check.sh の行がコメントでも通る。mirror にだけあるディレクトリを `--write` すると収まらない不具合あり。T015 に起票
 - 再現: `bash scripts/skill-mirrors.sh --check`
 - 何が本当の原因だったか: 写しのずれを調べる検査が無かった。api-design・external-ai-tools・security-review は既に `~/.codex/skills` 側が古かった
 - commit: `b0f05d9`
