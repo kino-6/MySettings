@@ -55,6 +55,13 @@ next lap to start correctly.
    repro, read the artifact. Its verdict either closes the row or sends it back,
    and its refactoring proposals enter the queue as rows with their own gates.
    See [references/gate-audit-loop.md](references/gate-audit-loop.md).
+   **Audit only rows that changed behaviour.** A row that only adds or tightens
+   tests or docs closes on the implementer's own check: break the thing it
+   guards and watch it go red. **File a row only for a defect a user would hit.**
+   A weak test the auditor names is fixed once, in the same lap, not filed.
+   Without these two limits audit rows beget audit rows: one 50-line script took
+   three audits and four rows, and every user-facing bug came from the first two
+   audits; the rest were test gaps.
 9. **Groom in the same edit, then loop.** Update the status, move finished rows
    to the archive leaving a one-line pointer, collapse the verbose completion
    notes. Grooming happens at commit granularity - not "later".

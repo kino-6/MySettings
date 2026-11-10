@@ -6,6 +6,14 @@
 
 ## 2026-11
 
+### T016 — 写しの検査の試験を check.sh で毎回走らせ、下位だけのずれも赤にする
+
+- 完了: 2026-11-10
+- Gate: `bash scripts/test-skill-mirrors.sh && grep -Eq "^step skill-mirrors-test block bash scripts/test-skill-mirrors.sh" scripts/check.sh` — 試験が通り、check.sh が止める段として毎回走らせる。`diff -rq` を `diff -q` にすると赤
+- 監査: 省略。試験だけの行で、`diff -rq` を `diff -q` に退行させると試験が赤になることを実装者が確かめた。監査が起票した行をまた監査する連鎖に止めどころが無いと分かり、T017 で決まりにした
+- 再現: `bash scripts/test-skill-mirrors.sh`
+- commit: `cc2cf11`
+
 ### T015 — skill の写しをそろえる処理と、その Gate の穴をふさぐ
 
 - 完了: 2026-11-10

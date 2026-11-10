@@ -6,7 +6,8 @@ as evidence. This is the loop's one structural hole: steps 4-6 of the lap are al
 run by the same context that produced the diff.
 
 The fix is a **second perspective with no access to the first one's reasoning**,
-run automatically on every `[x]` transition, whose output is new queue rows. That
+run on every `[x]` transition of a row that changed behaviour, whose output is
+new queue rows. That
 makes verification productive rather than a checkpoint: an audit either closes the
 row or files the next lap.
 
@@ -85,7 +86,11 @@ auditor proposes, and **only** proposes:
 - Missing coverage adjacent to the change - not a wishlist, only what the diff
   made reachable.
 
-Each item comes out as a **queue row with its own gate**, or it is dropped. A
+Each item comes out as a **queue row with its own gate**, or it is dropped. File
+a row only for a defect a user would hit. A gap in the gate or the tests - a
+mutation that survived, a case not covered - is fixed once by the implementer in
+the same lap and noted in the archive record; it is not filed. A filed row is
+audited again, so filing test gaps is what makes the loop never end. A
 refactor suggestion without a gate is an opinion, and opinions do not enter the
 queue. The auditor does not edit code: applying its plan is a later lap that
 goes through the same audit.
@@ -144,9 +149,11 @@ of force:
   if it has one rather than adding a second gatekeeper.
 
 **Cost control.** The audit is per row, not per edit, and revert-and-run plus two
-or three mutations is the whole budget. Skip the audit only for rows whose gate is
-a pure equality on a value the diff does not compute - and say in the row that you
-skipped it, so the skip is visible.
+or three mutations is the whole budget. Skip the audit for rows that changed no
+behaviour - tests, docs, gate fixes, including rows the audit itself filed - and
+for rows whose gate is a pure equality on a value the diff does not compute. The
+implementer breaks what the row guards once and sees red, and the row says the
+audit was skipped, so the skip is visible.
 
 ## Why this is not just "run the review skill"
 

@@ -153,7 +153,7 @@
       "min_check": "`grep -q 'Audit only rows that changed behaviour' .agents/skills/task-queue-loop/SKILL.md` — 決まりが SKILL.md の手順 8 にある",
       "gate": "`grep -q 'Audit only rows that changed behaviour' .agents/skills/task-queue-loop/SKILL.md && grep -q 'only for a defect a user would hit' .agents/skills/task-queue-loop/references/gate-audit-loop.md && grep -q 'defect a user would hit' .agents/skills/task-queue-loop/templates/gate-auditor.md && grep -q '使う人が踏む不具合' .agents/skills/task-queue-loop/templates/work-rules.md && bash scripts/skill-mirrors.sh --check` — 2 つの決まりが手順・監査の手引き・監査役の指示・作業規則の 4 か所にあり、user 側の写しも同じ",
       "locked": "2026-11-11",
-      "passes": false,
+      "passes": true,
       "amendments": []
     }
   }

@@ -60,7 +60,9 @@ review. Your question is whether the row's own gate is capable of telling.
    seam it worked around, naming that will misread next session, coverage the
    change just made reachable. **Each item needs a
    gate of its own or it is dropped** - a suggestion without a gate is an
-   opinion. Never edit code; you propose the lap, you do not run it.
+   opinion. Propose a row only for a defect a user would hit; list a gap in the
+   gate or tests under EVIDENCE as a one-line fix instead, because every filed
+   row is audited again. Never edit code; you propose the lap, you do not run it.
 
 ## Return exactly this
 
